@@ -1,8 +1,9 @@
 import { redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
+import { lucia } from "$lib/server/auth";
 
-export const load: LayoutServerLoad = async ({ locals, url }) => {
-	const session = await locals.auth();
+export const load: LayoutServerLoad = async ({ cookies, url }) => {
+  const sessionId = cookies.get(lucia.sessionCookieName);
 
 	const { searchParams } = url;
 
@@ -13,6 +14,8 @@ export const load: LayoutServerLoad = async ({ locals, url }) => {
   } else if(searchParams.get('error') === 'CredentialsSignin' && searchParams.get('code') === 'credentials') {
 		errorMessage = 'Username or password is incorrect';
   }
+
+  const session = sessionId ? await lucia.validateSession(sessionId) : null;
 
 	if (
 		!session?.user &&

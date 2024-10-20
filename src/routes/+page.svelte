@@ -39,8 +39,6 @@
 
 			throw new Error(errorMessage);
 		}
-
-		console.log('formData', formData);
 	};
 </script>
 

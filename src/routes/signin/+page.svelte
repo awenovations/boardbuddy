@@ -1,24 +1,90 @@
 <script lang="ts">
-	import Signin from '$lib/components/signin/signin.svelte';
-	import { signIn as clientSignIn } from '@auth/sveltekit/client';
-	import { SignIn as SignInForm } from '@auth/sveltekit/components';
-
-	const handleSigninSubmit = () => {
-    const form = document.getElementById('signin-form');
-
-		const formData = [...new FormData(form).entries()].reduce(
-			(accumulator, value) => ({
-				...accumulator,
-				[value[0]]: value[1]
-			}),
-			{}
-		);
-
-		clientSignIn('credentials', formData);
-	};
-
+	import { enhance } from '$app/forms';
+	import Icon from '@awenovations/aura/icon.svelte';
+	import Link from '@awenovations/aura/link.svelte';
+	import Button from '@awenovations/aura/button.svelte';
+	import Divider from '@awenovations/aura/divider.svelte';
+	import Container from '@awenovations/aura/container.svelte';
+	import TextField from '@awenovations/aura/text-field.svelte';
 </script>
 
-<Signin />
-<SignInForm provider="google" signInPages="signin" class="google-sign-in hidden-sign-in-form" />
-<button class="local-signin-form hidden-sign-in-form" on:click={handleSigninSubmit} />
+<Container kind="filled" variant="elevated" clearPadding>
+	<div class="content-wrapper">
+		<Button
+			fullWidth
+			kind="outlined"
+			variant="tertiary"
+			data-cy="google-button"
+			on:click={() => {}}
+		>
+			<Icon name="google-color" slot="icon-before" />
+
+			Sign in with Google
+		</Button>
+
+		<Button fullWidth kind="outlined" variant="tertiary" data-cy="apple-button">
+			<Icon name="apple" slot="icon-before" />
+
+			Sign in with Apple
+		</Button>
+
+		<div>
+			<Divider data-cy="divider">OR</Divider>
+		</div>
+
+		<form method="post" use:enhance id="signin-form">
+			<div class="form-group">
+				<TextField name="email" data-cy="email" placeholder="email@example.com">
+					<span slot="label">Email</span>
+				</TextField>
+				<TextField name="password" data-cy="password" type="password" placeholder="password" />
+				<div class="forgot-password" data-cy="forgot-password">
+					Forgot Password? <Link data-cy="forgot-password-link">Reset now</Link>
+				</div>
+			</div>
+			<Button type="submit" fullWidth variant="tertiary" data-cy="sign-in">Sign in</Button>
+		</form>
+		<div class="sign-up" data-cy="sign-up">
+			Don't have an account?
+			<Link data-cy="sign-up-link" href="/signup">Sign up</Link>
+		</div>
+	</div></Container
+>
+
+<style lang="scss">
+	form,
+	.form-group,
+	.content-wrapper {
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+	}
+
+	.form-group {
+		gap: 0.643rem;
+
+		.forgot-password {
+			width: fit-content;
+		}
+	}
+
+	.content-wrapper,
+	form {
+		gap: 1.5rem;
+	}
+
+	.content-wrapper {
+		box-sizing: border-box;
+		padding: 3rem 3.714rem 1.857rem;
+		width: 25.643rem;
+		height: 34.214rem;
+	}
+
+	.sign-up {
+		flex: 1;
+		display: flex;
+		gap: 5px;
+		align-items: self-end;
+		justify-content: center;
+	}
+</style>

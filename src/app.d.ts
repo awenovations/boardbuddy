@@ -11,6 +11,11 @@ declare global {
 		// interface PageData {}
 		// interface PageState {}
 		// interface Platform {}
+ 
+		interface Locals {
+			user: import("lucia").User | null;
+			session: import("lucia").Session | null;
+		}
 	}
 }
 
