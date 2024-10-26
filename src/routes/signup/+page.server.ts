@@ -80,8 +80,6 @@ export const actions: Actions = {
 
     const userObject = (await user.json())?.[0]
 
-    console.log('userObject', userObject);
-
     await (await mongoDbClient).db().collection('users').insertOne({
       _id: userObject.id,
       email,
