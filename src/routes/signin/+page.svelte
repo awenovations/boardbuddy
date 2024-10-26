@@ -1,11 +1,30 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
 	import Icon from '@awenovations/aura/icon.svelte';
 	import Link from '@awenovations/aura/link.svelte';
 	import Button from '@awenovations/aura/button.svelte';
 	import Divider from '@awenovations/aura/divider.svelte';
 	import Container from '@awenovations/aura/container.svelte';
 	import TextField from '@awenovations/aura/text-field.svelte';
+	import { showToast } from '@awenovations/aura/toast.store';
+
+	const onSubmit =
+		() =>
+		async ({ result }) => {
+			if (result.status === 302) {
+				goto(result.location);
+				showToast({
+					severity: 'success',
+					message: "You're logged in!"
+				});
+			} else {
+				showToast({
+					severity: 'error',
+					message: 'Sorry, something went wrong, please try again!'
+				});
+			}
+		};
 </script>
 
 <Container kind="filled" variant="elevated" clearPadding>
@@ -32,7 +51,7 @@
 			<Divider data-cy="divider">OR</Divider>
 		</div>
 
-		<form method="post" use:enhance id="signin-form">
+		<form method="post" use:enhance={onSubmit} id="signin-form">
 			<div class="form-group">
 				<TextField name="email" data-cy="email" placeholder="email@example.com">
 					<span slot="label">Email</span>

@@ -33,7 +33,7 @@
 			<Divider data-cy="divider">OR</Divider>
 		</div>
 
-		<form method="post" use:enhance id="signup-form">
+    <form method="post" use:enhance id="signup-form">
 			<div class="form-group">
 				<TextField name="name" data-cy="name" placeholder="Your name">
 					<span slot="label">Name</span>

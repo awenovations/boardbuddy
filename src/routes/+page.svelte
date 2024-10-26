@@ -5,7 +5,6 @@
 	import Board from '$lib/components/board/board.svelte';
 
 	export let handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-		console.log(event);
 		const formData = [...new FormData(event.currentTarget).entries()].reduce(
 			(accumulator, value) => ({
 				...accumulator,
