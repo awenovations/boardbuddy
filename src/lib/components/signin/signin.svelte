@@ -5,13 +5,8 @@
 	import Divider from '@awenovations/aura/divider.svelte';
 	import Container from '@awenovations/aura/container.svelte';
 	import TextField from '@awenovations/aura/text-field.svelte';
-	import { clickGoogleSigninButton } from '$lib/auth/client/helpers';
 
-	const handleSigninSubmit = (event) => {
-		event.preventDefault();
-    // This is a work around for sveltekit in cypress tests
-    document.querySelector('.local-signin-form')?.click();
-	};
+  export let loading : boolean = false;
 </script>
 
 <Container kind="filled" variant="elevated" clearPadding>
@@ -21,14 +16,14 @@
 			kind="outlined"
 			variant="tertiary"
 			data-cy="google-button"
-			on:click={clickGoogleSigninButton}
+			type="button"
 		>
 			<Icon name="google-color" slot="icon-before" />
 
 			Sign in with Google
 		</Button>
 
-		<Button fullWidth kind="outlined" variant="tertiary" data-cy="apple-button">
+		<Button type="button" fullWidth kind="outlined" variant="tertiary" data-cy="apple-button">
 			<Icon name="apple" slot="icon-before" />
 
 			Sign in with Apple
@@ -38,7 +33,7 @@
 			<Divider data-cy="divider">OR</Divider>
 		</div>
 
-		<form on:submit={handleSigninSubmit} id="signin-form">
+		<div class="signin-form">
 			<div class="form-group">
 				<TextField name="email" data-cy="email" placeholder="email@example.com">
 					<span slot="label">Email</span>
@@ -48,8 +43,8 @@
 					Forgot Password? <Link data-cy="forgot-password-link">Reset now</Link>
 				</div>
 			</div>
-			<Button type="submit" fullWidth variant="tertiary" data-cy="sign-in">Sign in</Button>
-		</form>
+      <Button type="submit" loading={loading} fullWidth variant="tertiary" data-cy="sign-in">Sign in</Button>
+		</div>
 		<div class="sign-up" data-cy="sign-up">
 			Don't have an account?
 			<Link data-cy="sign-up-link" href="/signup">Sign up</Link>
@@ -58,7 +53,7 @@
 >
 
 <style lang="scss">
-	form,
+	.signin-form,
 	.form-group,
 	.content-wrapper {
 		display: flex;
@@ -75,7 +70,7 @@
 	}
 
 	.content-wrapper,
-	form {
+	.signin-form {
 		gap: 1.5rem;
 	}
 

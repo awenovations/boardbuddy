@@ -7,6 +7,9 @@
 	import Container from '@awenovations/aura/container.svelte';
 	import TextField from '@awenovations/aura/text-field.svelte';
 	import { clickGoogleSigninButton } from '$lib/auth/client/helpers';
+
+  
+
 </script>
 
 <Container kind="filled" variant="elevated" clearPadding>

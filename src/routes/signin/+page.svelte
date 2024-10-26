@@ -1,17 +1,17 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
-	import Icon from '@awenovations/aura/icon.svelte';
-	import Link from '@awenovations/aura/link.svelte';
-	import Button from '@awenovations/aura/button.svelte';
-	import Divider from '@awenovations/aura/divider.svelte';
-	import Container from '@awenovations/aura/container.svelte';
-	import TextField from '@awenovations/aura/text-field.svelte';
+	import SignIn from '$lib/components/signin/signin.svelte';
 	import { showToast } from '@awenovations/aura/toast.store';
 
-	const onSubmit =
-		() =>
-		async ({ result }) => {
+	let loading = false;
+
+	const onSubmit = () => {
+		loading = true;
+
+		return async ({ result }) => {
+			loading = false;
+
 			if (result.status === 302) {
 				goto(result.location);
 				showToast({
@@ -25,85 +25,17 @@
 				});
 			}
 		};
+	};
 </script>
 
-<Container kind="filled" variant="elevated" clearPadding>
-	<div class="content-wrapper">
-		<Button
-			fullWidth
-			kind="outlined"
-			variant="tertiary"
-			data-cy="google-button"
-			on:click={() => {}}
-		>
-			<Icon name="google-color" slot="icon-before" />
-
-			Sign in with Google
-		</Button>
-
-		<Button fullWidth kind="outlined" variant="tertiary" data-cy="apple-button">
-			<Icon name="apple" slot="icon-before" />
-
-			Sign in with Apple
-		</Button>
-
-		<div>
-			<Divider data-cy="divider">OR</Divider>
-		</div>
-
-		<form method="post" use:enhance={onSubmit} id="signin-form">
-			<div class="form-group">
-				<TextField name="email" data-cy="email" placeholder="email@example.com">
-					<span slot="label">Email</span>
-				</TextField>
-				<TextField name="password" data-cy="password" type="password" placeholder="password" />
-				<div class="forgot-password" data-cy="forgot-password">
-					Forgot Password? <Link data-cy="forgot-password-link">Reset now</Link>
-				</div>
-			</div>
-			<Button type="submit" fullWidth variant="tertiary" data-cy="sign-in">Sign in</Button>
-		</form>
-		<div class="sign-up" data-cy="sign-up">
-			Don't have an account?
-			<Link data-cy="sign-up-link" href="/signup">Sign up</Link>
-		</div>
-	</div></Container
->
+<form method="post" use:enhance={onSubmit} id="signin-form">
+  <SignIn {loading} />
+</form>
 
 <style lang="scss">
-	form,
-	.form-group,
-	.content-wrapper {
+	form {
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-start;
-	}
-
-	.form-group {
-		gap: 0.643rem;
-
-		.forgot-password {
-			width: fit-content;
-		}
-	}
-
-	.content-wrapper,
-	form {
-		gap: 1.5rem;
-	}
-
-	.content-wrapper {
-		box-sizing: border-box;
-		padding: 3rem 3.714rem 1.857rem;
-		width: 25.643rem;
-		height: 34.214rem;
-	}
-
-	.sign-up {
-		flex: 1;
-		display: flex;
-		gap: 5px;
-		align-items: self-end;
-		justify-content: center;
 	}
 </style>
