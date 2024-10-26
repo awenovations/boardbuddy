@@ -5,15 +5,9 @@
 	import Divider from '@awenovations/aura/divider.svelte';
 	import Container from '@awenovations/aura/container.svelte';
 	import TextField from '@awenovations/aura/text-field.svelte';
-	import { clickGoogleSigninButton } from '$lib/auth/client/helpers';
 
-	const handleSignUpWrapper = () => document.querySelector('.google-sign-in button').click();
+  export let loading : boolean = false;
 
-	export const handleOnSubmit = async (event: FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
-    // This is a work around for sveltekit in cypress tests
-    document.querySelector('.local-signup-form')?.click();
-	};
 </script>
 
 <Container kind="filled" variant="elevated" clearPadding>
@@ -23,7 +17,7 @@
 			kind="outlined"
 			variant="tertiary"
 			data-cy="google-button"
-			on:click={clickGoogleSigninButton}
+      type="button"
 		>
 			<Icon name="google-color" slot="icon-before" />
 
@@ -40,7 +34,7 @@
 			<Divider data-cy="divider">OR</Divider>
 		</div>
 
-		<form on:submit={handleOnSubmit} id="signup-form">
+		<div class="signup-form">
 			<div class="form-group">
 				<TextField name="name" data-cy="name" placeholder="Your name">
 					<span slot="label">Name</span>
@@ -64,8 +58,8 @@
 					<span slot="label">Password</span>
 				</TextField>
 			</div>
-			<Button type="submit" fullWidth variant="tertiary" data-cy="sign-up">Sign up</Button>
-		</form>
+      <Button type="submit" {loading} fullWidth variant="tertiary" data-cy="sign-up">Sign up</Button>
+		</div>
 		<div class="sign-in" data-cy="sign-in">
 			Already have an account?
 			<Link data-cy="sign-in-link" href="/signin">Sign in</Link>
@@ -74,7 +68,7 @@
 >
 
 <style lang="scss">
-	form,
+	.signup-form,
 	.form-group,
 	.content-wrapper {
 		display: flex;
@@ -90,7 +84,7 @@
 		}
 	}
 
-	form,
+	.signup-form,
 	.content-wrapper {
 		gap: 1.786rem;
 	}

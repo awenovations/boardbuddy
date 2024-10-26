@@ -4,8 +4,52 @@ import {
 	OAUTH_CLIENT_URL,
 	OAUTH_VALIDATION_URL,
 	KEYCLOAK_CLIENT_ID,
-	KEYCLOAK_CLIENT_SECRET
+	KEYCLOAK_CLIENT_SECRET,
+	KEYCLOAK_ADMIN_API
 } from '$env/static/private';
+
+export const findUser = (accessToken: string, email: string) => fetch(`${KEYCLOAK_ADMIN_API}/users?email=${encodeURIComponent(email)}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`
+    }
+  })
+
+export const createUser = (
+	accessToken: string,
+	firstName: string,
+	email: string,
+	password: string
+) =>
+	fetch(`${KEYCLOAK_ADMIN_API}/users`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${accessToken}`
+		},
+		body: JSON.stringify({
+			email,
+			firstName,
+			enabled: true,
+			username: email,
+			credentials: [{ type: 'password', value: password, temporary: false }]
+		})
+	});
+
+export const getTokenWithClientCredentials = async () =>
+	fetch(`${OAUTH_CLIENT_URL}/protocol/openid-connect/token`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+		},
+		body: qs.stringify({
+			grant_type: 'client_credentials',
+			scope: 'openid',
+			client_id: KEYCLOAK_CLIENT_ID,
+			client_secret: KEYCLOAK_CLIENT_SECRET
+		})
+	});
 
 export const authenticateWithKeycloak = async (email: string, password: string) =>
 	fetch(`${OAUTH_CLIENT_URL}/protocol/openid-connect/token`, {
@@ -50,8 +94,8 @@ export const signOutUserFromKeycloak = (refresh_token: string, accessToken: stri
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-      'Authorizatoin': `Bearer ${accessToken}`,
-    },
+			Authorizatoin: `Bearer ${accessToken}`
+		},
 		body: qs.stringify({
 			client_id: KEYCLOAK_CLIENT_ID,
 			refresh_token

@@ -1,6 +1,12 @@
 import Signup from './signup.svelte';
 
 describe('Signup Form', () => {
+	it('Should show a loading submit button', () => {
+		cy.mount(Signup, { props: { loading: true } });
+		cy.get('.aura-progress-ring');
+	});
+
+	describe('When loading defaults', () => {
   beforeEach(() => {
     cy.mount(Signup);
   });
@@ -36,5 +42,6 @@ describe('Signup Form', () => {
   it('Should show a sign in link', () => {
     cy.get('[data-cy=sign-in]').should('contains.text', 'Already have an account?');
     cy.get('[data-cy=sign-in-link]').should('contains.text', 'Sign in');
+  });
   });
 });
