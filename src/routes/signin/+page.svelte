@@ -26,10 +26,14 @@
 			}
 		};
 	};
+
+  const signInWithGoogleHandler = () => {
+    goto("/signin/providers/google");
+  };
 </script>
 
 <form method="post" use:enhance={onSubmit} id="signin-form">
-  <SignIn {loading} />
+  <SignIn {loading} {signInWithGoogleHandler} />
 </form>
 
 <style lang="scss">

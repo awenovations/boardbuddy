@@ -8,13 +8,14 @@ import {
 	KEYCLOAK_ADMIN_API
 } from '$env/static/private';
 
-export const findUser = (accessToken: string, email: string) => fetch(`${KEYCLOAK_ADMIN_API}/users?email=${encodeURIComponent(email)}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`
-    }
-  })
+export const findUser = (accessToken: string, email: string) =>
+	fetch(`${KEYCLOAK_ADMIN_API}/users?email=${encodeURIComponent(email)}`, {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${accessToken}`
+		}
+	});
 
 export const createUser = (
 	accessToken: string,

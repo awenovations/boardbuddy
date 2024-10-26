@@ -42,7 +42,8 @@ export const actions: Actions = {
 		await (await mongoDbClient).db().collection('users').insertOne({
 			_id: userObject.id,
 			email,
-			name: firstName
+			name: firstName,
+			authProvider: 'board-buddy'
 		});
 
 		redirect(302, '/signin');

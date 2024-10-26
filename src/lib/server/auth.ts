@@ -1,3 +1,4 @@
+import { Google } from 'arctic';
 import { Collection } from 'mongodb';
 import { dev } from '$app/environment';
 import { Lucia, TimeSpan } from 'lucia';
@@ -5,10 +6,13 @@ import mongoDbClient from '$lib/db/mongo';
 import { refreshToken } from '$lib/server/keycloak';
 import { MongodbAdapter } from '@lucia-auth/adapter-mongodb';
 
+import { AUTH_GOOGLE_ID, AUTH_GOOGLE_SECRET, AUTH_GOOGLE_CALLBACK } from '$env/static/private';
+
 interface UserDoc {
 	_id: string;
 	email: string;
 	name: string;
+	provider: string;
 }
 
 interface SessionDoc {
@@ -32,6 +36,10 @@ const adapter = new MongodbAdapter(Session, User);
 adapter.updateSessionExpiration = async function (sessionId: string, expiresAt: Date) {
 	const [session] = await this.getSessionAndUser(sessionId);
 
+	let updateToSession = {
+		expires_at: expiresAt
+	};
+
 	if (session?.attributes?.token?.refresh_token) {
 		const refreshResponse = await refreshToken(session.attributes.token.refresh_token);
 
@@ -42,20 +50,22 @@ adapter.updateSessionExpiration = async function (sessionId: string, expiresAt: 
 		const expires_at = Date.now() + expires_in * 1000;
 		const refresh_expires_at = Date.now() + refresh_expires_in * 1000;
 
-		await this.Session.findOneAndUpdate(
-			{ _id: sessionId },
-			{
-				$set: {
-					expires_at: expiresAt,
-					token: {
-						...tokenForUse,
-						expires_at,
-						refresh_expires_at
-					}
-				}
+		updateToSession = {
+			...updateToSession,
+			token: {
+				...tokenForUse,
+				expires_at,
+				refresh_expires_at
 			}
-		);
+		};
 	}
+
+	await this.Session.findOneAndUpdate(
+		{ _id: sessionId },
+		{
+			$set: updateToSession
+		}
+	);
 };
 
 export const lucia = new Lucia(adapter, {
@@ -81,6 +91,8 @@ export const signOut = async (sessionId: string) => {
 		// await signOutUserFromKeycloak(refreshToken, accessToken);
 	}
 };
+
+export const google = new Google(AUTH_GOOGLE_ID, AUTH_GOOGLE_SECRET, AUTH_GOOGLE_CALLBACK);
 
 declare module 'lucia' {
 	interface Register {

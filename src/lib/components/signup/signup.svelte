@@ -7,6 +7,7 @@
 	import TextField from '@awenovations/aura/text-field.svelte';
 
   export let loading : boolean = false;
+  export let signUpWithGoogleHandler = () => {};
 
 </script>
 
@@ -18,6 +19,7 @@
 			variant="tertiary"
 			data-cy="google-button"
       type="button"
+      on:click={signUpWithGoogleHandler}
 		>
 			<Icon name="google-color" slot="icon-before" />
 
