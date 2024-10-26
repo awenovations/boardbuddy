@@ -2,8 +2,8 @@ import { Collection } from 'mongodb';
 import { dev } from '$app/environment';
 import { Lucia, TimeSpan } from 'lucia';
 import mongoDbClient from '$lib/db/mongo';
+import { refreshToken } from '$lib/server/keycloak';
 import { MongodbAdapter } from '@lucia-auth/adapter-mongodb';
-import { refreshToken, signOutUserFromKeycloak } from '$lib/server/keycloak';
 
 interface UserDoc {
 	_id: string;
@@ -20,6 +20,12 @@ interface SessionDoc {
 const db = (await mongoDbClient).db();
 const User = db.collection('users') as Collection<UserDoc>;
 const Session = db.collection('sessions') as Collection<SessionDoc>;
+
+export const validEmail = (email: string) =>
+	typeof email === 'string' && /^[\w-\.\+]+@([\w-]+\.)+[\w-]{2,4}$/.test(email);
+
+export const validPassword = (password: string) =>
+	typeof password === 'string' && password.length >= 6 && password.length <= 255;
 
 const adapter = new MongodbAdapter(Session, User);
 
@@ -69,11 +75,11 @@ export const lucia = new Lucia(adapter, {
 export const signOut = async (sessionId: string) => {
 	const session = await lucia.validateSession(sessionId);
 
-  if(session) {
-    await lucia.invalidateSession(sessionId);
-    //TODO: Destroy user session in keycloak
-    // await signOutUserFromKeycloak(refreshToken, accessToken);
-  }
+	if (session) {
+		await lucia.invalidateSession(sessionId);
+		//TODO: Destroy user session in keycloak
+		// await signOutUserFromKeycloak(refreshToken, accessToken);
+	}
 };
 
 declare module 'lucia' {

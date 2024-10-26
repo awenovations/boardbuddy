@@ -3,13 +3,14 @@ import { fail, redirect } from '@sveltejs/kit';
 
 import type { Actions } from './$types';
 import { createUser, findUser, getTokenWithClientCredentials } from '$lib/server/keycloak';
+import { validEmail, validPassword } from '$lib/server/auth';
 
 export const actions: Actions = {
 	default: async (event) => {
 		const formData = await event.request.formData();
 		const firstName = formData.get('name');
-		const email = formData.get('email');
-		const password = formData.get('password');
+		const email = formData.get('email') as string;
+		const password = formData.get('password') as string;
 
 		if (typeof firstName !== 'string') {
 			return fail(400, {
@@ -17,13 +18,13 @@ export const actions: Actions = {
 			});
 		}
 
-		if (typeof email !== 'string' || !/^[\w-\.\+]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+		if (!validEmail(email)) {
 			return fail(400, {
 				message: 'Invalid email'
 			});
 		}
 
-		if (typeof password !== 'string' || password.length < 6 || password.length > 255) {
+		if (!validPassword(password)) {
 			return fail(400, {
 				message: 'Invalid password'
 			});
