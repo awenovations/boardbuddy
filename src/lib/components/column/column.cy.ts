@@ -28,4 +28,37 @@ describe('when using a column', () => {
 				.then(() => expect(stub).to.be.called);
 		});
 	});
+
+	describe('when task cards are present', () => {
+		it('should show a few cards', () => {
+			mount(Column, {
+				props: {
+					name: header,
+					handleCreateTask: () => {},
+					cards: [
+						{
+							_id: '3cb834af-b714-40be-81b0-93c1c73bca33',
+							taskName: 'Test',
+							description: 'test',
+							assignee: 'test',
+							taskType: 'user story',
+							user_id: '104383507739409303538',
+							column: 'Backlog'
+						},
+						{
+							_id: '3cb834ag-b714-40be-81b0-93c1c73bca33',
+							taskName: 'Test 2',
+							description: 'test 2',
+							assignee: 'test 2',
+							taskType: 'user story',
+							user_id: '104383507739409303538',
+							column: 'Backlog'
+						}
+					]
+				}
+			});
+
+			cy.get('[data-cy=task-card]').should('have.length', 2);
+		});
+	});
 });

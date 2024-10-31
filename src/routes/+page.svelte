@@ -1,8 +1,13 @@
 <script lang="ts">
+	import { page } from '$app/stores';
+	import { invalidateAll } from '$app/navigation';
+
 	import { showToast } from '@awenovations/aura/toast.store';
-  import camelCase from 'lodash.camelCase';
+	import camelCase from 'lodash.camelCase';
 
 	import Board from '$lib/components/board/board.svelte';
+
+	$: cards = $page.data.cards;
 
 	export let handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
 		const formData = [...new FormData(event.currentTarget).entries()].reduce(
@@ -16,7 +21,7 @@
 		try {
 			const response = await fetch('/api/tasks/add', {
 				method: 'POST',
-				body: JSON.stringify(formData),
+				body: JSON.stringify(formData)
 			});
 
 			if (response.ok) {
@@ -24,6 +29,7 @@
 					severity: 'success',
 					message: 'Task created!'
 				});
+				invalidateAll();
 				return;
 			} else {
 				throw Error((await response.json()).message);
@@ -41,4 +47,6 @@
 	};
 </script>
 
-<Board {handleSubmit} />
+{#key cards}
+	<Board {handleSubmit} cards={$page.data.cards} />
+{/key}

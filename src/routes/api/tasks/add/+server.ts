@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { fail, json } from '@sveltejs/kit';
 import { lucia } from "$lib/server/auth";
 import mongoDbClient from '$lib/db/mongo';
@@ -18,7 +19,7 @@ export async function POST({ cookies, request }: RequestEvent) {
 
   const tasks = (await mongoDbClient).db().collection('tasks');
 
-  const task = await tasks.insertOne({...body, user_id: user?.id});
+  const task = await tasks.insertOne({_id: uuidv4(), ...body, user_id: user?.id});
 
   return json(await tasks.findOne({ _id: task.insertedId }));
 }

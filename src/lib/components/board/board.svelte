@@ -1,34 +1,50 @@
 <script lang="ts">
-	import Column from '$lib/components/column/column.svelte';
-	import TaskForm from '$lib/components/task-form/task-form.svelte';
 	import Panel from '@awenovations/aura/panel.svelte';
+	import Column from '$lib/components/column/column.svelte';
+	import type { Card } from '$lib/components/task-card/types';
+	import TaskForm from '$lib/components/task-form/task-form.svelte';
 
-  export let handleSubmit : (event: FormEvent<HTMLFormElement>) => void;
+	export let handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
+
+	export let cards: Array<Card> = [];
 
 	let taskFormOpen: boolean = false;
-	$: newTaskType = '';
 
-	const handleCreateTask = (taskType: string) => {
+	$: newTaskColumn = '';
+
+	const handleCreateTask = (taskColumn: string) => {
 		taskFormOpen = true;
-    newTaskType = taskType;
+		newTaskColumn = taskColumn;
 	};
 
 	const handleClose = () => {
 		taskFormOpen = false;
-    newTaskType = "";
+		newTaskColumn = '';
 	};
 
+	const tasksByColumns = cards.reduce(
+		(accumulator: Record<string, Array<Card>>, currentValue: Card) => {
+			const columnName = currentValue.column;
+			const tasks = accumulator?.[columnName] ?  [...accumulator[columnName], currentValue] : [currentValue];
+
+			return {
+				...accumulator,
+				[columnName]: [...tasks]
+			};
+		},
+		{}
+	);
 </script>
 
 <div class="column-wrapper">
-	<Column name="Backlog" {handleCreateTask} />
-	<Column name="To Do" {handleCreateTask} />
-	<Column name="In Progress" {handleCreateTask} />
-	<Column name="Done" {handleCreateTask} />
+	<Column cards={tasksByColumns['Backlog']} name="Backlog" {handleCreateTask} />
+	<Column cards={tasksByColumns['To Do']} name="To Do" {handleCreateTask} />
+	<Column cards={tasksByColumns['In Progress']} name="In Progress" {handleCreateTask} />
+	<Column cards={tasksByColumns['Done']} name="Done" {handleCreateTask} />
 </div>
 
 <Panel open={taskFormOpen}>
-  <TaskForm {handleClose} type={newTaskType} {handleSubmit} />
+	<TaskForm {handleClose} column={newTaskColumn} {handleSubmit} />
 </Panel>
 
 <style lang="ts">

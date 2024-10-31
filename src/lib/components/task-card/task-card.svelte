@@ -57,7 +57,8 @@
 
 		.card-type {
 			display: flex;
-			justify-content: space-between;
+			justify-content: flex-end;
+			gap: 0.714rem;
 
 			.card-type-text {
 				text-align: right;

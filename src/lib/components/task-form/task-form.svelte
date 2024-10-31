@@ -2,7 +2,7 @@
 	import TextField from '@awenovations/aura/text-field.svelte';
 	import Button from '@awenovations/aura/button.svelte';
 
-	export let type: string = '';
+	export let column: string = '';
 	export let handleClose: () => void;
 	export let handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
 
@@ -105,7 +105,6 @@
 			data-cy="task-type"
 			type="text"
 			placeholder="Task type..."
-			value={type}
 		>
 			<span slot="label">Task type</span>
 			<span data-cy="task-type-errors" slot="errors">Task type is required</span>
@@ -121,6 +120,7 @@
 		>
 		<Button {loading} type="submit" size="small" data-cy="save-button">Save</Button>
 	</div>
+  <input type="hidden" name="column" value={column} />
 </form>
 
 <style lang="scss">
