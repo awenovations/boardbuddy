@@ -25,7 +25,9 @@
 	const tasksByColumns = cards.reduce(
 		(accumulator: Record<string, Array<Card>>, currentValue: Card) => {
 			const columnName = currentValue.column;
-			const tasks = accumulator?.[columnName] ?  [...accumulator[columnName], currentValue] : [currentValue];
+			const tasks = accumulator?.[columnName]
+				? [...accumulator[columnName], currentValue]
+				: [currentValue];
 
 			return {
 				...accumulator,
@@ -52,7 +54,6 @@
 		display: flex;
 		flex-direction: row;
 		gap: 2.5rem;
-		height: 100%;
-		width: 100%;
+		overflow: hidden;
 	}
 </style>

@@ -23,7 +23,7 @@
 		<span class="name">Board Buddy</span>
 		Simplify Your Workflow
 	</div>
-	<slot></slot>
+	<slot />
 </div>
 <Toast />
 
@@ -54,8 +54,9 @@
 		box-sizing: border-box;
 		margin: 0 auto;
 		width: fit-content;
+		max-height: 100%;
 		gap: 3.813rem;
-    justify-content: center;
+		overflow: hidden;
 
 		&.center {
 			gap: 0.714rem;

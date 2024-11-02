@@ -45,7 +45,6 @@
 		display: flex;
 		flex-direction: column;
 		align-items: stretch;
-		height: 100%;
 
 		:global(.card-container) {
 			flex: 1;
@@ -54,6 +53,7 @@
       display: flex;
       flex-direction: column;
       gap: 0.875rem;
+      overflow-y: scroll;
 		}
 
 		h2 {
