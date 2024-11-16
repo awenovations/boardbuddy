@@ -17,6 +17,24 @@ describe('Task Card', () => {
 					cy.mount(TaskCard, { props: { title, body, assignee } });
 				});
 
+				describe('when dragging a card', () => {
+					it('should change the cursor to grab hand on hover', () => {
+						cy.get('[data-cy=task-card]')
+							.realHover()
+							.then(($el) => {
+                cy.wrap($el.css('cursor')).should('equal', 'grab');
+							});
+					});
+
+					it('should change the cursor to grabbing hand on click', () => {
+						cy.get('[data-cy=task-card]')
+							.realMouseDown()
+							.then(($el) => {
+                cy.wrap($el.css('cursor')).should('equal', 'grabbing');
+							});
+					});
+				});
+
 				it('should show the card', () => {
 					cy.get('[data-cy=task-card]').should('exist');
 				});

@@ -6,10 +6,24 @@
 	export let body: string;
 	export let assignee: string;
 	export let type = 'user story';
+	let dragging = false;
 </script>
 
-<Container data-cy="task-card" clearPadding variant="elevated">
-	<div class="card">
+<Container
+	draggable
+	on:dragstart={() => console.log('dragging')}
+	data-cy="task-card"
+	clearPadding
+	variant="elevated"
+>
+	<div
+		role="button"
+		tabindex="0"
+		class="card"
+		class:dragging
+		on:mousedown={() => (dragging = true)}
+		on:mouseup={() => (dragging = false)}
+	>
 		<h4 class="card-title" data-cy="task-card-title">{title}</h4>
 		<span class="card-body" data-cy="task-card-body">{body}</span>
 		<span class="card-assignee" data-cy="task-card-assignee">Assigned to <i>{assignee}</i></span>
@@ -38,6 +52,15 @@
 		flex-direction: column;
 		gap: 1.143rem;
 		justify-content: space-between;
+		user-select: none;
+
+		&:hover {
+			cursor: grab;
+		}
+
+		&.dragging {
+			cursor: grabbing;
+		}
 
 		.card-type-text,
 		.card-assignee,
