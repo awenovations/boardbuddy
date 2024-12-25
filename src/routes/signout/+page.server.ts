@@ -8,7 +8,7 @@ export const load : PageServerLoad = async ({ cookies }) => {
   const refreshToken = cookies.get('board-buddy-refresh');
   const accessToken = cookies.get('board-buddy-access');
 
-  if(sessionId && refreshToken && accessToken) signOut(sessionId, refreshToken, accessToken);
+  if(sessionId) signOut(sessionId, refreshToken, accessToken);
 
   redirect(307, '/signin');
 }

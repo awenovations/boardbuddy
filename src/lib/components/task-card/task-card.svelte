@@ -1,29 +1,115 @@
 <script lang="ts">
-	import Container from '@awenovations/aura/container.svelte';
+	import { browser } from '$app/environment';
+	import { onMount, onDestroy } from 'svelte';
 	import Icon from '@awenovations/aura/icon.svelte';
+	import { draggingStore } from '$lib/stores/dragging.store';
+	import Container from '@awenovations/aura/container.svelte';
 
+	export let id: string;
 	export let title: string;
 	export let body: string;
 	export let assignee: string;
 	export let type = 'user story';
-	let dragging = false;
+
+	$: dragging = $draggingStore.dragging;
+
+	let card: HTMLDivElement;
+
+	let hover = () => {
+		if (dragging) {
+			draggingStore.set({ ...$draggingStore, hoveredId: id });
+		}
+	};
+
+	let originalPosition: { x?: number; y?: number } = {};
+
+	const drag = (evt) => {
+		const offset = card?.parentElement?.getBoundingClientRect();
+
+		if (card) {
+			draggingStore.set({
+				...$draggingStore,
+				draggedId: id,
+				mousePosition: { x: evt.clientX, y: evt.clientY }
+			});
+			const position = {
+				y: offset.y + evt.movementY,
+				x: offset.x + evt.movementX
+			};
+
+			card.parentElement.classList.add('dragging');
+			card.parentElement.style.top = `${position.y}px`;
+			card.parentElement.style.left = `${position.x}px`;
+		}
+	};
+
+	const removeDropStyles = () => {
+		card?.parentElement?.classList.remove('dragging');
+		card?.parentElement?.style.removeProperty('top');
+		card?.parentElement?.style.removeProperty('left');
+		card?.parentElement?.classList.remove('animateable');
+
+		document.querySelectorAll('.dropzone').forEach((dropzone) => dropzone.classList.remove('show'));
+	};
+
+	const drop = (evt: Event) => {
+
+		card.parentElement.classList.add('animateable');
+
+		card.parentElement.style.top = `${originalPosition.y}px`;
+		card.parentElement.style.left = `${originalPosition.x}px`;
+
+		document.removeEventListener('mouseup', drop);
+		document.removeEventListener('mousemove', drag);
+
+    if($draggingStore.validDrop) {
+      removeDropStyles();
+    } else {
+      setTimeout(removeDropStyles, 200);
+    }
+
+		draggingStore.set({
+			dragging: false,
+			mousePosition: undefined,
+			hoveredId: undefined,
+			validDrop: false,
+			draggedId: undefined
+		});
+	};
+
+	const dragStart = () => {
+		draggingStore.set({ dragging: true });
+
+		const offset = card.parentElement.getBoundingClientRect();
+
+		originalPosition = {
+			y: offset.y,
+			x: offset.x
+		};
+
+		dragging = true;
+
+		document.addEventListener('mouseup', drop);
+		document.addEventListener('mousemove', drag);
+	};
+
+	onMount(() => {
+		if (browser) {
+			card.parentElement.addEventListener('mousedown', dragStart);
+			card.parentElement.addEventListener('mouseover', hover);
+		}
+	});
+
+	onDestroy(() => {
+		if (browser) {
+			card.parentElement.removeEventListener('mousedown', dragStart);
+			card.parentElement.removeEventListener('mouseover', hover);
+		}
+	});
 </script>
 
-<Container
-	draggable
-	on:dragstart={() => console.log('dragging')}
-	data-cy="task-card"
-	clearPadding
-	variant="elevated"
->
-	<div
-		role="button"
-		tabindex="0"
-		class="card"
-		class:dragging
-		on:mousedown={() => (dragging = true)}
-		on:mouseup={() => (dragging = false)}
-	>
+<Container class="task-card" data-cy="task-card" clearPadding variant="elevated" data-id={id}>
+	<div bind:this={card} role="button" tabindex="0" class="card" class:dragging>
 		<h4 class="card-title" data-cy="task-card-title">{title}</h4>
 		<span class="card-body" data-cy="task-card-body">{body}</span>
 		<span class="card-assignee" data-cy="task-card-assignee">Assigned to <i>{assignee}</i></span>
@@ -41,6 +127,17 @@
 </Container>
 
 <style lang="scss">
+	:global(.task-card.animateable) {
+		transition: all 200ms ease-out;
+	}
+
+	:global(.task-card.dragging) {
+		position: absolute;
+		z-index: 1001;
+		opacity: 0.8;
+		pointer-events: none;
+	}
+
 	.card {
 		height: 12.714rem;
 		width: 13.929rem;
@@ -54,12 +151,12 @@
 		justify-content: space-between;
 		user-select: none;
 
-		&:hover {
-			cursor: grab;
+		&.dragging {
+			cursor: grabbing !important;
 		}
 
-		&.dragging {
-			cursor: grabbing;
+		&:hover {
+			cursor: grab;
 		}
 
 		.card-type-text,

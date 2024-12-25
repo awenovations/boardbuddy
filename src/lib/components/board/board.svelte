@@ -55,5 +55,6 @@
 		flex-direction: row;
 		gap: 2.5rem;
 		overflow: hidden;
+    height: 100%;
 	}
 </style>

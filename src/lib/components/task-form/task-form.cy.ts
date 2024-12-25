@@ -48,7 +48,7 @@ describe('Task Form', () => {
 			cy.get('input[data-cy=task-name]').type('Test task name');
 			cy.get('textarea[data-cy=description]').type('Test description');
 			cy.get('input[data-cy=assignee]').type('Test assignee');
-			cy.get('input[data-cy=task-type]').type('Task type');
+			cy.get('[data-cy=task-type]').realClick().type('{downArrow}{enter}');
 		};
 
 		const setup = () => {

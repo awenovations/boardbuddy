@@ -47,6 +47,7 @@ describe('when loading buddy board', () => {
 							assignee: 'test',
 							taskType: 'user story',
 							user_id: '104383507739409303538',
+							order: 0,
 							column: 'Backlog'
 						},
 						{
@@ -56,6 +57,7 @@ describe('when loading buddy board', () => {
 							assignee: 'test 2',
 							taskType: 'user story',
 							user_id: '104383507739409303538',
+							order: 0,
 							column: 'Done'
 						},
 						{
@@ -65,6 +67,7 @@ describe('when loading buddy board', () => {
 							assignee: 'test 2',
 							taskType: 'user story',
 							user_id: '104383507739409303538',
+							order: 0,
 							column: 'In Progress'
 						},
 						{
@@ -74,6 +77,7 @@ describe('when loading buddy board', () => {
 							assignee: 'test 2',
 							taskType: 'user story',
 							user_id: '104383507739409303538',
+							order: 0,
 							column: 'To Do'
 						}
 					]

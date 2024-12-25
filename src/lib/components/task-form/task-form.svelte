@@ -1,6 +1,7 @@
 <script lang="ts">
-	import TextField from '@awenovations/aura/text-field.svelte';
 	import Button from '@awenovations/aura/button.svelte';
+	import Dropdown from '@awenovations/aura/dropdown.svelte';
+	import TextField from '@awenovations/aura/text-field.svelte';
 
 	export let column: string = '';
 	export let handleClose: () => void;
@@ -21,6 +22,12 @@
 
 				if (name) {
 					accumulator[name] = !element.checkValidity();
+				}
+
+				if (name === 'task-type') {
+					const value = element.getAttribute('value');
+
+					accumulator[name] = !value;
 				}
 
 				return accumulator;
@@ -97,18 +104,20 @@
 			<span data-cy="assignee-errors" slot="errors">Assignee is required</span>
 		</TextField>
 
-		<TextField
+		<Dropdown
+			data-cy="task-type"
 			fullWidth
 			required
 			name="task-type"
 			showErrors={showErrors?.['task-type']}
-			data-cy="task-type"
-			type="text"
-			placeholder="Task type..."
 		>
-			<span slot="label">Task type</span>
+			<span slot="placeholder">Task type...</span>
 			<span data-cy="task-type-errors" slot="errors">Task type is required</span>
-		</TextField>
+			<span slot="label">Task type</span>
+			<aura-option value="user story">user story</aura-option>
+			<aura-option value="bug fix">bug fix</aura-option>
+			<aura-option value="plan">plan</aura-option>
+		</Dropdown>
 	</div>
 	<div class="bottom-row">
 		<Button
@@ -120,7 +129,7 @@
 		>
 		<Button {loading} type="submit" size="small" data-cy="save-button">Save</Button>
 	</div>
-  <input type="hidden" name="column" value={column} />
+	<input type="hidden" name="column" value={column} />
 </form>
 
 <style lang="scss">

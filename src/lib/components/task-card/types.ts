@@ -5,6 +5,7 @@ export interface Card {
   assignee: string;
   taskType: string;
   user_id: string;
+  order: number;
   column: string;
 }
 

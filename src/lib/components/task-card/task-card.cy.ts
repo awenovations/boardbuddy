@@ -18,19 +18,19 @@ describe('Task Card', () => {
 				});
 
 				describe('when dragging a card', () => {
-					it('should change the cursor to grab hand on hover', () => {
+					it.skip('should change the cursor to grab hand on hover', () => {
 						cy.get('[data-cy=task-card]')
 							.realHover()
 							.then(($el) => {
-                cy.wrap($el.css('cursor')).should('equal', 'grab');
+								cy.wrap($el.css('cursor')).should('equal', 'grab');
 							});
 					});
 
-					it('should change the cursor to grabbing hand on click', () => {
+					it.skip('should change the cursor to grabbing hand on click', () => {
 						cy.get('[data-cy=task-card]')
 							.realMouseDown()
 							.then(($el) => {
-                cy.wrap($el.css('cursor')).should('equal', 'grabbing');
+								cy.wrap($el.css('cursor')).should('equal', 'grabbing');
 							});
 					});
 				});

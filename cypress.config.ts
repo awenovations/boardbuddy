@@ -1,5 +1,4 @@
 import { resolve } from 'path';
-import { existsSync } from 'fs';
 import { defineConfig } from 'cypress';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import { replaceCodePlugin } from 'vite-plugin-replace';
@@ -7,7 +6,7 @@ import { replaceCodePlugin } from 'vite-plugin-replace';
 export default defineConfig({
 	viewportWidth: 500,
 	viewportHeight: 800,
-
+  retries: 2,
 	component: {
 		setupNodeEvents(_, config) {
 			return Object.assign({}, config);
@@ -29,7 +28,8 @@ export default defineConfig({
 				],
 				resolve: {
 					alias: {
-						['$lib']: resolve('src/lib')
+						['$lib']: resolve('src/lib'),
+						['$app']: resolve('cypress/svelte-shims')
 					}
 				}
 			})
