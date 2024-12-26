@@ -43,7 +43,7 @@
 		"@auth/core": "^0.34.1",
 		"@auth/mongodb-adapter": "^3.4.2",
 		"@auth/sveltekit": "^1.4.1",
-		"@awenovations/aura": "^0.0.29",
+		"@awenovations/aura": "^0.0.30",
 		"@lucia-auth/adapter-mongodb": "^1.0.3",
 		"@types/find-node-modules": "^2.1.2",
 		"@types/uuid": "^10.0.0",
