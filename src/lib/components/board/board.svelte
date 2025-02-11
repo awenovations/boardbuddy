@@ -45,7 +45,7 @@
 	<Column cards={tasksByColumns['Done']} name="Done" {handleCreateTask} />
 </div>
 
-<Panel open={taskFormOpen}>
+<Panel open={taskFormOpen} class="task-form-panel">
 	<TaskForm {handleClose} column={newTaskColumn} {handleSubmit} />
 </Panel>
 
@@ -55,6 +55,10 @@
 		flex-direction: row;
 		gap: 2.5rem;
 		overflow: hidden;
-    height: 100%;
+		height: 100%;
+	}
+
+	:global(.task-form-panel) {
+		z-index: 1000;
 	}
 </style>

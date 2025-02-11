@@ -57,5 +57,5 @@ export async function PATCH({ cookies, request }: RequestEvent) {
 		);
 	}
 
-	return json({ test: '' });
+  return new Response(null, {status: 204});
 }

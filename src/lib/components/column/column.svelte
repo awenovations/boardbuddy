@@ -1,4 +1,6 @@
 <script lang="ts">
+	import 'animate.css';
+
 	import { browser } from '$app/environment';
 	import { invalidateAll } from '$app/navigation';
 	import Link from '@awenovations/aura/link.svelte';
@@ -274,17 +276,19 @@
 	</h2>
 	<Container kind="outlined" clearPadding class="card-container" data-cy="card-container">
 		{#each cardList as card}
-			{#if card.dropzone}
-				<div class="dropzone" data-index={card.index}>Drop Here</div>
-			{:else}
-				<TaskCard
-					id={card._id}
-					title={card.taskName}
-					body={card.description}
-					type={card.taskType}
-					assignee={card.assignee}
-				/>
-			{/if}
+			{#key card}
+				{#if card.dropzone}
+					<div class="dropzone" data-index={card.index}>Drop Here</div>
+				{:else}
+					<TaskCard
+						id={card._id}
+						title={card.taskName}
+						body={card.description}
+						type={card.taskType}
+						assignee={card.assignee}
+					/>
+				{/if}
+			{/key}
 		{/each}
 	</Container>
 </div>

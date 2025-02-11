@@ -2,7 +2,7 @@ import TaskCard from './task-card.svelte';
 
 describe('Task Card', () => {
 	beforeEach(() => {
-		cy.viewport(250, 250);
+		cy.viewport(350, 250);
 	});
 
 	describe('when viewing a card', () => {
@@ -11,10 +11,26 @@ describe('Task Card', () => {
 			const body =
 				'An example task description that is longer than the amount that should be shown in this card.';
 			const assignee = 'Joe';
+			const id = 'test-id';
 
 			describe('with defaults', () => {
 				beforeEach(() => {
-					cy.mount(TaskCard, { props: { title, body, assignee } });
+					cy.mount(TaskCard, { props: { title, body, assignee, id } });
+				});
+
+				describe('when hovering over a card', () => {
+					it('should show action buttons when card is hovered', () => {
+						cy.get('[data-cy=task-card]').realHover();
+						cy.get('[data-cy=task-card-actions]').should('be.visible');
+						cy.get('[data-cy=task-card]').realMouseMove(-10, -10);
+					});
+
+					it('should show action buttons when actions is hovered', () => {
+						cy.get('[data-cy=task-card]').realHover();
+						cy.get('[data-cy=task-card-actions]').realHover();
+						cy.wait(300);
+						cy.get('[data-cy=task-card-actions]').should('be.visible');
+					});
 				});
 
 				describe('when dragging a card', () => {
@@ -68,31 +84,31 @@ describe('Task Card', () => {
 			describe('with non-default values', () => {
 				it('should show a custom task type', () => {
 					const type = 'non-default';
-					cy.mount(TaskCard, { props: { title, body, assignee, type } });
+					cy.mount(TaskCard, { props: { title, body, assignee, type, id } });
 					cy.get('[data-cy=task-card-type]').should('contain', type);
 				});
 
 				it('should default to a plan icon', () => {
 					const type = 'anything';
-					cy.mount(TaskCard, { props: { title, body, assignee, type } });
+					cy.mount(TaskCard, { props: { title, body, assignee, type, id } });
 					cy.get('[data-cy=task-card-type] [style*=plan]').should('exist');
 				});
 
 				it('should show a user story icon', () => {
 					const type = 'user story';
-					cy.mount(TaskCard, { props: { title, body, assignee, type } });
+					cy.mount(TaskCard, { props: { title, body, assignee, type, id } });
 					cy.get('[data-cy=task-card-type] [style*=user-story]').should('exist');
 				});
 
 				it('should show a bug fix icon', () => {
 					const type = 'bug fix';
-					cy.mount(TaskCard, { props: { title, body, assignee, type } });
+					cy.mount(TaskCard, { props: { title, body, assignee, type, id } });
 					cy.get('[data-cy=task-card-type] [style*=bug]').should('exist');
 				});
 
 				it('should show a plan icon', () => {
 					const type = 'planning';
-					cy.mount(TaskCard, { props: { title, body, assignee, type } });
+					cy.mount(TaskCard, { props: { title, body, assignee, type, id } });
 					cy.get('[data-cy=task-card-type] [style*=plan]').should('exist');
 				});
 			});
@@ -104,9 +120,10 @@ describe('Task Card', () => {
 				'An example task description that is longer than the amount that should be shown in this card.';
 			const assignee = "Joe's name is way too long";
 			const type = 'This is a really long type that should be truncated';
+			const id = 'test-id';
 
 			beforeEach(() => {
-				cy.mount(TaskCard, { props: { title, body, assignee, type } });
+				cy.mount(TaskCard, { props: { title, body, assignee, type, id } });
 			});
 
 			it('should show an ellipsis on a long title', () => {

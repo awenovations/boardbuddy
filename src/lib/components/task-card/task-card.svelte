@@ -1,9 +1,17 @@
 <script lang="ts">
+	import 'animate.css';
+
+	import Portal from 'svelte-portal';
+	import classNames from 'classnames';
+	import debounce from 'lodash.debounce';
 	import { browser } from '$app/environment';
 	import { onMount, onDestroy } from 'svelte';
 	import Icon from '@awenovations/aura/icon.svelte';
+	import Button from '@awenovations/aura/button.svelte';
+	import Divider from '@awenovations/aura/divider.svelte';
 	import { draggingStore } from '$lib/stores/dragging.store';
 	import Container from '@awenovations/aura/container.svelte';
+	import { computePosition, autoUpdate } from '@floating-ui/dom';
 
 	export let id: string;
 	export let title: string;
@@ -11,15 +19,64 @@
 	export let assignee: string;
 	export let type = 'user story';
 
+	$: hideActionsTransition = false;
+	$: showActions = false;
 	$: dragging = $draggingStore.dragging;
+	$: actionsIsHovered = false;
+	$: cardIsHovered = false;
 
 	let card: HTMLDivElement;
+
+	let cleanUp;
 
 	let hover = () => {
 		if (dragging) {
 			draggingStore.set({ ...$draggingStore, hoveredId: id });
 		}
+
+		if (!card?.parentElement) return;
+
+		const taskCardActions = document.querySelector(`.task-card-actions[data-id="${id}"]`);
+
+		const setActionPosition = () => {
+			if (!card?.parentElement) return;
+
+			computePosition(card.parentElement, taskCardActions, { placement: 'right-start' }).then(
+				({ x, y }) => {
+					Object.assign(taskCardActions.style, {
+						left: `${x + 8}px`,
+						top: `${y}px`
+					});
+				}
+			);
+		};
+
+		cleanUp = autoUpdate(card.parentElement, taskCardActions, setActionPosition);
+
+		showActions = true;
+		cardIsHovered = true;
 	};
+
+	const debounceRate = 300;
+
+	let hoverOut = () => {
+		cardIsHovered = false;
+	};
+
+	let hoverOutWithDebounce = debounce(() => {
+		if (!cardIsHovered && !actionsIsHovered) {
+			hideActionsMenu();
+			cleanUp?.();
+		}
+	}, debounceRate);
+
+	const actionsHover = () => (actionsIsHovered = true);
+	const actionsHoverOut = debounce(() => {
+		if (!cardIsHovered) {
+			actionsIsHovered = false;
+			hideActionsMenu();
+		}
+	}, debounceRate);
 
 	let originalPosition: { x?: number; y?: number } = {};
 
@@ -53,7 +110,6 @@
 	};
 
 	const drop = (evt: Event) => {
-
 		card.parentElement.classList.add('animateable');
 
 		card.parentElement.style.top = `${originalPosition.y}px`;
@@ -62,11 +118,11 @@
 		document.removeEventListener('mouseup', drop);
 		document.removeEventListener('mousemove', drag);
 
-    if($draggingStore.validDrop) {
-      removeDropStyles();
-    } else {
-      setTimeout(removeDropStyles, 200);
-    }
+		if ($draggingStore.validDrop) {
+			removeDropStyles();
+		} else {
+			setTimeout(removeDropStyles, 200);
+		}
 
 		draggingStore.set({
 			dragging: false,
@@ -77,7 +133,17 @@
 		});
 	};
 
+	const hideActionsMenu = () => {
+		hideActionsTransition = true;
+
+		setTimeout(() => {
+			showActions = false;
+			hideActionsTransition = false;
+		}, 250);
+	};
+
 	const dragStart = () => {
+		hideActionsMenu();
 		draggingStore.set({ dragging: true });
 
 		const offset = card.parentElement.getBoundingClientRect();
@@ -97,6 +163,12 @@
 		if (browser) {
 			card.parentElement.addEventListener('mousedown', dragStart);
 			card.parentElement.addEventListener('mouseover', hover);
+			card.parentElement.addEventListener('mouseleave', hoverOut);
+			card.parentElement.addEventListener('mouseleave', hoverOutWithDebounce);
+
+			const taskCardActions = document.querySelector(`.task-card-actions[data-id="${id}"]`);
+			taskCardActions.addEventListener('mouseover', actionsHover);
+			taskCardActions.addEventListener('mouseleave', actionsHoverOut);
 		}
 	});
 
@@ -104,6 +176,12 @@
 		if (browser) {
 			card.parentElement.removeEventListener('mousedown', dragStart);
 			card.parentElement.removeEventListener('mouseover', hover);
+			card.parentElement.removeEventListener('mouseleave', hoverOut);
+			card.parentElement.removeEventListener('mouseleave', hoverOutWithDebounce);
+
+			const taskCardActions = document.querySelector(`.task-card-actions[data-id="${id}"]`);
+			taskCardActions.removeEventListener('mouseover', actionsHover);
+			taskCardActions.removeEventListener('mouseleave', actionsHoverOut);
 		}
 	});
 </script>
@@ -126,6 +204,27 @@
 	</div>
 </Container>
 
+<Portal target="body">
+	<Container
+		data-id={id}
+		variant="elevated"
+		class={classNames('task-card-actions', 'animate__animated', 'animate__fadeIn', {
+			showActions,
+			animate__fadeOut: hideActionsTransition
+		})}
+		data-cy="task-card-actions"
+		clearPadding
+	>
+		<div class="action-button">
+			<Icon class="action-button-icon" name="pencil" />
+		</div>
+		<Divider class="actions-divider" />
+		<div class="action-button">
+			<Icon class="action-button-icon" name="trash" />
+		</div>
+	</Container>
+</Portal>
+
 <style lang="scss">
 	:global(.task-card.animateable) {
 		transition: all 200ms ease-out;
@@ -136,6 +235,47 @@
 		z-index: 1001;
 		opacity: 0.8;
 		pointer-events: none;
+	}
+
+	:global(.task-card-actions) {
+		position: absolute;
+		width: 1.714rem !important;
+		height: 3.571rem !important;
+
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+		cursor: pointer;
+
+		--animate-duration: 250ms;
+
+		&:not(.showActions) {
+			display: none;
+		}
+	}
+
+	:global(.actions-divider) {
+		width: 100%;
+		max-height: 0.071rem;
+	}
+
+	:global(.action-button) {
+		flex: 1;
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		cursor: pointer;
+
+		&:hover {
+			background: var(--aura-tertiary-10);
+		}
+	}
+
+	:global(.action-button-icon .icon) {
+		background: var(--aura-tertiary-50) !important;
 	}
 
 	.card {
@@ -150,6 +290,11 @@
 		gap: 1.143rem;
 		justify-content: space-between;
 		user-select: none;
+		position: relative;
+
+		* {
+			pointer-events: none;
+		}
 
 		&.dragging {
 			cursor: grabbing !important;

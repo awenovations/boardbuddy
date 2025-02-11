@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-  import { onMount, onDestroy } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { invalidateAll } from '$app/navigation';
 
 	import { showToast } from '@awenovations/aura/toast.store';
@@ -47,28 +47,27 @@
 		}
 	};
 
-  const clickedOnCard = (el: HTMLElement) => {
+	const clickedOnCard = (el: HTMLElement) => {
+		if (el?.classList?.contains('card')) {
+			return true;
+		}
 
-    if(el?.classList?.contains('card')) {
-      return true;
-    }
+		if (el?.parentElement && document.body.tagName !== el?.parentElement?.tagName) {
+			return clickedOnCard(el?.parentElement);
+		}
 
-    if(document.body.tagName !== el?.parentElement.tagName) {
-      return clickedOnCard(el?.parentElement);
-    }
+		return false;
+	};
 
-    return false;
-  }
+	const mousedown = (evt) => {
+		if (clickedOnCard(evt.target)) {
+			document.body.classList.add('dragging');
+		}
+	};
 
-  const mousedown = evt => { 
-    if(clickedOnCard(evt.target)) {
-      document.body.classList.add('dragging')
-    }
-  };
-
-  const mouseup = evt => { 
-    document.body.classList.remove('dragging')
-  }
+	const mouseup = (evt) => {
+		document.body.classList.remove('dragging');
+	};
 </script>
 
 <svelte:document on:mousedown={mousedown} on:mouseup={mouseup} />
@@ -78,9 +77,7 @@
 {/key}
 
 <style lang="scss">
-
-:global(body.dragging) {
-  cursor: grabbing !important;
-}
-
+	:global(body.dragging) {
+		cursor: grabbing !important;
+	}
 </style>
