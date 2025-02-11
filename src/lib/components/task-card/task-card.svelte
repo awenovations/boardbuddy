@@ -55,6 +55,7 @@
 
 		showActions = true;
 		cardIsHovered = true;
+		actionsIsHovered = false;
 	};
 
 	const debounceRate = 300;
@@ -75,6 +76,7 @@
 		if (!cardIsHovered) {
 			actionsIsHovered = false;
 			hideActionsMenu();
+			cleanUp?.();
 		}
 	}, debounceRate);
 
