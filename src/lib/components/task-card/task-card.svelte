@@ -6,8 +6,11 @@
 	import debounce from 'lodash.debounce';
 	import { browser } from '$app/environment';
 	import { onMount, onDestroy } from 'svelte';
+	import { invalidateAll } from '$app/navigation';
 	import Icon from '@awenovations/aura/icon.svelte';
+	import Dialog from '@awenovations/aura/dialog.svelte';
 	import Button from '@awenovations/aura/button.svelte';
+	import { openDialog } from '$lib/stores/dialog.store';
 	import Divider from '@awenovations/aura/divider.svelte';
 	import { draggingStore } from '$lib/stores/dragging.store';
 	import Container from '@awenovations/aura/container.svelte';
@@ -79,6 +82,16 @@
 			cleanUp?.();
 		}
 	}, debounceRate);
+
+	const deleteTask = async () => {
+		const response = await fetch(`/api/tasks/${id}`, {
+			method: 'DELETE'
+		});
+
+		if (response.ok) {
+			invalidateAll();
+		}
+	};
 
 	let originalPosition: { x?: number; y?: number } = {};
 
@@ -221,7 +234,15 @@
 			<Icon class="action-button-icon" name="pencil" />
 		</div>
 		<Divider class="actions-divider" />
-		<div class="action-button">
+		<div
+			class="action-button"
+			on:click={() =>
+				openDialog({
+					message: 'Are you sure you want to delete this task?',
+					confirmText: 'Delete',
+					handleConfirm: deleteTask
+				})}
+		>
 			<Icon class="action-button-icon" name="trash" />
 		</div>
 	</Container>

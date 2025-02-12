@@ -33,6 +33,16 @@ describe('Task Card', () => {
 					});
 				});
 
+        // TODO: Figure out how to test the confirm delete
+				describe.skip('when deleting', () => {
+					it('should show action buttons when actions is hovered', () => {
+						cy.get('[data-cy=task-card]').realHover();
+						cy.get('[data-cy=task-card-actions]').realHover();
+						cy.wait(300);
+						cy.get('[data-cy=confirm-task-delete]').should('be.visible');
+					});
+				});
+
 				describe('when dragging a card', () => {
 					it.skip('should change the cursor to grab hand on hover', () => {
 						cy.get('[data-cy=task-card]')

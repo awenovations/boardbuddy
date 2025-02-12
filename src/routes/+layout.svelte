@@ -3,7 +3,9 @@
 	import { onMount } from 'svelte';
 	import classNames from 'classnames';
 	import Toast from '@awenovations/aura/toast.svelte';
+	import Dialog from '@awenovations/aura/dialog.svelte';
 	import '@awenovations/aura/dist/tokens/_variables.css';
+	import { dialogStore } from '$lib/stores/dialog.store';
 	import { showToast } from '@awenovations/aura/toast.store';
 
 	export let data;
@@ -26,6 +28,16 @@
 	<slot />
 </div>
 <Toast />
+{#if $dialogStore.open}
+	<Dialog
+		class="floating-dialog"
+		confirmText={$dialogStore.confirmText}
+		cancelText={$dialogStore.cancelText}
+		onCancel={$dialogStore.handleCancel}
+		onConfirm={$dialogStore.handleConfirm}>{$dialogStore.message}</Dialog
+	>
+	<div class="backdrop"></div>
+{/if}
 
 <style lang="scss">
 	@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
@@ -75,5 +87,24 @@
 		.center & {
 			align-items: center;
 		}
+	}
+
+	:global(.floating-dialog) {
+		position: absolute;
+		top: 43%;
+		left: 50%;
+		transform: translateX(-50%);
+		z-index: 1001;
+	}
+
+	.backdrop {
+		position: absolute;
+		top: 0;
+		left: 0;
+		background: rgba(0, 0, 0, 40%);
+		backdrop-filter: blur(0.2rem);
+		height: 100%;
+		width: 100%;
+		z-index: 1000;
 	}
 </style>
