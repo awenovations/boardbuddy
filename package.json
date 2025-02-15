@@ -11,7 +11,8 @@
 		"test": "vitest",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
-		"ct:open": "npx cypress open"
+		"ct:open": "npx cypress open",
+		"ct:headless": "npx cypress run --component --headless "
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^3.0.0",
