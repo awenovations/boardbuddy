@@ -116,7 +116,7 @@ describe('Task Form', () => {
 				setup();
 			});
 
-			it('When task name is empty', () => {
+			it('should show task name error', () => {
 				cy.get('[data-cy=save-button]')
 					.realClick()
 					.then(() => {
@@ -124,7 +124,7 @@ describe('Task Form', () => {
 					});
 			});
 
-			it('When task description is empty', () => {
+			it('should show description error', () => {
 				cy.get('[data-cy=save-button]')
 					.realClick()
 					.then(() => {
@@ -132,7 +132,7 @@ describe('Task Form', () => {
 					});
 			});
 
-			it('When task assignee is empty', () => {
+			it('should show task assignee error', () => {
 				cy.get('[data-cy=save-button]')
 					.realClick()
 					.then(() => {
@@ -140,12 +140,49 @@ describe('Task Form', () => {
 					});
 			});
 
-			it('When task type is empty', () => {
+			it('should show task type error', () => {
 				cy.get('[data-cy=save-button]')
 					.realClick()
 					.then(() => {
 						cy.get('[data-cy=task-type-errors]').contains('Task type is required');
 					});
+			});
+		});
+
+		describe('When editing a post', () => {
+			const taskName = 'Test Task Name';
+			const description = 'Test Task Description';
+			const assignee = 'Test Task Assignee';
+			const taskType = 'bug fix';
+
+			const setup = () => {
+				cy.mount(TaskForm, {
+					props: {
+						handleClose: () => {},
+						handleSubmit: () => {},
+						task: { taskName, description, assignee, taskType }
+					}
+				});
+			};
+
+			beforeEach(() => {
+				setup();
+			});
+
+			it('should have task name value', () => {
+				cy.get('[data-cy=task-name]').should('have.value', taskName);
+			});
+
+			it('should have description value', () => {
+				cy.get('[data-cy=description]').should('have.value', description);
+			});
+
+			it('should have assignee value', () => {
+				cy.get('[data-cy=assignee]').should('have.value', assignee);
+			});
+
+			it('should have task type value', () => {
+				cy.get('input[name=task-type]').should('have.value', taskType);
 			});
 		});
 	});

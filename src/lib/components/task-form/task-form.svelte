@@ -1,10 +1,12 @@
 <script lang="ts">
 	import Button from '@awenovations/aura/button.svelte';
+	import type { Card } from '$lib/components/task-card/types';
 	import Dropdown from '@awenovations/aura/dropdown.svelte';
 	import TextField from '@awenovations/aura/text-field.svelte';
 
 	export let column: string = '';
 	export let handleClose: () => void;
+	export let task: Partial<Card> = {};
 	export let handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
 
 	$: loading = false;
@@ -72,6 +74,7 @@
 		name="task-name"
 		data-cy="task-name"
 		placeholder="Task name..."
+		value={task.taskName}
 	>
 		<span slot="label">Task name</span>
 		<span data-cy="task-name-errors" slot="errors">Task name is required</span>
@@ -85,6 +88,7 @@
 		data-cy="description"
 		type="multi"
 		placeholder="Descrption..."
+		value={task.description}
 	>
 		<span slot="label">Description</span>
 		<span data-cy="task-description-errors" slot="errors">Task description is required</span>
@@ -99,6 +103,7 @@
 			data-cy="assignee"
 			type="text"
 			placeholder="Assignee..."
+			value={task.assignee}
 		>
 			<span slot="label">Assignee</span>
 			<span data-cy="assignee-errors" slot="errors">Assignee is required</span>
@@ -110,6 +115,7 @@
 			required
 			name="task-type"
 			showErrors={showErrors?.['task-type']}
+			currentValue={task.taskType}
 		>
 			<span slot="placeholder">Task type...</span>
 			<span data-cy="task-type-errors" slot="errors">Task type is required</span>
