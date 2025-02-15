@@ -31,6 +31,12 @@
 	let card: HTMLDivElement;
 
 	let cleanUp;
+	const openDeleteDialog = () =>
+		openDialog({
+			message: 'Are you sure you want to delete this task?',
+			confirmText: 'Delete',
+			handleConfirm: deleteTask
+		});
 
 	let hover = () => {
 		if (dragging) {
@@ -234,15 +240,7 @@
 			<Icon class="action-button-icon" name="pencil" />
 		</div>
 		<Divider class="actions-divider" />
-		<div
-			class="action-button"
-			on:click={() =>
-				openDialog({
-					message: 'Are you sure you want to delete this task?',
-					confirmText: 'Delete',
-					handleConfirm: deleteTask
-				})}
-		>
+		<div class="action-button" on:click={openDeleteDialog}>
 			<Icon class="action-button-icon" name="trash" />
 		</div>
 	</Container>
