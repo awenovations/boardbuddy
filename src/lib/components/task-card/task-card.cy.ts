@@ -33,7 +33,7 @@ describe('Task Card', () => {
 					});
 				});
 
-        // TODO: Figure out how to test the confirm delete
+				// TODO: Figure out how to test the confirm delete
 				describe.skip('when deleting', () => {
 					it('should show action buttons when actions is hovered', () => {
 						cy.get('[data-cy=task-card]').realHover();
