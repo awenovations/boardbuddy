@@ -1,7 +1,7 @@
 import { resolve } from 'path';
 import { defineConfig } from 'cypress';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
-import { replaceCodePlugin } from 'vite-plugin-replace';
+import { replaceCodePlugin } from '@awenovations/vite-plugin-replace';
 
 export default defineConfig({
 	viewportWidth: 500,

@@ -4,16 +4,28 @@
 	import Dropdown from '@awenovations/aura/dropdown.svelte';
 	import TextField from '@awenovations/aura/text-field.svelte';
 
-	export let column: string = '';
-	export let handleClose: () => void;
-	export let task: Partial<Card> = {};
-	export let handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
+	interface Props {
+		column?: string;
+		handleClose: () => void;
+		task?: Partial<Card>;
+		handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
+	}
 
-	$: loading = false;
+	let {
+		column = '',
+		handleClose,
+		task = {},
+		handleSubmit
+	}: Props = $props();
 
-	$: showErrors = null;
+	let loading = $state(false);
+	
 
-	$: pristine = true;
+	let showErrors = $state(null);
+	
+
+	let pristine = $state(true);
+	
 
 	const checkFormValidity = (form: HTMLFormElement) => {
 		const valid = form.checkValidity();
@@ -62,10 +74,10 @@
 
 <form
 	class="task-form"
-	on:change={(event) => {
+	onchange={(event) => {
 		checkFormValidity(event.currentTarget);
 	}}
-	on:submit={submitForm}
+	onsubmit={submitForm}
 	novalidate
 >
 	<TextField
@@ -76,8 +88,12 @@
 		placeholder="Task name..."
 		value={task.taskName}
 	>
-		<span slot="label">Task name</span>
-		<span data-cy="task-name-errors" slot="errors">Task name is required</span>
+		{#snippet label()}
+				<span >Task name</span>
+			{/snippet}
+		{#snippet errors()}
+				<span data-cy="task-name-errors" >Task name is required</span>
+			{/snippet}
 	</TextField>
 
 	<TextField
@@ -90,8 +106,12 @@
 		placeholder="Descrption..."
 		value={task.description}
 	>
-		<span slot="label">Description</span>
-		<span data-cy="task-description-errors" slot="errors">Task description is required</span>
+		{#snippet label()}
+				<span >Description</span>
+			{/snippet}
+		{#snippet errors()}
+				<span data-cy="task-description-errors" >Task description is required</span>
+			{/snippet}
 	</TextField>
 
 	<div class="bottom-row">
@@ -105,8 +125,12 @@
 			placeholder="Assignee..."
 			value={task.assignee}
 		>
-			<span slot="label">Assignee</span>
-			<span data-cy="assignee-errors" slot="errors">Assignee is required</span>
+			{#snippet label()}
+						<span >Assignee</span>
+					{/snippet}
+			{#snippet errors()}
+						<span data-cy="assignee-errors" >Assignee is required</span>
+					{/snippet}
 		</TextField>
 
 		<Dropdown
@@ -117,9 +141,15 @@
 			showErrors={showErrors?.['task-type']}
 			currentValue={task.taskType}
 		>
-			<span slot="placeholder">Task type...</span>
-			<span data-cy="task-type-errors" slot="errors">Task type is required</span>
-			<span slot="label">Task type</span>
+			{#snippet placeholder()}
+						<span >Task type...</span>
+					{/snippet}
+			{#snippet errors()}
+						<span data-cy="task-type-errors" >Task type is required</span>
+					{/snippet}
+			{#snippet label()}
+						<span >Task type</span>
+					{/snippet}
 			<aura-option value="user story">user story</aura-option>
 			<aura-option value="bug fix">bug fix</aura-option>
 			<aura-option value="plan">plan</aura-option>

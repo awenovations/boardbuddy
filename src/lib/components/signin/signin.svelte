@@ -6,8 +6,12 @@
 	import Container from '@awenovations/aura/container.svelte';
 	import TextField from '@awenovations/aura/text-field.svelte';
 
-  export let loading : boolean = false;
-  export let signInWithGoogleHandler = () => {};
+	interface Props {
+		loading?: boolean;
+		signInWithGoogleHandler?: any;
+	}
+
+	let { loading = false, signInWithGoogleHandler = () => {} }: Props = $props();
 </script>
 
 <Container kind="filled" variant="elevated" clearPadding>
@@ -20,13 +24,15 @@
 			type="button"
       on:click={signInWithGoogleHandler}
 		>
-			<Icon name="google-color" slot="icon-before" />
+			<!-- @migration-task: migrate this slot by hand, `icon-before` is an invalid identifier -->
+	<Icon name="google-color" slot="icon-before" />
 
 			Sign in with Google
 		</Button>
 
 		<Button type="button" fullWidth kind="outlined" variant="tertiary" data-cy="apple-button">
-			<Icon name="apple" slot="icon-before" />
+			<!-- @migration-task: migrate this slot by hand, `icon-before` is an invalid identifier -->
+	<Icon name="apple" slot="icon-before" />
 
 			Sign in with Apple
 		</Button>
@@ -38,7 +44,9 @@
 		<div class="signin-form">
 			<div class="form-group">
 				<TextField name="email" data-cy="email" placeholder="email@example.com">
-					<span slot="label">Email</span>
+					{#snippet label()}
+										<span >Email</span>
+									{/snippet}
 				</TextField>
 				<TextField name="password" data-cy="password" type="password" placeholder="password" />
 				<div class="forgot-password" data-cy="forgot-password">

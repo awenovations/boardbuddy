@@ -6,8 +6,12 @@
 	import Container from '@awenovations/aura/container.svelte';
 	import TextField from '@awenovations/aura/text-field.svelte';
 
-  export let loading : boolean = false;
-  export let signUpWithGoogleHandler = () => {};
+	interface Props {
+		loading?: boolean;
+		signUpWithGoogleHandler?: any;
+	}
+
+	let { loading = false, signUpWithGoogleHandler = () => {} }: Props = $props();
 
 </script>
 
@@ -21,13 +25,15 @@
       type="button"
       on:click={signUpWithGoogleHandler}
 		>
-			<Icon name="google-color" slot="icon-before" />
+			<!-- @migration-task: migrate this slot by hand, `icon-before` is an invalid identifier -->
+	<Icon name="google-color" slot="icon-before" />
 
 			Continue with Google
 		</Button>
 
 		<Button fullWidth kind="outlined" variant="tertiary" data-cy="apple-button">
-			<Icon name="apple" slot="icon-before" />
+			<!-- @migration-task: migrate this slot by hand, `icon-before` is an invalid identifier -->
+	<Icon name="apple" slot="icon-before" />
 
 			Continue with Apple
 		</Button>
@@ -39,7 +45,9 @@
 		<div class="signup-form">
 			<div class="form-group">
 				<TextField name="name" data-cy="name" placeholder="Your name">
-					<span slot="label">Name</span>
+					{#snippet label()}
+										<span >Name</span>
+									{/snippet}
 				</TextField>
 				<TextField
 					type="email"
@@ -48,7 +56,9 @@
 					data-cy="email"
 					placeholder="email@example.com"
 				>
-					<span slot="label">Email</span>
+					{#snippet label()}
+										<span >Email</span>
+									{/snippet}
 				</TextField>
 				<TextField
 					name="password"
@@ -57,7 +67,9 @@
 					type="password"
 					placeholder="password"
 				>
-					<span slot="label">Password</span>
+					{#snippet label()}
+										<span >Password</span>
+									{/snippet}
 				</TextField>
 			</div>
       <Button type="submit" {loading} fullWidth variant="tertiary" data-cy="sign-up">Sign up</Button>

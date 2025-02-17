@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import 'animate.css';
 
 	import Portal from 'svelte-portal';
@@ -16,19 +18,36 @@
 	import Container from '@awenovations/aura/container.svelte';
 	import { computePosition, autoUpdate } from '@floating-ui/dom';
 
-	export let id: string;
-	export let title: string;
-	export let body: string;
-	export let assignee: string;
-	export let type = 'user story';
+	interface Props {
+		id: string;
+		title: string;
+		body: string;
+		assignee: string;
+		type?: string;
+	}
 
-	$: hideActionsTransition = false;
-	$: showActions = false;
-	$: dragging = $draggingStore.dragging;
-	$: actionsIsHovered = false;
-	$: cardIsHovered = false;
+	let {
+		id,
+		title,
+		body,
+		assignee,
+		type = 'user story'
+	}: Props = $props();
 
-	let card: HTMLDivElement;
+	let hideActionsTransition = $state(false);
+	
+	let showActions = $state(false);
+	
+	let dragging;
+	run(() => {
+		dragging = $draggingStore.dragging;
+	});
+	let actionsIsHovered = $state(false);
+	
+	let cardIsHovered = $state(false);
+	
+
+	let card: HTMLDivElement = $state();
 
 	let cleanUp;
 	const openDeleteDialog = () =>
@@ -201,8 +220,8 @@
 			card.parentElement.removeEventListener('mouseleave', hoverOutWithDebounce);
 
 			const taskCardActions = document.querySelector(`.task-card-actions[data-id="${id}"]`);
-			taskCardActions.removeEventListener('mouseover', actionsHover);
-			taskCardActions.removeEventListener('mouseleave', actionsHoverOut);
+			taskCardActions?.removeEventListener('mouseover', actionsHover);
+			taskCardActions?.removeEventListener('mouseleave', actionsHoverOut);
 		}
 	});
 </script>
@@ -240,7 +259,7 @@
 			<Icon class="action-button-icon" name="pencil" />
 		</div>
 		<Divider class="actions-divider" />
-		<div class="action-button" on:click={openDeleteDialog}>
+		<div class="action-button" onclick={openDeleteDialog}>
 			<Icon class="action-button-icon" name="trash" />
 		</div>
 	</Container>

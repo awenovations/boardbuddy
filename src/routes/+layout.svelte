@@ -8,7 +8,7 @@
 	import { dialogStore } from '$lib/stores/dialog.store';
 	import { showToast } from '@awenovations/aura/toast.store';
 
-	export let data;
+	let { data, children } = $props();
 
 	onMount(() => {
 		if (data.errorMessage) {
@@ -25,7 +25,7 @@
 		<span class="name">Board Buddy</span>
 		Simplify Your Workflow
 	</div>
-	<slot />
+	{@render children?.()}
 </div>
 <Toast />
 {#if $dialogStore.open}

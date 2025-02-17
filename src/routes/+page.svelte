@@ -8,9 +8,9 @@
 
 	import Board from '$lib/components/board/board.svelte';
 
-	$: cards = $page.data.cards;
+	let cards = $derived($page.data.cards);
 
-	export let handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+	let { handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
 		const formData = [...new FormData(event.currentTarget).entries()].reduce(
 			(accumulator, value) => ({
 				...accumulator,
@@ -45,7 +45,7 @@
 
 			throw new Error(errorMessage);
 		}
-	};
+	} } = $props();
 
 	const clickedOnCard = (el: HTMLElement) => {
 		if (el?.classList?.contains('card')) {
@@ -70,7 +70,7 @@
 	};
 </script>
 
-<svelte:document on:mousedown={mousedown} on:mouseup={mouseup} />
+<svelte:document onmousedown={mousedown} onmouseup={mouseup} />
 
 {#key cards}
 	<Board {handleSubmit} cards={$page.data.cards} />

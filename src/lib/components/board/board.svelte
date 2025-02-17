@@ -4,13 +4,18 @@
 	import type { Card } from '$lib/components/task-card/types';
 	import TaskForm from '$lib/components/task-form/task-form.svelte';
 
-	export let handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
 
-	export let cards: Array<Card> = [];
+	interface Props {
+		handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
+		cards?: Array<Card>;
+	}
 
-	let taskFormOpen: boolean = false;
+	let { handleSubmit, cards = [] }: Props = $props();
 
-	$: newTaskColumn = '';
+	let taskFormOpen: boolean = $state(false);
+
+	let newTaskColumn = $state('');
+	
 
 	const handleCreateTask = (taskColumn: string) => {
 		taskFormOpen = true;

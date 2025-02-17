@@ -4,7 +4,7 @@
 	import SignIn from '$lib/components/signin/signin.svelte';
 	import { showToast } from '@awenovations/aura/toast.store';
 
-	let loading = false;
+	let loading = $state(false);
 
 	const onSubmit = () => {
 		loading = true;

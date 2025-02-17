@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import 'animate.css';
 
 	import { browser } from '$app/environment';
@@ -11,28 +13,32 @@
 	import type { Card } from '$lib/components/task-card/types';
 	import TaskCard from '$lib/components/task-card/task-card.svelte';
 
-	export let name: string;
-	export let cards: Array<Card> = [];
-	export let handleCreateTask: (type: string) => void;
+	interface Props {
+		name: string;
+		cards?: Array<Card>;
+		handleCreateTask: (type: string) => void;
+	}
 
-	let columnWrapper: HTMLDivElement;
-	let droppable = false;
+	let { name, cards = [], handleCreateTask }: Props = $props();
 
-	$: dragging = $draggingStore.dragging;
-	$: draggedId = $draggingStore.draggedId;
+	let columnWrapper: HTMLDivElement = $state();
+	let droppable = $state(false);
 
-	$: hoveredId = $draggingStore.hoveredId;
+	let dragging = $derived($draggingStore.dragging);
+	let draggedId = $derived($draggingStore.draggedId);
 
-	$: cardList = [
+	let hoveredId = $derived($draggingStore.hoveredId);
+
+	let cardList = $derived([
 		{ dropzone: true, visible: false, index: 0 },
 		...cards.flatMap((card, index) => [card, { dropzone: true, index: index + 1 }])
-	];
+	]);
 
-	$: {
+	run(() => {
 		if (!dragging) {
 			droppable = false;
 		}
-	}
+	});
 
 	const handleCreateTaskElement = () => {
 		handleCreateTask(name);
@@ -259,10 +265,10 @@
 	data-cy="column"
 	class="column-wrapper"
 	class:droppable
-	on:mouseover={mouseover}
-	on:mouseout={mouseout}
-	on:mousemove={mousemove}
-	on:mouseup={mouseup}
+	onmouseover={mouseover}
+	onmouseout={mouseout}
+	onmousemove={mousemove}
+	onmouseup={mouseup}
 >
 	<h2 data-cy="column-header">
 		{name}
