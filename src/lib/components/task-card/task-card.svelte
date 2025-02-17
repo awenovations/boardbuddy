@@ -26,26 +26,19 @@
 		type?: string;
 	}
 
-	let {
-		id,
-		title,
-		body,
-		assignee,
-		type = 'user story'
-	}: Props = $props();
+	let { id, title, body, assignee, type = 'user story' }: Props = $props();
 
 	let hideActionsTransition = $state(false);
-	
+
 	let showActions = $state(false);
-	
+
 	let dragging;
 	run(() => {
 		dragging = $draggingStore.dragging;
 	});
 	let actionsIsHovered = $state(false);
-	
+
 	let cardIsHovered = $state(false);
-	
 
 	let card: HTMLDivElement = $state();
 
@@ -174,6 +167,8 @@
 	};
 
 	const hideActionsMenu = () => {
+		if (actionsIsHovered) return;
+
 		hideActionsTransition = true;
 
 		setTimeout(() => {
