@@ -36,9 +36,6 @@
 	run(() => {
 		dragging = $draggingStore.dragging;
 	});
-	let actionsIsHovered = $state(false);
-
-	let cardIsHovered = $state(false);
 
 	let card: HTMLDivElement = $state();
 
@@ -51,6 +48,7 @@
 		});
 
 	let hover = () => {
+		hoverOut.cancel();
 		if (dragging) {
 			draggingStore.set({ ...$draggingStore, hoveredId: id });
 		}
@@ -75,31 +73,25 @@
 		cleanUp = autoUpdate(card.parentElement, taskCardActions, setActionPosition);
 
 		showActions = true;
-		cardIsHovered = true;
-		actionsIsHovered = false;
 	};
 
 	const debounceRate = 300;
 
-	let hoverOut = () => {
-		cardIsHovered = false;
+	let hoverOut = debounce(() => {
+		hoverOut.cancel();
+		hideActionsTransition = true;
+		hideActions();
+		cleanUp?.();
+	}, debounceRate);
+
+	const hideActions = debounce(() => {
+		showActions = false;
+		hideActionsTransition = false;
+	}, debounceRate);
+
+	const actionsHover = () => {
+		hoverOut.cancel();
 	};
-
-	let hoverOutWithDebounce = debounce(() => {
-		if (!cardIsHovered && !actionsIsHovered) {
-			hideActionsMenu();
-			cleanUp?.();
-		}
-	}, debounceRate);
-
-	const actionsHover = () => (actionsIsHovered = true);
-	const actionsHoverOut = debounce(() => {
-		if (!cardIsHovered) {
-			actionsIsHovered = false;
-			hideActionsMenu();
-			cleanUp?.();
-		}
-	}, debounceRate);
 
 	const deleteTask = async () => {
 		const response = await fetch(`/api/tasks/${id}`, {
@@ -166,19 +158,7 @@
 		});
 	};
 
-	const hideActionsMenu = () => {
-		if (actionsIsHovered) return;
-
-		hideActionsTransition = true;
-
-		setTimeout(() => {
-			showActions = false;
-			hideActionsTransition = false;
-		}, 250);
-	};
-
 	const dragStart = () => {
-		hideActionsMenu();
 		draggingStore.set({ dragging: true });
 
 		const offset = card.parentElement.getBoundingClientRect();
@@ -199,11 +179,10 @@
 			card.parentElement.addEventListener('mousedown', dragStart);
 			card.parentElement.addEventListener('mouseover', hover);
 			card.parentElement.addEventListener('mouseleave', hoverOut);
-			card.parentElement.addEventListener('mouseleave', hoverOutWithDebounce);
 
 			const taskCardActions = document.querySelector(`.task-card-actions[data-id="${id}"]`);
 			taskCardActions.addEventListener('mouseover', actionsHover);
-			taskCardActions.addEventListener('mouseleave', actionsHoverOut);
+			taskCardActions.addEventListener('mouseleave', hoverOut);
 		}
 	});
 
@@ -212,11 +191,10 @@
 			card.parentElement.removeEventListener('mousedown', dragStart);
 			card.parentElement.removeEventListener('mouseover', hover);
 			card.parentElement.removeEventListener('mouseleave', hoverOut);
-			card.parentElement.removeEventListener('mouseleave', hoverOutWithDebounce);
 
 			const taskCardActions = document.querySelector(`.task-card-actions[data-id="${id}"]`);
 			taskCardActions?.removeEventListener('mouseover', actionsHover);
-			taskCardActions?.removeEventListener('mouseleave', actionsHoverOut);
+			taskCardActions?.removeEventListener('mouseleave', hoverOut);
 		}
 	});
 </script>
