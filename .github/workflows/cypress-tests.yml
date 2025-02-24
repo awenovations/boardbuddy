@@ -18,7 +18,7 @@ jobs:
           node-version: 22.11.0
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci && npx svelte-kit sync
 
       - name: Run Cypress tests
         run: npm run ct:headless 
