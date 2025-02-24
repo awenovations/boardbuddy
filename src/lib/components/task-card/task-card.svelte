@@ -33,6 +33,7 @@
 	let showActions = $state(false);
 
 	let dragging;
+
 	run(() => {
 		dragging = $draggingStore.dragging;
 	});
@@ -59,13 +60,16 @@
 
 		const setActionPosition = () => {
 			if (!card?.parentElement) return;
+			const cardColumn = card.parentElement.parentElement;
 
 			computePosition(card.parentElement, taskCardActions, { placement: 'right-start' }).then(
 				({ x, y }) => {
-					Object.assign(taskCardActions.style, {
-						left: `${x + 8}px`,
-						top: `${y}px`
-					});
+					if (cardColumn.offsetTop < y) {
+						Object.assign(taskCardActions.style, {
+							left: `${x + 8}px`,
+							top: `${y}px`
+						});
+					}
 				}
 			);
 		};
