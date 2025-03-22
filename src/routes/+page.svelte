@@ -10,42 +10,46 @@
 
 	let cards = $derived($page.data.cards);
 
-	let { handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-		const formData = [...new FormData(event.currentTarget).entries()].reduce(
-			(accumulator, value) => ({
-				...accumulator,
-				[camelCase(value[0])]: value[1]
-			}),
-			{}
-		);
+	let {
+		handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+			const formData = [...new FormData(event.currentTarget).entries()].reduce(
+				(accumulator, value) => ({
+					...accumulator,
+					[camelCase(value[0])]: value[1]
+				}),
+				{}
+			);
 
-		try {
-			const response = await fetch('/api/tasks', {
-				method: 'POST',
-				body: JSON.stringify(formData)
-			});
+			try {
+				const url = formData.id ? `/api/tasks/${formData.id}` : '/api/tasks';
 
-			if (response.ok) {
-				showToast({
-					severity: 'success',
-					message: 'Task created!'
+				const response = await fetch(url, {
+					method: formData.id ? 'PATCH' : 'POST',
+					body: JSON.stringify(formData)
 				});
-				invalidateAll();
-				return;
-			} else {
-				throw Error((await response.json()).message);
+
+				if (response.ok) {
+					showToast({
+						severity: 'success',
+						message: 'Task created!'
+					});
+					invalidateAll();
+					return;
+				} else {
+					throw Error((await response.json()).message);
+				}
+			} catch (error) {
+				const errorMessage = (error as { message: string }).message;
+
+				showToast({
+					severity: 'error',
+					message: (error as { message: string }).message
+				});
+
+				throw new Error(errorMessage);
 			}
-		} catch (error) {
-			const errorMessage = (error as { message: string }).message;
-
-			showToast({
-				severity: 'error',
-				message: (error as { message: string }).message
-			});
-
-			throw new Error(errorMessage);
 		}
-	} } = $props();
+	} = $props();
 
 	const clickedOnCard = (el: HTMLElement) => {
 		if (el?.classList?.contains('card')) {

@@ -17,9 +17,10 @@
 		name: string;
 		cards?: Array<Card>;
 		handleCreateTask: (type: string) => void;
+		handleEditTask: (task: Card) => void;
 	}
 
-	let { name, cards = [], handleCreateTask }: Props = $props();
+	let { name, cards = [], handleCreateTask, handleEditTask }: Props = $props();
 
 	let columnWrapper: HTMLDivElement = $state();
 	let droppable = $state(false);
@@ -292,6 +293,7 @@
 						body={card.description}
 						type={card.taskType}
 						assignee={card.assignee}
+						{handleEditTask}
 					/>
 				{/if}
 			{/key}

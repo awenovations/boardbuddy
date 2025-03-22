@@ -15,6 +15,7 @@
 	import { openDialog } from '$lib/stores/dialog.store';
 	import Divider from '@awenovations/aura/divider.svelte';
 	import { draggingStore } from '$lib/stores/dragging.store';
+	import type { Card } from '$lib/components/task-card/types';
 	import Container from '@awenovations/aura/container.svelte';
 	import { computePosition, autoUpdate } from '@floating-ui/dom';
 
@@ -24,9 +25,10 @@
 		body: string;
 		assignee: string;
 		type?: string;
+		handleEditTask: (task: Card) => void;
 	}
 
-	let { id, title, body, assignee, type = 'user story' }: Props = $props();
+	let { id, title, body, assignee, type = 'user story', handleEditTask }: Props = $props();
 
 	let hideActionsTransition = $state(false);
 
@@ -232,7 +234,17 @@
 		data-cy="task-card-actions"
 		clearPadding
 	>
-		<div class="action-button">
+		<div
+			class="action-button"
+			onclick={() =>
+				handleEditTask({
+					_id: id,
+					title,
+					body,
+					assignee,
+					type
+				})}
+		>
 			<Icon class="action-button-icon" name="pencil" />
 		</div>
 		<Divider class="actions-divider" />

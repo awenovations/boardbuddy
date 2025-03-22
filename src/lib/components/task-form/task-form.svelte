@@ -11,21 +11,18 @@
 		handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
 	}
 
-	let {
-		column = '',
-		handleClose,
-		task = {},
-		handleSubmit
-	}: Props = $props();
+	let { column = '', handleClose: _handleClose, task = {}, handleSubmit }: Props = $props();
+
+	const handleClose = () => {
+		_handleClose();
+		task = {};
+	};
 
 	let loading = $state(false);
-	
 
 	let showErrors = $state(null);
-	
 
 	let pristine = $state(true);
-	
 
 	const checkFormValidity = (form: HTMLFormElement) => {
 		const valid = form.checkValidity();
@@ -86,14 +83,14 @@
 		name="task-name"
 		data-cy="task-name"
 		placeholder="Task name..."
-		value={task.taskName}
+		value={task.title}
 	>
 		{#snippet label()}
-				<span >Task name</span>
-			{/snippet}
+			<span>Task name</span>
+		{/snippet}
 		{#snippet errors()}
-				<span data-cy="task-name-errors" >Task name is required</span>
-			{/snippet}
+			<span data-cy="task-name-errors">Task name is required</span>
+		{/snippet}
 	</TextField>
 
 	<TextField
@@ -104,14 +101,14 @@
 		data-cy="description"
 		type="multi"
 		placeholder="Descrption..."
-		value={task.description}
+		value={task.body}
 	>
 		{#snippet label()}
-				<span >Description</span>
-			{/snippet}
+			<span>Description</span>
+		{/snippet}
 		{#snippet errors()}
-				<span data-cy="task-description-errors" >Task description is required</span>
-			{/snippet}
+			<span data-cy="task-description-errors">Task description is required</span>
+		{/snippet}
 	</TextField>
 
 	<div class="bottom-row">
@@ -126,11 +123,11 @@
 			value={task.assignee}
 		>
 			{#snippet label()}
-						<span >Assignee</span>
-					{/snippet}
+				<span>Assignee</span>
+			{/snippet}
 			{#snippet errors()}
-						<span data-cy="assignee-errors" >Assignee is required</span>
-					{/snippet}
+				<span data-cy="assignee-errors">Assignee is required</span>
+			{/snippet}
 		</TextField>
 
 		<Dropdown
@@ -142,14 +139,14 @@
 			currentValue={task.taskType}
 		>
 			{#snippet placeholder()}
-						<span >Task type...</span>
-					{/snippet}
+				<span>Task type...</span>
+			{/snippet}
 			{#snippet errors()}
-						<span data-cy="task-type-errors" >Task type is required</span>
-					{/snippet}
+				<span data-cy="task-type-errors">Task type is required</span>
+			{/snippet}
 			{#snippet label()}
-						<span >Task type</span>
-					{/snippet}
+				<span>Task type</span>
+			{/snippet}
 			<aura-option value="user story">user story</aura-option>
 			<aura-option value="bug fix">bug fix</aura-option>
 			<aura-option value="plan">plan</aura-option>
@@ -166,6 +163,9 @@
 		<Button {loading} type="submit" size="small" data-cy="save-button">Save</Button>
 	</div>
 	<input type="hidden" name="column" value={column} />
+  {#if task._id}
+    <input type="hidden" name="id" value={task._id} />
+  {/if}
 </form>
 
 <style lang="scss">
