@@ -8,9 +8,11 @@
       "env": {
         "NODE_ENV": "production",
         "PORT": 3000,
-        "HOST": "0.0.0.0"
-      }
+        "HOST": "0.0.0.0",
+        "PM2_LOG_LEVEL": "debug"
+      },
+      "output": "/dev/stdout",
+      "error": "/dev/stderr"
     }
   ]
 }
-
