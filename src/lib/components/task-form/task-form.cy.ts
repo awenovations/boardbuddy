@@ -160,7 +160,7 @@ describe('Task Form', () => {
 					props: {
 						handleClose: () => {},
 						handleSubmit: () => {},
-            task: { title: taskName, body: description, assignee, taskType }
+						task: { title: taskName, body: description, assignee, taskType }
 					}
 				});
 			};

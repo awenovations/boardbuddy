@@ -1,12 +1,14 @@
 import qs from 'qs';
 
-import {
+import { env } from '$env/dynamic/private';
+
+const {
 	OAUTH_CLIENT_URL,
 	OAUTH_VALIDATION_URL,
 	KEYCLOAK_CLIENT_ID,
 	KEYCLOAK_CLIENT_SECRET,
 	KEYCLOAK_ADMIN_API
-} from '$env/static/private';
+} = env;
 
 export const findUser = (accessToken: string, email: string) =>
 	fetch(`${KEYCLOAK_ADMIN_API}/users?email=${encodeURIComponent(email)}`, {

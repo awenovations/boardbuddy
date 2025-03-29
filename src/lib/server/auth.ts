@@ -1,12 +1,14 @@
 import { Google } from 'arctic';
 import { Collection } from 'mongodb';
-import { dev } from '$app/environment';
 import { Lucia, TimeSpan } from 'lucia';
 import mongoDbClient from '$lib/db/mongo';
+import { building, dev } from '$app/environment';
 import { refreshToken } from '$lib/server/keycloak';
 import { MongodbAdapter } from '@lucia-auth/adapter-mongodb';
 
-import { AUTH_GOOGLE_ID, AUTH_GOOGLE_SECRET, AUTH_GOOGLE_CALLBACK } from '$env/static/private';
+import { env } from '$env/dynamic/private';
+
+const { AUTH_GOOGLE_ID, AUTH_GOOGLE_SECRET, AUTH_GOOGLE_CALLBACK } = env;
 
 interface UserDoc {
 	_id: string;
@@ -21,15 +23,16 @@ interface SessionDoc {
 	user_id: string;
 }
 
-const db = (await mongoDbClient).db();
-const User = db.collection('users') as Collection<UserDoc>;
-const Session = db.collection('sessions') as Collection<SessionDoc>;
-
+// Validation helpers
 export const validEmail = (email: string) =>
-	typeof email === 'string' && /^[\w-\.\+]+@([\w-]+\.)+[\w-]{2,4}$/.test(email);
+  typeof email === 'string' && /^[\w-\.\+]+@([\w-]+\.)+[\w-]{2,4}$/.test(email);
 
 export const validPassword = (password: string) =>
-	typeof password === 'string' && password.length >= 6 && password.length <= 255;
+  typeof password === 'string' && password.length >= 6 && password.length <= 255;
+
+const db = building ? { collection: () => {}} : (await mongoDbClient).db();
+const User = db.collection('users') as Collection<UserDoc>;
+const Session = db.collection('sessions') as Collection<SessionDoc>;
 
 const adapter = new MongodbAdapter(Session, User);
 

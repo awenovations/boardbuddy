@@ -4,7 +4,7 @@
 	import { invalidateAll } from '$app/navigation';
 
 	import { showToast } from '@awenovations/aura/toast.store';
-	import camelCase from 'lodash.camelCase';
+	import camelCase from 'lodash.camelcase';
 
 	import Board from '$lib/components/board/board.svelte';
 

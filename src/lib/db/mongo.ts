@@ -1,15 +1,13 @@
 import { MongoClient } from 'mongodb';
-import { dev } from '$app/environment';
-import { MONGODB_URI } from "$env/static/private";
-
-if (!MONGODB_URI) {
-  throw new Error('Invalid/Missing environment variable: "MONGODB_URI"');
-}
+import { building, dev } from '$app/environment';
+import { env } from "$env/dynamic/private";
 
 const options = {};
 
 let client : MongoClient;
 let clientPromise: Promise<MongoClient>;
+
+const { MONGODB_URI } = env;
 
 if (dev) {
   // In development mode, use a global variable so that the value
@@ -19,7 +17,7 @@ if (dev) {
     global._mongoClientPromise = client.connect();
   }
   clientPromise = global._mongoClientPromise;
-} else {
+} else if(!building) {
   // In production mode, it's best to not use a global variable.
   client = new MongoClient(MONGODB_URI, options);
   clientPromise = client.connect();
@@ -27,4 +25,5 @@ if (dev) {
 
 // Export a module-scoped MongoClient promise. By doing this in a
 // separate module, the client can be shared across functions.
+// @ts-expect-error
 export default clientPromise;
