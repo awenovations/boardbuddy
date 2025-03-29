@@ -12,6 +12,7 @@ RUN npm install -g pm2
 COPY --from=builder /app/build build/
 COPY --from=builder /app/node_modules node_modules/
 COPY package.json .
+COPY ecosystem.config.json .
 EXPOSE 3000
 ENV NODE_ENV=production
-CMD ["pm2-runtime", "build/index.js", "--name", "board-buddy-app"]
+CMD ["pm2-runtime", "start", "ecosystem.config.json"]
