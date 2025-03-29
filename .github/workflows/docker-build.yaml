@@ -20,16 +20,6 @@ jobs:
         id: commit_sha
         run: echo "COMMIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
-      - name: Get Pull Request ID (if available)
-        id: pr_id
-        run: |
-          if [[ $GITHUB_EVENT_NAME == "pull_request" ]]; then
-            PR_ID=$(jq --raw-output .pull_request.number $GITHUB_EVENT_PATH)
-            echo "PR_ID=$PR_ID" >> $GITHUB_ENV
-          else
-            echo "PR_ID=none" >> $GITHUB_ENV
-          fi
-
       - name: Get Repository Name
         id: repo_name
         run: echo "REPO_NAME=$(basename ${GITHUB_REPOSITORY})" >> $GITHUB_ENV
@@ -50,7 +40,6 @@ jobs:
           push: true
           tags: |
             benjaminpknox/${{ env.REPO_NAME }}:${{ env.COMMIT_SHA }}
-            benjaminpknox/${{ env.REPO_NAME }}:${{ env.COMMIT_SHA }}-${{ env.PR_ID }}
 
       - name: Verify Image
         run: docker images
