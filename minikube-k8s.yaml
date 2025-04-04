@@ -96,6 +96,10 @@ kind: Ingress
 metadata:
   name: board-buddy-ingress
 spec:
+  tls:
+  - hosts:
+    - board-buddy.local.cloud
+    secretName: board-buddy-tls-secret
   rules:
     - host: "board-buddy.local.cloud"
       http:
