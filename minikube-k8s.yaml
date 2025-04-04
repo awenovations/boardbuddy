@@ -1,0 +1,109 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: board-buddy
+spec:
+  selector:
+    matchLabels:
+      app: board-buddy
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: board-buddy
+    spec:
+      containers:
+        - name: board-buddy
+          env:
+          - name: AUTH_GOOGLE_ID
+            valueFrom:
+              secretKeyRef:
+                name: board-buddy-env
+                key: AUTH_GOOGLE_ID
+          - name: AUTH_GOOGLE_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: board-buddy-env
+                key: AUTH_GOOGLE_SECRET
+          - name: AUTH_GOOGLE_CALLBACK
+            valueFrom:
+              secretKeyRef:
+                name: board-buddy-env
+                key: AUTH_GOOGLE_CALLBACK
+          - name: MONGODB_URI
+            valueFrom:
+              secretKeyRef:
+                name: board-buddy-env
+                key: MONGODB_URI
+          - name: APPLE_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: board-buddy-env
+                key: APPLE_CLIENT_ID
+          - name: APPLE_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: board-buddy-env
+                key: APPLE_CLIENT_SECRET
+          - name: OAUTH_VALIDATION_URL
+            valueFrom:
+              secretKeyRef:
+                name: board-buddy-env
+                key: OAUTH_VALIDATION_URL
+          - name: OAUTH_CLIENT_URL
+            valueFrom:
+              secretKeyRef:
+                name: board-buddy-env
+                key: OAUTH_CLIENT_URL
+          - name: KEYCLOAK_ADMIN_API
+            valueFrom:
+              secretKeyRef:
+                name: board-buddy-env
+                key: KEYCLOAK_ADMIN_API
+          - name: KEYCLOAK_REALM
+            valueFrom:
+              secretKeyRef:
+                name: board-buddy-env
+                key: KEYCLOAK_REALM
+          - name: KEYCLOAK_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: board-buddy-env
+                key: KEYCLOAK_CLIENT_ID
+          - name: KEYCLOAK_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: board-buddy-env
+                key: KEYCLOAK_CLIENT_SECRET
+          image: benjaminpknox/boardbuddy:a94c4e8 # Change to your local docker image
+          ports:
+          - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: board-buddy-service
+spec:
+  selector:
+    app: board-buddy
+  ports:
+    - port: 3000
+      targetPort: 3000
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: board-buddy-ingress
+spec:
+  rules:
+    - host: "board-buddy.local.cloud"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: board-buddy-service
+                port:
+                  number: 3000
