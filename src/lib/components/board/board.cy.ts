@@ -3,16 +3,11 @@ import Board from './board.svelte';
 describe('when loading buddy board', () => {
 	beforeEach(() => {
 		cy.viewport(1280, 720);
-		cy.get('body').invoke('css', 'margin-top', '160px');
 	});
 
 	describe('when loading an empty board', () => {
 		beforeEach(() => {
 			cy.mount(Board);
-		});
-
-		it('Should show signout button', () => {
-			cy.get('[data-cy=sign-out]').should('exist');
 		});
 
 		it('Should show 5 columns on the board', () => {

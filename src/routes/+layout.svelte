@@ -2,8 +2,10 @@
 	import 'reset-css/reset.css';
 	import { onMount } from 'svelte';
 	import classNames from 'classnames';
+	import { goto } from '$app/navigation';
 	import Toast from '@awenovations/aura/toast.svelte';
 	import Dialog from '@awenovations/aura/dialog.svelte';
+	import Button from '@awenovations/aura/button.svelte';
 	import '@awenovations/aura/dist/tokens/_variables.css';
 	import { dialogStore } from '$lib/stores/dialog.store';
 	import { showToast } from '@awenovations/aura/toast.store';
@@ -21,10 +23,24 @@
 </script>
 
 <div class={classNames('wrapper', { center: !data.session })}>
-	<div class="logo">
-		<span class="name">Board Buddy</span>
-		Simplify Your Workflow
-	</div>
+  <header>
+    <div class="logo">
+      <span class="name">Board Buddy</span>
+      Simplify Your Workflow
+    </div>
+
+    {#if data.session}
+    <Button
+      onclick={() => goto('/signout')}
+      kind="outlined"
+      variant="secondary"
+      size="small"
+      data-cy="sign-out"
+      class="sign-out">Sign out</Button
+    >
+    {/if}
+  </header>
+  
 	{@render children?.()}
 </div>
 <Toast />
@@ -69,12 +85,22 @@
 		max-height: 100%;
 		gap: 3.813rem;
 		overflow: hidden;
-		position: relative;
 
 		&.center {
 			gap: 0.714rem;
 		}
+
+    &:not(.center) header {
+      display: flex;
+      align-items: self-start;
+      justify-content: space-between;
+    }
 	}
+
+	:global(.sign-out) {
+		margin-right: 0.071rem;
+	}
+
 
 	.logo {
 		color: var(--aura-light-secondary-40);
