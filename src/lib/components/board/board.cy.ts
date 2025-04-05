@@ -3,6 +3,7 @@ import Board from './board.svelte';
 describe('when loading buddy board', () => {
 	beforeEach(() => {
 		cy.viewport(1280, 720);
+		cy.get('body').invoke('css', 'margin-top', '160px');
 	});
 
 	describe('when loading an empty board', () => {
@@ -10,33 +11,37 @@ describe('when loading buddy board', () => {
 			cy.mount(Board);
 		});
 
+		it('Should show signout button', () => {
+			cy.get('[data-cy=sign-out]').should('exist');
+		});
+
 		it('Should show 5 columns on the board', () => {
-			cy.get('[cy-test=column-header]').should('have.length', 4);
+			cy.get('[data-cy=column-header]').should('have.length', 4);
 		});
 
 		it('Should have Backlog column', () => {
-			cy.get('[cy-test=column-header]').should('contains.text', 'Backlog');
+			cy.get('[data-cy=column-header]').should('contains.text', 'Backlog');
 		});
 
 		it('Should have To Do column', () => {
-			cy.get('[cy-test=column-header]').should('contains.text', 'To Do');
+			cy.get('[data-cy=column-header]').should('contains.text', 'To Do');
 		});
 
 		it('Should have In Progress column', () => {
-			cy.get('[cy-test=column-header]').should('contains.text', 'In Progress');
+			cy.get('[data-cy=column-header]').should('contains.text', 'In Progress');
 		});
 
 		it('Should have Done column', () => {
-			cy.get('[cy-test=column-header]').should('contains.text', 'Done');
+			cy.get('[data-cy=column-header]').should('contains.text', 'Done');
 		});
 
 		it('Should show add button', () => {
-			cy.get('[cy-test=add-button]').should('have.length', 4);
+			cy.get('[data-cy=add-button]').should('have.length', 4);
 		});
 	});
 
 	describe('when task cards are present', () => {
-		it.only('should show a few cards', () => {
+		it('should show a few cards', () => {
 			cy.mount(Board, {
 				props: {
 					cards: [

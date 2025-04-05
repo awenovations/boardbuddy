@@ -69,6 +69,7 @@
 		max-height: 100%;
 		gap: 3.813rem;
 		overflow: hidden;
+		position: relative;
 
 		&.center {
 			gap: 0.714rem;
