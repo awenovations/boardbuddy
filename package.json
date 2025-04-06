@@ -42,7 +42,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@awenovations/aura": "^0.0.34",
+		"@awenovations/aura": "^0.0.35",
 		"@lucia-auth/adapter-mongodb": "^1.0.3",
 		"@types/find-node-modules": "^2.1.2",
 		"@types/uuid": "^10.0.0",
