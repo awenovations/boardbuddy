@@ -33,15 +33,11 @@ export const actions: Actions = {
 		const tokenRequest = await getTokenWithClientCredentials();
 		const token = await tokenRequest.json();
 
-		console.log(await createUser(token.access_token, firstName, email, password));
+		await createUser(token.access_token, firstName, email, password);
 
 		const user = await findUser(token.access_token, email);
 
-    console.log('user', user);
-
 		const userObject = (await user.json())?.[0];
-
-    console.log('userObject', userObject)
 
 		await (await mongoDbClient).db().collection('users').insertOne({
 			_id: userObject.id,

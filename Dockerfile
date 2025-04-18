@@ -11,10 +11,12 @@ WORKDIR /app
 COPY --from=builder /app/build build/
 COPY --from=builder /app/node_modules node_modules/
 COPY package.json .
+COPY server.js server.js
+
 EXPOSE 3000
 ENV NODE_ENV=production
 
 ENV PROTOCOL_HEADER=x-forwarded-proto
 ENV HOST_HEADER=x-forwarded-host
 
-CMD ["node", "build/index.js"]
+CMD ["node", "server.js"]

@@ -27,13 +27,17 @@
 		};
 	};
 
-  const signInWithGoogleHandler = () => {
-    goto("/signin/providers/google");
-  };
+	const signInWithGoogleHandler = () => {
+		goto('/signin/providers/google');
+	};
+
+	const signInWithAppleHandler = () => {
+		goto('/signin/providers/apple');
+	};
 </script>
 
 <form method="post" use:enhance={onSubmit} id="signin-form">
-  <SignIn {loading} {signInWithGoogleHandler} />
+	<SignIn {loading} {signInWithGoogleHandler} {signInWithAppleHandler} />
 </form>
 
 <style lang="scss">

@@ -9,9 +9,14 @@
 	interface Props {
 		loading?: boolean;
 		signInWithGoogleHandler?: any;
+		signInWithAppleHandler?: any;
 	}
 
-	let { loading = false, signInWithGoogleHandler = () => {} }: Props = $props();
+	let {
+		loading = false,
+		signInWithGoogleHandler = () => {},
+		signInWithAppleHandler = () => {}
+	}: Props = $props();
 </script>
 
 <Container kind="filled" variant="elevated" clearPadding>
@@ -22,17 +27,24 @@
 			variant="tertiary"
 			data-cy="google-button"
 			type="button"
-      on:click={signInWithGoogleHandler}
+			on:click={signInWithGoogleHandler}
 		>
 			<!-- @migration-task: migrate this slot by hand, `icon-before` is an invalid identifier -->
-	<Icon name="google-color" slot="icon-before" />
+			<Icon name="google-color" slot="icon-before" />
 
 			Sign in with Google
 		</Button>
 
-		<Button type="button" fullWidth kind="outlined" variant="tertiary" data-cy="apple-button">
+		<Button
+			type="button"
+			fullWidth
+			kind="outlined"
+			variant="tertiary"
+			data-cy="apple-button"
+			on:click={signInWithAppleHandler}
+		>
 			<!-- @migration-task: migrate this slot by hand, `icon-before` is an invalid identifier -->
-	<Icon name="apple" slot="icon-before" />
+			<Icon name="apple" slot="icon-before" />
 
 			Sign in with Apple
 		</Button>
@@ -45,15 +57,16 @@
 			<div class="form-group">
 				<TextField name="email" data-cy="email" placeholder="email@example.com">
 					{#snippet label()}
-										<span >Email</span>
-									{/snippet}
+						<span>Email</span>
+					{/snippet}
 				</TextField>
 				<TextField name="password" data-cy="password" type="password" placeholder="password" />
 				<div class="forgot-password" data-cy="forgot-password">
 					Forgot Password? <Link data-cy="forgot-password-link">Reset now</Link>
 				</div>
 			</div>
-      <Button type="submit" loading={loading} fullWidth variant="tertiary" data-cy="sign-in">Sign in</Button>
+			<Button type="submit" {loading} fullWidth variant="tertiary" data-cy="sign-in">Sign in</Button
+			>
 		</div>
 		<div class="sign-up" data-cy="sign-up">
 			Don't have an account?

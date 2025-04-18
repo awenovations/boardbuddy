@@ -40,11 +40,26 @@ spec:
               secretKeyRef:
                 name: board-buddy-env
                 key: APPLE_CLIENT_ID
-          - name: APPLE_CLIENT_SECRET
+          - name: APPLE_TEAM_ID
             valueFrom:
               secretKeyRef:
                 name: board-buddy-env
-                key: APPLE_CLIENT_SECRET
+                key: APPLE_TEAM_ID
+          - name: APPLE_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: board-buddy-env
+                key: APPLE_KEY_ID
+          - name: APPLE_PRIVATE_KEY
+            valueFrom:
+              secretKeyRef:
+                name: board-buddy-env
+                key: APPLE_PRIVATE_KEY
+          - name: APPLE_REDIRECT_URI
+            valueFrom:
+              secretKeyRef:
+                name: board-buddy-env
+                key: APPLE_REDIRECT_URI
           - name: OAUTH_VALIDATION_URL
             valueFrom:
               secretKeyRef:
@@ -75,7 +90,8 @@ spec:
               secretKeyRef:
                 name: board-buddy-env
                 key: KEYCLOAK_CLIENT_SECRET
-          image: benjaminpknox/boardbuddy:a94c4e8 # Change to your local docker image
+          image: benjaminpknox/boardbuddy:apple-oauth # Change to your local docker image
+          imagePullPolicy: Always
           ports:
           - containerPort: 3000
 ---

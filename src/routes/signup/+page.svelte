@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { enhance } from "$app/forms";
+	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
-  import SignUp from "$lib/components/signup/signup.svelte";
+	import SignUp from '$lib/components/signup/signup.svelte';
 	import { showToast } from '@awenovations/aura/toast.store';
 
 	let loading = $state(false);
@@ -16,7 +16,7 @@
 				goto(result.location);
 				showToast({
 					severity: 'success',
-					message: "Thanks for making an account!"
+					message: 'Thanks for making an account!'
 				});
 			} else {
 				showToast({
@@ -27,14 +27,17 @@
 		};
 	};
 
-  const signUpWithGoogleHandler = () => {
-    goto("/signin/providers/google");
-  };
+	const signUpWithGoogleHandler = () => {
+		goto('/signin/providers/google');
+	};
 
+	const signUpWithAppleHandler = () => {
+		goto('/signin/providers/apple');
+	};
 </script>
 
 <form method="post" use:enhance={onSubmit} id="signup-form">
-  <SignUp {loading} {signUpWithGoogleHandler} />
+	<SignUp {loading} {signUpWithGoogleHandler} {signUpWithAppleHandler} />
 </form>
 
 <style lang="scss">
@@ -42,6 +45,5 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-start;
-  }
-
+	}
 </style>

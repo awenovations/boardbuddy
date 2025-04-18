@@ -9,10 +9,14 @@
 	interface Props {
 		loading?: boolean;
 		signUpWithGoogleHandler?: any;
+		signUpWithAppleHandler?: any;
 	}
 
-	let { loading = false, signUpWithGoogleHandler = () => {} }: Props = $props();
-
+	let {
+		loading = false,
+		signUpWithGoogleHandler = () => {},
+		signUpWithAppleHandler = () => {}
+	}: Props = $props();
 </script>
 
 <Container kind="filled" variant="elevated" clearPadding>
@@ -22,18 +26,25 @@
 			kind="outlined"
 			variant="tertiary"
 			data-cy="google-button"
-      type="button"
-      on:click={signUpWithGoogleHandler}
+			type="button"
+			onclick={signUpWithGoogleHandler}
 		>
 			<!-- @migration-task: migrate this slot by hand, `icon-before` is an invalid identifier -->
-	<Icon name="google-color" slot="icon-before" />
+			<Icon name="google-color" slot="icon-before" />
 
 			Continue with Google
 		</Button>
 
-		<Button fullWidth kind="outlined" variant="tertiary" data-cy="apple-button">
+		<Button
+			fullWidth
+			kind="outlined"
+			variant="tertiary"
+			type="button"
+			data-cy="apple-button"
+			onclick={signUpWithAppleHandler}
+		>
 			<!-- @migration-task: migrate this slot by hand, `icon-before` is an invalid identifier -->
-	<Icon name="apple" slot="icon-before" />
+			<Icon name="apple" slot="icon-before" />
 
 			Continue with Apple
 		</Button>
@@ -46,8 +57,8 @@
 			<div class="form-group">
 				<TextField name="name" data-cy="name" placeholder="Your name">
 					{#snippet label()}
-										<span >Name</span>
-									{/snippet}
+						<span>Name</span>
+					{/snippet}
 				</TextField>
 				<TextField
 					type="email"
@@ -57,8 +68,8 @@
 					placeholder="email@example.com"
 				>
 					{#snippet label()}
-										<span >Email</span>
-									{/snippet}
+						<span>Email</span>
+					{/snippet}
 				</TextField>
 				<TextField
 					name="password"
@@ -68,11 +79,12 @@
 					placeholder="password"
 				>
 					{#snippet label()}
-										<span >Password</span>
-									{/snippet}
+						<span>Password</span>
+					{/snippet}
 				</TextField>
 			</div>
-      <Button type="submit" {loading} fullWidth variant="tertiary" data-cy="sign-up">Sign up</Button>
+			<Button type="submit" {loading} fullWidth variant="tertiary" data-cy="sign-up">Sign up</Button
+			>
 		</div>
 		<div class="sign-in" data-cy="sign-in">
 			Already have an account?
