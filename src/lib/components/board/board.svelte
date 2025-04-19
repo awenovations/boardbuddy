@@ -46,7 +46,15 @@
 		},
 		{}
 	);
+
+	const handleEscapeKeydown = (event) => {
+		if (event.key === 'Escape') {
+			taskFormOpen = false;
+		}
+	};
 </script>
+
+<svelte:window onkeydown={handleEscapeKeydown} />
 
 <div class="column-wrapper">
 	<Column {handleEditTask} cards={tasksByColumns['Backlog']} name="Backlog" {handleCreateTask} />
