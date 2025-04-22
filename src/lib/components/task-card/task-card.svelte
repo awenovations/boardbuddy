@@ -26,9 +26,18 @@
 		assignee: string;
 		type?: string;
 		handleEditTask: (task: Card) => void;
+		handleOpenTask: (task: Card) => void;
 	}
 
-	let { id, title, body, assignee, type = 'user story', handleEditTask }: Props = $props();
+	let {
+		id,
+		title,
+		body,
+		assignee,
+		type = 'user story',
+		handleEditTask,
+		handleOpenTask
+	}: Props = $props();
 
 	let hideActionsTransition = $state(false);
 
@@ -236,6 +245,21 @@
 	>
 		<div
 			class="action-button"
+			data-cy="task-open-details-button"
+			onclick={() =>
+				handleOpenTask({
+					_id: id,
+					title,
+					body,
+					assignee,
+					type
+				})}
+		>
+			<Icon class="action-button-icon" name="eye-open" />
+		</div>
+		<Divider class="actions-divider" />
+		<div
+			class="action-button"
 			onclick={() =>
 				handleEditTask({
 					_id: id,
@@ -244,11 +268,12 @@
 					assignee,
 					type
 				})}
+			data-cy="task-card-edit-button"
 		>
 			<Icon class="action-button-icon" name="pencil" />
 		</div>
 		<Divider class="actions-divider" />
-		<div class="action-button" onclick={openDeleteDialog}>
+		<div class="action-button" data-cy="task-card-delete-button" onclick={openDeleteDialog}>
 			<Icon class="action-button-icon" name="trash" />
 		</div>
 	</Container>
@@ -269,7 +294,7 @@
 	:global(.task-card-actions) {
 		position: absolute;
 		width: 1.714rem !important;
-		height: 3.571rem !important;
+		height: 5.357rem !important;
 
 		display: flex;
 		flex-direction: column;

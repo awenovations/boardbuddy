@@ -153,14 +153,14 @@ describe('Task Form', () => {
 			const taskName = 'Test Task Name';
 			const description = 'Test Task Description';
 			const assignee = 'Test Task Assignee';
-			const taskType = 'bug fix';
+			const type = 'bug fix';
 
 			const setup = () => {
 				cy.mount(TaskForm, {
 					props: {
 						handleClose: () => {},
 						handleSubmit: () => {},
-						task: { title: taskName, body: description, assignee, taskType }
+						task: { title: taskName, body: description, assignee, type }
 					}
 				});
 			};
@@ -182,7 +182,7 @@ describe('Task Form', () => {
 			});
 
 			it('should have task type value', () => {
-				cy.get('input[name=task-type]').should('have.value', taskType);
+				cy.get('input[name=task-type]').should('have.value', type);
 			});
 		});
 	});

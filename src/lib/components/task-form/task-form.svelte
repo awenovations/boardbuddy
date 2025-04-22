@@ -100,7 +100,7 @@
 		name="description"
 		data-cy="description"
 		type="multi"
-		placeholder="Descrption..."
+		placeholder="Description..."
 		value={task.body}
 	>
 		{#snippet label()}
@@ -136,7 +136,10 @@
 			required
 			name="task-type"
 			showErrors={showErrors?.['task-type']}
-			currentValue={task.taskType}
+			on:change={(event) => {
+				task.type = event.detail.value;
+			}}
+			currentValue={task.type}
 		>
 			{#snippet placeholder()}
 				<span>Task type...</span>
@@ -163,9 +166,9 @@
 		<Button {loading} type="submit" size="small" data-cy="save-button">Save</Button>
 	</div>
 	<input type="hidden" name="column" value={column} />
-  {#if task._id}
-    <input type="hidden" name="id" value={task._id} />
-  {/if}
+	{#if task._id}
+		<input type="hidden" name="id" value={task._id} />
+	{/if}
 </form>
 
 <style lang="scss">

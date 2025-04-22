@@ -18,11 +18,27 @@ describe('Task Card', () => {
 					cy.mount(TaskCard, { props: { title, body, assignee, id } });
 				});
 
-				describe('when hovering over a card', () => {
-					it('should show action buttons when card is hovered', () => {
-						cy.get('[data-cy=task-card]').realHover();
-						cy.get('[data-cy=task-card-actions]').should('be.visible');
-						cy.get('[data-cy=task-card]').realMouseMove(-10, -10);
+				describe('when triggering action buttons', () => {
+					describe('when hovering over a card', () => {
+						beforeEach(() => {
+							cy.get('[data-cy=task-card]').realHover();
+						});
+
+						it('Should show open details button', () => {
+							cy.get('[data-cy=task-open-details-button]').should('be.visible');
+						});
+
+						it('Should show edit button', () => {
+							cy.get('[data-cy=task-card-edit-button]').should('be.visible');
+						});
+
+						it('Should show delete button', () => {
+							cy.get('[data-cy=task-card-delete-button]').should('be.visible');
+						});
+
+						it('should show action buttons when card is hovered', () => {
+							cy.get('[data-cy=task-card-actions]').should('be.visible');
+						});
 					});
 
 					it('should show action buttons when actions is hovered', () => {

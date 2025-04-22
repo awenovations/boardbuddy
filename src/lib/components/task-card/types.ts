@@ -1,9 +1,9 @@
 export interface Card {
   _id: string;
-  taskName: string;
-  description: string;
+  title: string;
+  body: string;
   assignee: string;
-  taskType: string;
+  type: string;
   user_id: string;
   order: number;
   column: string;

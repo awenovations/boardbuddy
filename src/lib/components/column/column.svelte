@@ -18,9 +18,10 @@
 		cards?: Array<Card>;
 		handleCreateTask: (type: string) => void;
 		handleEditTask: (task: Card) => void;
+		handleOpenTask: (task: Card) => void;
 	}
 
-	let { name, cards = [], handleCreateTask, handleEditTask }: Props = $props();
+	let { name, cards = [], handleCreateTask, handleEditTask, handleOpenTask }: Props = $props();
 
 	let columnWrapper: HTMLDivElement = $state();
 	let droppable = $state(false);
@@ -275,7 +276,7 @@
 		{name}
 		<span class="create-button">
 			<Tooltip placement="top-start" content="Click to add a card">
-				<Link on:click={handleCreateTaskElement} data-cy="add-button"
+				<Link onclick={handleCreateTaskElement} data-cy="add-button"
 					><Icon class="bg" name="circle-plus" /></Link
 				>
 			</Tooltip>
@@ -294,6 +295,7 @@
 						type={card.taskType}
 						assignee={card.assignee}
 						{handleEditTask}
+						{handleOpenTask}
 					/>
 				{/if}
 			{/key}
