@@ -51,7 +51,10 @@
 
 	let card: HTMLDivElement = $state();
 
+	let showTitleTooltip = $state(false);
+
 	let cleanUp;
+	let cleanUpTooltip;
 	const openDeleteDialog = () =>
 		openDialog({
 			message: 'Are you sure you want to delete this task?',
@@ -66,6 +69,10 @@
 		}
 
 		if (!card?.parentElement) return;
+
+		const cardTitle = card.querySelector('.card-title');
+
+		showTitleTooltip = cardTitle.scrollWidth > cardTitle.clientWidth;
 
 		const taskCardActions = document.querySelector(`.task-card-actions[data-id="${id}"]`);
 
@@ -87,6 +94,30 @@
 
 		cleanUp = autoUpdate(card.parentElement, taskCardActions, setActionPosition);
 
+		const taskCardTitleTooltip = document.querySelector(
+			`.task-card-title-tooltip[data-id="${id}"]`
+		);
+
+		const setTitleTooltipPosition = () => {
+			if (!card?.parentElement) return;
+			const cardColumn = card.parentElement.parentElement;
+
+			computePosition(card.parentElement, taskCardTitleTooltip, { placement: 'top' }).then(
+				({ x, y }) => {
+					const topPlacement = y - 8;
+
+					if (cardColumn.offsetTop - taskCardTitleTooltip.clientHeight < topPlacement) {
+						Object.assign(taskCardTitleTooltip.style, {
+							left: `${x}px`,
+							top: `${topPlacement}px`
+						});
+					}
+				}
+			);
+		};
+
+		cleanUpTooltip = autoUpdate(card.parentElement, taskCardTitleTooltip, setTitleTooltipPosition);
+
 		showActions = true;
 	};
 
@@ -97,9 +128,11 @@
 		hideActionsTransition = true;
 		hideActions();
 		cleanUp?.();
+		cleanUpTooltip?.();
 	}, debounceRate);
 
 	const hideActions = debounce(() => {
+		showTitleTooltip = false;
 		showActions = false;
 		hideActionsTransition = false;
 	}, debounceRate);
@@ -235,6 +268,20 @@
 <Portal target="body">
 	<Container
 		data-id={id}
+		clearPadding
+		variant="flat"
+		class={[
+			'task-card-title-tooltip',
+			'animate__animated',
+			'animate__fadeInUp',
+			{
+				showTitleTooltip,
+				animate__fadeOutDown: hideActionsTransition
+			}
+		]}>{title}</Container
+	>
+	<Container
+		data-id={id}
 		variant="elevated"
 		class={classNames('task-card-actions', 'animate__animated', 'animate__fadeIn', {
 			showActions,
@@ -330,6 +377,20 @@
 
 	:global(.action-button-icon .icon) {
 		background: var(--aura-tertiary-50) !important;
+	}
+
+	:global(.task-card-title-tooltip) {
+		position: absolute;
+		display: none;
+		padding: 0.571rem;
+		box-sizing: border-box;
+		max-width: 16rem;
+		--animate-duration: 100ms;
+		text-align: left!important;
+	}
+
+	:global(.task-card-title-tooltip.showTitleTooltip) {
+		display: block;
 	}
 
 	.card {
