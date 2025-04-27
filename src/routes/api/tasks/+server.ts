@@ -25,7 +25,16 @@ export async function POST({ cookies, request }: RequestEvent) {
 
 	const order = typeof lastCardOrder === 'undefined' ? 0 : lastCardOrder + 1;
 
-	const task = await tasks.insertOne({ _id: uuidv4(), ...body, order, user_id: user?.id });
+	const now = Date.now();
+
+	const task = await tasks.insertOne({
+		_id: uuidv4(),
+		...body,
+		order,
+		user_id: user?.id,
+		createDate: now,
+		lastUpdateDate: now
+	});
 
 	return json(await tasks.findOne({ _id: task.insertedId }));
 }
@@ -57,5 +66,5 @@ export async function PATCH({ cookies, request }: RequestEvent) {
 		);
 	}
 
-  return new Response(null, {status: 204});
+	return new Response(null, { status: 204 });
 }

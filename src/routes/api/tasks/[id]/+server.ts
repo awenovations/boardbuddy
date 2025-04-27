@@ -43,7 +43,10 @@ export async function PATCH({ cookies, request, params }: RequestEvent) {
 		}
 	}
 
-	await tasks.updateOne({ _id: id as any }, { $set: { ...task, ...body } });
+	await tasks.updateOne(
+		{ _id: id as any },
+		{ $set: { ...task, ...body, lastUpdateDate: Date.now() } }
+	);
 
 	return new Response(null, { status: 204 });
 }
