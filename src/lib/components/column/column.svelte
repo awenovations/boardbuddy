@@ -294,6 +294,7 @@
 						body={card.description}
 						type={card.taskType}
 						assignee={card.assignee}
+						column={card.column}
 						{handleEditTask}
 						{handleOpenTask}
 					/>

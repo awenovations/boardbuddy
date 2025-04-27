@@ -24,6 +24,7 @@
 		title: string;
 		body: string;
 		assignee: string;
+		column: string;
 		type?: string;
 		handleEditTask: (task: Card) => void;
 		handleOpenTask: (task: Card) => void;
@@ -34,6 +35,7 @@
 		title,
 		body,
 		assignee,
+		column,
 		type = 'user story',
 		handleEditTask,
 		handleOpenTask
@@ -299,7 +301,8 @@
 					title,
 					body,
 					assignee,
-					type
+					type,
+					column
 				})}
 		>
 			<Icon class="action-button-icon" name="eye-open" />
@@ -386,7 +389,7 @@
 		box-sizing: border-box;
 		max-width: 16rem;
 		--animate-duration: 100ms;
-		text-align: left!important;
+		text-align: left !important;
 	}
 
 	:global(.task-card-title-tooltip.showTitleTooltip) {

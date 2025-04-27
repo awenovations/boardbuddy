@@ -130,7 +130,7 @@
 				</div>
 
 				<div class="task-meta-value">
-					<span>{openTask.title}</span>
+					<span>{openTask.column}</span>
 					<span>{openTask.assignee}</span>
 					<span>{openTask.type}</span>
 				</div>
