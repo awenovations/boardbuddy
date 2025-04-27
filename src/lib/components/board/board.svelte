@@ -150,7 +150,7 @@
 						taskDetailsOpen = false;
 					}}>Close</Button
 				>
-        <Button type="submit" size="small" onclick={() => handleEditTask(openTask)}>Edit</Button>
+				<Button type="submit" size="small" onclick={() => handleEditTask(openTask)}>Edit</Button>
 			</div>
 		</div>
 	{/if}
@@ -169,9 +169,12 @@
 		z-index: 1000;
 	}
 
-	:global(.task-details .task-description) {
+	:global(.task-details .aura-container.task-description) {
 		white-space: pre-wrap;
 		text-align: left !important;
+		flex: 1;
+		overflow-y: auto;
+		height: auto;
 	}
 
 	.task-details {
@@ -179,8 +182,16 @@
 		display: flex;
 		flex-direction: column;
 		width: 41vw;
-		padding: 10rem 3.143rem 0;
+		max-height: 100%;
+		padding: 3.143rem;
 		box-sizing: border-box;
+
+		h2,
+		.task-meta,
+		h4,
+		.task-details-actions {
+			flex: 0 0 auto;
+		}
 
 		&,
 		.task-meta .task-meta-value,
