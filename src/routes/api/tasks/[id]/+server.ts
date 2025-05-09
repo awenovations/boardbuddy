@@ -37,6 +37,7 @@ export async function PATCH({ cookies, request, params }: RequestEvent) {
 		});
 	}
 
+  // Clears out empty strings
 	for (const key in body) {
 		if (body.hasOwnProperty(key) && typeof body[key] === 'string' && body[key].length === 0) {
 			delete body[key];

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
+	import { invalidateAll } from '$app/navigation';
 	import SignIn from '$lib/components/signin/signin.svelte';
 	import { showToast } from '@awenovations/aura/toast.store';
 
@@ -13,6 +14,7 @@
 			loading = false;
 
 			if (result.status === 302) {
+				invalidateAll();
 				goto(result.location);
 				showToast({
 					severity: 'success',

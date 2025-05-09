@@ -90,7 +90,7 @@ spec:
               secretKeyRef:
                 name: board-buddy-env
                 key: KEYCLOAK_CLIENT_SECRET
-          image: benjaminpknox/boardbuddy:apple-oauth # Change to your local docker image
+          image: benjaminpknox/boardbuddy:1c72544
           imagePullPolicy: Always
           ports:
           - containerPort: 3000

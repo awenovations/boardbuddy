@@ -10,6 +10,15 @@ const {
 	KEYCLOAK_ADMIN_API
 } = env;
 
+export const getUserById = async (userId: string, accessToken: string) =>
+	fetch(`${KEYCLOAK_ADMIN_API}/users/${userId}`, {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${accessToken}`
+		}
+	});
+
 export const findUser = (accessToken: string, email: string) =>
 	fetch(`${KEYCLOAK_ADMIN_API}/users?email=${encodeURIComponent(email)}`, {
 		method: 'GET',
@@ -103,4 +112,18 @@ export const signOutUserFromKeycloak = (refresh_token: string, accessToken: stri
 			client_id: KEYCLOAK_CLIENT_ID,
 			refresh_token
 		})
+	});
+
+export const updateUserInKeycloak = (
+	userId: string,
+	accessToken: string,
+	payload: Record<string, any>
+) =>
+	fetch(`${KEYCLOAK_ADMIN_API}/users/${userId}`, {
+		method: 'PUT',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${accessToken}`
+		},
+		body: JSON.stringify(payload)
 	});

@@ -4,7 +4,12 @@ import type { Handle } from '@sveltejs/kit';
 import { csrf } from './hooks/csrf';
 
 const allowedPaths: string[] = [];
-const allowedOrigins: string[] = ['https://appleid.apple.com'];
+const allowedOrigins: string[] = [
+	'https://appleid.apple.com',
+	'http://localhost:5173',
+	'https://board-buddy.local.cloud',
+	'https://boardbuddy.cloud'
+];
 
 export const handle: Handle = sequence(
 	csrf(allowedPaths, allowedOrigins),

@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
-import { lucia } from "$lib/server/auth";
+import { lucia, validateUserAndGetDetails } from "$lib/server/auth";
 
 export const load: LayoutServerLoad = async ({ cookies, url }) => {
   const sessionId = cookies.get(lucia.sessionCookieName);
@@ -15,7 +15,7 @@ export const load: LayoutServerLoad = async ({ cookies, url }) => {
 		errorMessage = 'Username or password is incorrect';
   }
 
-  const session = sessionId ? await lucia.validateSession(sessionId) : null;
+  const session = sessionId ? await validateUserAndGetDetails(sessionId) : null;
 
 	if (
 		!session?.user &&
