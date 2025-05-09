@@ -33,7 +33,7 @@ export const actions: Actions = {
 		const tokenRequest = await getTokenWithClientCredentials();
 		const token = await tokenRequest.json();
 
-		await createUser(token.access_token, firstName, email, password);
+    await createUser(token.access_token, firstName, email, password);
 
 		const user = await findUser(token.access_token, email);
 

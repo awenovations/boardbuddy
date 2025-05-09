@@ -25,12 +25,12 @@ interface SessionDoc {
 
 // Validation helpers
 export const validEmail = (email: string) =>
-  typeof email === 'string' && /^[\w-\.\+]+@([\w-]+\.)+[\w-]{2,4}$/.test(email);
+	typeof email === 'string' && /^[\w-\.\+]+@([\w-]+\.)+[\w-]{2,5}$/.test(email);
 
 export const validPassword = (password: string) =>
-  typeof password === 'string' && password.length >= 6 && password.length <= 255;
+	typeof password === 'string' && password.length >= 6 && password.length <= 255;
 
-const db = building ? { collection: () => {}} : (await mongoDbClient).db();
+const db = building ? { collection: () => {} } : (await mongoDbClient).db();
 const User = db.collection('users') as Collection<UserDoc>;
 const Session = db.collection('sessions') as Collection<SessionDoc>;
 
@@ -84,6 +84,25 @@ export const lucia = new Lucia(adapter, {
 		name: attributes.name
 	})
 });
+
+export const validateUserAndGetDetails = async (sessionId: string) => {
+	let { session } = await lucia.validateSession(sessionId);
+
+	if (!session) {
+		return null;
+	}
+
+	const user = await User.findOne({ _id: session.userId });
+
+	if (!user) {
+		return null;
+	}
+
+	return {
+		session,
+		user
+	};
+};
 
 export const signOut = async (sessionId: string) => {
 	const session = await lucia.validateSession(sessionId);
