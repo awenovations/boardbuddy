@@ -12,13 +12,12 @@
 	import { dialogStore } from '$lib/stores/dialog.store';
 	import Tooltip from '@awenovations/aura/tooltip.svelte';
 	import { showToast } from '@awenovations/aura/toast.store';
-	import TextField from '@awenovations/aura/text-field.svelte';
+
+	import PersonalInfo from '$lib/components/settings/personal-info/personal-info.svelte';
 
 	let { data, children } = $props();
 
 	let settingsOpen = $state(false);
-
-	let personalInfoFormLoading = $state(false);
 
 	$effect(() => {
 		if (data.errorMessage) {
@@ -37,39 +36,6 @@
 		if (event.key === 'Escape') {
 			settingsOpen = false;
 		}
-	};
-
-	const updatePersonalInformation = async (event: FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
-		personalInfoFormLoading = true;
-
-		const formData = [...new FormData(event.currentTarget).entries()].reduce(
-			(accumulator, value) => ({
-				...accumulator,
-				[value[0]]: value[1]
-			}),
-			{}
-		);
-
-		const result = await fetch(`/api/user/${data?.session?.user?._id}`, {
-			method: 'PATCH',
-			body: JSON.stringify(formData)
-		});
-
-		if (result.ok) {
-			showToast({
-				severity: 'success',
-				message: 'Personal information updated!'
-			});
-		} else {
-			const response = await result.json();
-			showToast({
-				severity: 'error',
-				message: response.message
-			});
-		}
-
-		personalInfoFormLoading = false;
 	};
 </script>
 
@@ -122,23 +88,7 @@
 				Settings
 				<Button size="small" onclick={toggleSettings}>Close</Button>
 			</h2>
-			<form onsubmit={updatePersonalInformation}>
-				<h3>Personal Information</h3>
-				<TextField name="name" value={data?.session?.user?.name}>
-					<span slot="label">Name</span>
-				</TextField>
-				<Tooltip
-					placement="bottom"
-					content={data?.session?.user?.authProvider !== 'board-buddy'
-						? `You are logged in using your ${data?.session?.user?.authProvider} account.`
-						: `Contact us if you'd like to change your email.`}
-				>
-					<TextField name="email" value={data?.session?.user?.email} disabled>
-						<span slot="label">Email</span>
-					</TextField>
-				</Tooltip>
-				<Button bind:loading={personalInfoFormLoading} kind="outlined">Update</Button>
-			</form>
+			<PersonalInfo user={data?.session?.user} />
 		</div>
 	</Panel>
 {/if}
@@ -170,13 +120,10 @@
 
 	.settings-wrapper {
 		padding: 1.5rem;
-		&,
-		form {
-			box-sizing: border-box;
-			display: flex;
-			flex-direction: column;
-			gap: 1rem;
-		}
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
 
 		:global(.aura-button .content) {
 			justify-content: center;
