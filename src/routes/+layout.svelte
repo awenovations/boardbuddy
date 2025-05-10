@@ -18,6 +18,8 @@
 
 	let settingsOpen = $state(false);
 
+	let personalInfoFormLoading = $state(false);
+
 	$effect(() => {
 		if (data.errorMessage) {
 			showToast({
@@ -39,6 +41,7 @@
 
 	const updatePersonalInformation = async (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
+		personalInfoFormLoading = true;
 
 		const formData = [...new FormData(event.currentTarget).entries()].reduce(
 			(accumulator, value) => ({
@@ -65,6 +68,8 @@
 				message: response.message
 			});
 		}
+
+		personalInfoFormLoading = false;
 	};
 </script>
 
@@ -132,7 +137,7 @@
 						<span slot="label">Email</span>
 					</TextField>
 				</Tooltip>
-				<Button kind="outlined">Update</Button>
+				<Button bind:loading={personalInfoFormLoading} kind="outlined">Update</Button>
 			</form>
 		</div>
 	</Panel>
