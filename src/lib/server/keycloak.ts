@@ -101,17 +101,13 @@ export const refreshToken = (refresh_token: string) =>
 		})
 	});
 
-export const signOutUserFromKeycloak = (refresh_token: string, accessToken: string) =>
-	fetch(`${OAUTH_CLIENT_URL}/protocol/openid-connect/logout`, {
+export const signOutUserFromKeycloak = (userId: string, accessToken: string) =>
+	fetch(`${KEYCLOAK_ADMIN_API}/users/${userId}/logout`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-			Authorizatoin: `Bearer ${accessToken}`
-		},
-		body: qs.stringify({
-			client_id: KEYCLOAK_CLIENT_ID,
-			refresh_token
-		})
+			Authorization: `Bearer ${accessToken}`
+		}
 	});
 
 export const updateUserInKeycloak = (
@@ -126,6 +122,15 @@ export const updateUserInKeycloak = (
 			Authorization: `Bearer ${accessToken}`
 		},
 		body: JSON.stringify(payload)
+	});
+
+export const deleteUserInKeycloak = (userId: string, accessToken: string) =>
+	fetch(`${KEYCLOAK_ADMIN_API}/users/${userId}`, {
+		method: 'DELETE',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${accessToken}`
+		}
 	});
 
 export const changePassword = (
@@ -145,4 +150,3 @@ export const changePassword = (
 			value: newPassword
 		})
 	});
-
