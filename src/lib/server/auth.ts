@@ -5,6 +5,7 @@ import mongoDbClient from '$lib/db/mongo';
 import { building, dev } from '$app/environment';
 import { refreshToken } from '$lib/server/keycloak';
 import { MongodbAdapter } from '@lucia-auth/adapter-mongodb';
+import { signOutUserFromKeycloak, getTokenWithClientCredentials } from '$lib/server/keycloak';
 
 import { env } from '$env/dynamic/private';
 
@@ -105,12 +106,20 @@ export const validateUserAndGetDetails = async (sessionId: string) => {
 };
 
 export const signOut = async (sessionId: string) => {
-	const session = await lucia.validateSession(sessionId);
+	const { session } = await lucia.validateSession(sessionId);
 
 	if (session) {
-		await lucia.invalidateSession(sessionId);
-		//TODO: Destroy user session in keycloak
-		// await signOutUserFromKeycloak(refreshToken, accessToken);
+		await lucia.invalidateSession(session.id);
+
+		const adminTokenResponse = await getTokenWithClientCredentials();
+
+		if (!adminTokenResponse.ok) {
+			throw new Error('Cannot generate admin token');
+		}
+
+		const { access_token } = await adminTokenResponse.json();
+
+		await signOutUserFromKeycloak(session.userId, access_token);
 	}
 };
 
