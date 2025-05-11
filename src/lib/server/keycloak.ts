@@ -127,3 +127,22 @@ export const updateUserInKeycloak = (
 		},
 		body: JSON.stringify(payload)
 	});
+
+export const changePassword = (
+	userId: string,
+	accessToken: string,
+	newPassword: Record<string, any>
+) =>
+	fetch(`${KEYCLOAK_ADMIN_API}/users/${userId}/reset-password`, {
+		method: 'PUT',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${accessToken}`
+		},
+		body: JSON.stringify({
+			type: 'password',
+			temporary: false,
+			value: newPassword
+		})
+	});
+

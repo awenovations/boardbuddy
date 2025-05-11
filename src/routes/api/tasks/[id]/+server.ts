@@ -3,6 +3,7 @@ import { lucia } from '$lib/server/auth';
 import mongoDbClient from '$lib/db/mongo';
 import type { RequestEvent } from './$types';
 import { type Card } from '$lib/components/task-card/types';
+import { clearEmptyStringProperties } from '$lib/helpers/api';
 
 export async function PATCH({ cookies, request, params }: RequestEvent) {
 	const sessionId = cookies.get(lucia.sessionCookieName);
@@ -37,12 +38,7 @@ export async function PATCH({ cookies, request, params }: RequestEvent) {
 		});
 	}
 
-  // Clears out empty strings
-	for (const key in body) {
-		if (body.hasOwnProperty(key) && typeof body[key] === 'string' && body[key].length === 0) {
-			delete body[key];
-		}
-	}
+  clearEmptyStringProperties(body);
 
 	await tasks.updateOne(
 		{ _id: id as any },

@@ -60,7 +60,6 @@
 	<Button bind:loading={personalInfoFormLoading} kind="outlined">Update</Button>
 </form>
 
-
 <style lang="scss">
   form {
     box-sizing: border-box;
@@ -69,4 +68,3 @@
     gap: 1rem;
   }
 </style>
-

@@ -14,6 +14,7 @@
 	import { showToast } from '@awenovations/aura/toast.store';
 
 	import PersonalInfo from '$lib/components/settings/personal-info/personal-info.svelte';
+	import AccountManagement from '$lib/components/settings/account-management/account-management.svelte';
 
 	let { data, children } = $props();
 
@@ -89,6 +90,7 @@
 				<Button size="small" onclick={toggleSettings}>Close</Button>
 			</h2>
 			<PersonalInfo user={data?.session?.user} />
+			<AccountManagement user={data?.session?.user} />
 		</div>
 	</Panel>
 {/if}
