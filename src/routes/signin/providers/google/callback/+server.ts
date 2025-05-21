@@ -31,9 +31,9 @@ export async function GET(event: RequestEvent): Promise<Response> {
 		// Invalid code or client credentials
 		return new Response(null, {
 			status: 302,
-      headers: {
-        Location: '/signin?error=true'
-      }
+			headers: {
+				Location: '/signin?error=true'
+			}
 		});
 	}
 
@@ -49,18 +49,22 @@ export async function GET(event: RequestEvent): Promise<Response> {
 		// Invalid code or client credentials
 		return new Response(null, {
 			status: 302,
-      headers: {
-        Location: '/signin?message=user+alread+exists'
-      }
+			headers: {
+				Location: '/signin?message=user+already+exists'
+			}
 		});
 	} else if (!existingUser) {
 		const client = (await mongoDbClient).db();
+
+		const now = Date.now();
 
 		await client.collection('users').insertOne({
 			_id: googleUserId,
 			email: claims.email,
 			name: claims.name,
-			authProvider: 'google'
+			authProvider: 'google',
+			createDate: now,
+			lastUpdateDate: now
 		});
 	}
 

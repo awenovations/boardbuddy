@@ -1,9 +1,24 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import { invalidateAll } from '$app/navigation';
 	import SignIn from '$lib/components/signin/signin.svelte';
 	import { showToast } from '@awenovations/aura/toast.store';
+
+	$effect(() => {
+		let message = $page.url.searchParams.get('message');
+
+		if (message) {
+			showToast({
+				severity: 'error',
+				message: message
+			});
+
+			// Remove the message
+			goto($page.url.pathname, { replaceState: true });
+		}
+	});
 
 	let loading = $state(false);
 

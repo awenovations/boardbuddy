@@ -30,10 +30,18 @@ export const actions: Actions = {
 			});
 		}
 
+		const existingUser = await (await mongoDbClient).db().collection('users').findOne({ email });
+
+		if (existingUser) {
+			return fail(400, {
+				message: 'User already exists.'
+			});
+		}
+
 		const tokenRequest = await getTokenWithClientCredentials();
 		const token = await tokenRequest.json();
 
-    await createUser(token.access_token, firstName, email, password);
+		await createUser(token.access_token, firstName, email, password);
 
 		const user = await findUser(token.access_token, email);
 

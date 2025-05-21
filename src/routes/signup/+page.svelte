@@ -12,16 +12,16 @@
 		return async ({ result }) => {
 			loading = false;
 
-			if (result.status === 302) {
+			if (result.type === 'failure' && result.status === 400) {
+				showToast({
+					severity: 'error',
+					message: result.data.message ?? 'Sorry, something went wrong, please try again!'
+				});
+			} else {
 				goto(result.location);
 				showToast({
 					severity: 'success',
 					message: 'Thanks for making an account!'
-				});
-			} else {
-				showToast({
-					severity: 'error',
-					message: 'Sorry, something went wrong, please try again!'
 				});
 			}
 		};

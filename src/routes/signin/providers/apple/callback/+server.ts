@@ -89,7 +89,7 @@ export async function POST({ request, cookies }: RequestEvent) {
 		return new Response(null, {
 			status: 302,
 			headers: {
-				Location: '/signin?message=user+alread+exists'
+				Location: '/signin?message=user+already+exists'
 			}
 		});
 	} else if (!existingUser) {
@@ -97,11 +97,15 @@ export async function POST({ request, cookies }: RequestEvent) {
 
 		const name = `${nameObject.firstName} ${nameObject.lastName}`;
 
+		const now = Date.now();
+
 		await client.collection('users').insertOne({
 			_id: appleUserId as any,
 			email,
 			name,
-			authProvider: 'apple'
+			authProvider: 'apple',
+			createDate: now,
+			lastUpdateDate: now
 		});
 	}
 
