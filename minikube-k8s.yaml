@@ -14,83 +14,10 @@ spec:
     spec:
       containers:
         - name: board-buddy
-          env:
-          - name: AUTH_GOOGLE_ID
-            valueFrom:
-              secretKeyRef:
-                name: board-buddy-env
-                key: AUTH_GOOGLE_ID
-          - name: AUTH_GOOGLE_SECRET
-            valueFrom:
-              secretKeyRef:
-                name: board-buddy-env
-                key: AUTH_GOOGLE_SECRET
-          - name: AUTH_GOOGLE_CALLBACK
-            valueFrom:
-              secretKeyRef:
-                name: board-buddy-env
-                key: AUTH_GOOGLE_CALLBACK
-          - name: MONGODB_URI
-            valueFrom:
-              secretKeyRef:
-                name: board-buddy-env
-                key: MONGODB_URI
-          - name: APPLE_CLIENT_ID
-            valueFrom:
-              secretKeyRef:
-                name: board-buddy-env
-                key: APPLE_CLIENT_ID
-          - name: APPLE_TEAM_ID
-            valueFrom:
-              secretKeyRef:
-                name: board-buddy-env
-                key: APPLE_TEAM_ID
-          - name: APPLE_KEY_ID
-            valueFrom:
-              secretKeyRef:
-                name: board-buddy-env
-                key: APPLE_KEY_ID
-          - name: APPLE_PRIVATE_KEY
-            valueFrom:
-              secretKeyRef:
-                name: board-buddy-env
-                key: APPLE_PRIVATE_KEY
-          - name: APPLE_REDIRECT_URI
-            valueFrom:
-              secretKeyRef:
-                name: board-buddy-env
-                key: APPLE_REDIRECT_URI
-          - name: OAUTH_VALIDATION_URL
-            valueFrom:
-              secretKeyRef:
-                name: board-buddy-env
-                key: OAUTH_VALIDATION_URL
-          - name: OAUTH_CLIENT_URL
-            valueFrom:
-              secretKeyRef:
-                name: board-buddy-env
-                key: OAUTH_CLIENT_URL
-          - name: KEYCLOAK_ADMIN_API
-            valueFrom:
-              secretKeyRef:
-                name: board-buddy-env
-                key: KEYCLOAK_ADMIN_API
-          - name: KEYCLOAK_REALM
-            valueFrom:
-              secretKeyRef:
-                name: board-buddy-env
-                key: KEYCLOAK_REALM
-          - name: KEYCLOAK_CLIENT_ID
-            valueFrom:
-              secretKeyRef:
-                name: board-buddy-env
-                key: KEYCLOAK_CLIENT_ID
-          - name: KEYCLOAK_CLIENT_SECRET
-            valueFrom:
-              secretKeyRef:
-                name: board-buddy-env
-                key: KEYCLOAK_CLIENT_SECRET
-          image: benjaminpknox/boardbuddy:1c72544
+          envFrom:
+          - secretRef:
+              name: board-buddy-env
+          image: benjaminpknox/boardbuddy:1f4c250
           imagePullPolicy: Always
           ports:
           - containerPort: 3000
