@@ -45,6 +45,8 @@
 
 	let showActions = $state(false);
 
+	let cardHovered = $state(false);
+
 	let dragging;
 
 	run(() => {
@@ -71,6 +73,8 @@
 		}
 
 		if (!card?.parentElement) return;
+
+		cardHovered = true;
 
 		const cardTitle = card.querySelector('.card-title');
 
@@ -131,11 +135,16 @@
 		hideActions();
 		cleanUp?.();
 		cleanUpTooltip?.();
+		cardHovered = false;
 	}, debounceRate);
 
 	const hideActions = debounce(() => {
-		showTitleTooltip = false;
-		showActions = false;
+		if (!cardHovered) {
+			showTitleTooltip = false;
+			showActions = false;
+		} else {
+			showActions = true;
+		}
 		hideActionsTransition = false;
 	}, debounceRate);
 
