@@ -14,6 +14,7 @@
 	let { handleSubmit, cards = [] }: Props = $props();
 
 	let openTask: Partial<Card> = $state({});
+	let openEditedTask: Partial<Card> = $state({});
 
 	let taskFormOpen: boolean = $state(false);
 	let taskDetailsOpen: boolean = $state(false);
@@ -40,17 +41,19 @@
 
 			setTimeout(() => {
 				taskFormOpen = true;
-				openTask = _task;
+				openEditedTask = _task;
 			}, 500);
 		} else {
 			taskFormOpen = true;
-			openTask = _task;
+			openEditedTask = _task;
 		}
 	};
 
 	const handleCreateTask = (taskColumn: string) => {
 		taskFormOpen = true;
 		newTaskColumn = taskColumn;
+		taskDetailsOpen = false;
+		openEditedTask = {};
 	};
 
 	const handleClose = () => {
@@ -115,7 +118,7 @@
 </div>
 
 <Panel open={taskFormOpen} class="task-panel task-form-panel">
-	<TaskForm task={openTask} {handleClose} column={newTaskColumn} {handleSubmit} />
+	<TaskForm task={openEditedTask} {handleClose} column={newTaskColumn} {handleSubmit} />
 </Panel>
 
 <Panel open={taskDetailsOpen} class="task-panel task-details-panel">
