@@ -38,7 +38,7 @@
 			} else {
 				showToast({
 					severity: 'error',
-					message: 'Sorry, something went wrong, please try again!'
+					message: result.data.message ?? 'Sorry, something went wrong, please try again!'
 				});
 			}
 		};
