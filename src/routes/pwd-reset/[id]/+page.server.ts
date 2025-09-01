@@ -7,13 +7,29 @@ import { changePassword, getTokenWithClientCredentials } from '$lib/server/keycl
 export const load: PageServerLoad = async ({ params }) => {
 	const client = (await mongoDbClient).db();
 
-	const collection = client.collection('passwordResets');
+	const passwordResetsCollection = client.collection('passwordResets');
 
-	const reset = await collection.findOne({ _id: params.id as any });
+	const reset = await passwordResetsCollection.findOne({ _id: params.id as any });
 
 	if (!reset) {
 		throw redirect(302, '/signin');
 	}
+
+	const usersCollection = client.collection('users');
+
+	const user = await usersCollection.findOne({ email: reset.email });
+
+	if (!user) {
+		throw redirect(302, '/signin');
+	}
+
+	if (user.authProvider !== 'board-buddy') {
+		await passwordResetsCollection.deleteOne({ _id: params.id as any });
+	}
+
+	return {
+		authProvider: user.authProvider
+	};
 };
 
 export const actions: Actions = {

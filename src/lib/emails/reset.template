@@ -1,0 +1,41 @@
+<mjml>
+  <mj-head>
+    <mj-font name="Roboto"
+       href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" />
+  </mj-head>
+  <mj-body background-color="#f5f5f5">
+     <mj-section full-width="full-width" padding="0" padding-top="50px">
+      <mj-column padding="0">
+        <mj-text 
+                 font-family="Roboto, Arial" 
+                 color="#5E78A8" 
+                 padding="0" 
+                 align="center" 
+                 font-weight="500"
+                 font-size="36px">
+          Board Buddy
+        </mj-text>
+        <mj-text
+                 font-family="Roboto, Arial" 
+                 color="#5E78A8" 
+                 padding="0" 
+                 align="center" 
+                 font-weight="200"
+                 font-size="14px">
+          <p>Simplify Your Workflow</p>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section full-width="full-width" padding="0" padding-bottom="50px">
+      <mj-column border="1px solid #c1c2c4" background-color="#ffffff" width="490px" padding="12px">
+        <mj-text align="center" font-family="Roboto, Arial" font-size="22px" font-weight="500" padding-top="30px" padding-bottom="30px">Reset your password</mj-text>
+				<mj-text font-family="Roboto, Arial" font-size="14px" font-weight="200">Hi {{name}},</mj-text>
+				<mj-text font-family="Roboto, Arial" font-size="14px" font-weight="200" padding-bottom="30px" line-height="21px">Did you ask to reset your password? If so, click the button below. If you didn’t ask to reset your password, please ignore this email.</mj-text>
+        <mj-button font-family="Roboto, Arial" background-color="#474a50" color="white" width="256px" href="{{reset_url}}" padding-bottom="30px" font-size="18px" border-radius="5px">
+          Reset password
+        </mj-button>
+        <mj-text align="center" font-family="Roboto, Arial" font-size="12px" font-weight="200" padding-bottom="30px" line-height="18px">Having Problems?<br />Email <a href="mailto:support@boardbuddy.cloud" style="color: #005da8; text-decoration: none;">support@boardbuddy.cloud</a></mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
