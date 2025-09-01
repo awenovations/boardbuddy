@@ -15,7 +15,6 @@
 				message: message
 			});
 
-			// Remove the message
 			goto($page.url.pathname, { replaceState: true });
 		}
 	});

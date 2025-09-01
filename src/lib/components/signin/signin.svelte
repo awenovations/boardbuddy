@@ -62,7 +62,7 @@
 				</TextField>
 				<TextField name="password" data-cy="password" type="password" placeholder="password" />
 				<div class="forgot-password" data-cy="forgot-password">
-					Forgot Password? <Link data-cy="forgot-password-link">Reset now</Link>
+					Forgot Password? <Link href="/pwd-reset/request" data-cy="forgot-password-link">Reset now</Link>
 				</div>
 			</div>
 			<Button type="submit" {loading} fullWidth variant="tertiary" data-cy="sign-in">Sign in</Button

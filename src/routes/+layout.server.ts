@@ -20,13 +20,14 @@ export const load: LayoutServerLoad = async ({ cookies, url }) => {
 	if (
 		!session?.user &&
 		url.pathname !== '/signin' &&
-		!url.pathname.includes('/icons') &&
-		!url.pathname.includes('/signup')
+		!url.pathname.startsWith('/icons') &&
+		!url.pathname.startsWith('/signup') &&
+		!url.pathname.startsWith('/pwd-reset')
 	) {
 		throw redirect(302, '/signin');
 	} else if (
 		session?.user &&
-		(url.pathname.includes('/signin') || url.pathname.includes('/signup'))
+		(url.pathname.startsWith('/signin') || url.pathname.startsWith('/signup'))
 	) {
 		throw redirect(302, '/');
 	}

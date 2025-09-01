@@ -42,7 +42,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@awenovations/aura": "^0.0.40",
+		"@awenovations/aura": "^0.0.43",
 		"@lucia-auth/adapter-mongodb": "^1.0.3",
 		"@types/find-node-modules": "^2.1.2",
 		"@types/uuid": "^10.0.0",
@@ -54,6 +54,7 @@
 		"jose": "^6.0.10",
 		"lodash.camelcase": "^4.3.0",
 		"lodash.debounce": "^4.0.8",
+		"mailgun.js": "^12.0.3",
 		"mongodb": "^6.13.0",
 		"qs": "^6.14.0",
 		"reset-css": "^5.0.2",

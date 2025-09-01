@@ -7,6 +7,7 @@ const allowedPaths: string[] = [];
 const allowedOrigins: string[] = [
 	'https://appleid.apple.com',
 	'http://localhost:5173',
+	'http://localhost:5174',
 	'https://board-buddy.local.cloud',
 	'https://boardbuddy.cloud'
 ];

@@ -17,7 +17,7 @@ spec:
           envFrom:
           - secretRef:
               name: board-buddy-env
-          image: benjaminpknox/boardbuddy:1f4c250
+          image: benjaminpknox/boardbuddy:83014bd
           imagePullPolicy: Always
           ports:
           - containerPort: 3000
