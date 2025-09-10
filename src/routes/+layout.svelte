@@ -84,7 +84,7 @@
 		<div class="backdrop"></div>
 	{/if}
 
-	<Panel width="25vw" open={settingsOpen} class="settings-panel">
+	<Panel width="19vw" open={settingsOpen} class="settings-panel">
 		<div class="settings-wrapper">
 			<h2>
 				Settings
