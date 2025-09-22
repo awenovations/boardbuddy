@@ -15,7 +15,9 @@ interface UserDoc {
 	_id: string;
 	email: string;
 	name: string;
-	provider: string;
+	authProvider: string;
+  createdDate: number;
+  lastUpdateDate?: number;
 }
 
 interface SessionDoc {

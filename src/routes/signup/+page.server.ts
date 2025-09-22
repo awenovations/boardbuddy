@@ -51,7 +51,9 @@ export const actions: Actions = {
 			_id: userObject.id,
 			email,
 			name: firstName,
-			authProvider: 'board-buddy'
+			authProvider: 'board-buddy',
+			createdDate: Date.now(),
+			lastUpdateDate: Date.now()
 		});
 
 		redirect(302, '/signin');

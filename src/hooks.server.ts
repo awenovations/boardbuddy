@@ -40,6 +40,7 @@ export const handle: Handle = sequence(
 				...sessionCookie.attributes
 			});
 		}
+
 		event.locals.user = user;
 		event.locals.session = session;
 

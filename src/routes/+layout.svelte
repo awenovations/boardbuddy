@@ -148,7 +148,8 @@
 		padding: 1.875rem 0;
 		box-sizing: border-box;
 		margin: 0 auto;
-		width: fit-content;
+		min-width: 71.429rem;
+    width: fit-content;
 		max-height: 100%;
 		gap: 3.813rem;
 		overflow: hidden;

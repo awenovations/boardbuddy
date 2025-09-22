@@ -1,3 +1,4 @@
+import { subDays } from 'date-fns';
 import { redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 import { lucia, validateUserAndGetDetails } from "$lib/server/auth";
@@ -31,6 +32,10 @@ export const load: LayoutServerLoad = async ({ cookies, url }) => {
 	) {
 		throw redirect(302, '/');
 	}
+
+  if(session && url.pathname !== '/paywall' && session.user.createdDate < subDays(new Date(), 3).getTime()) {
+    throw redirect(302, '/paywall');
+  }
 
 	return {
 		session,
