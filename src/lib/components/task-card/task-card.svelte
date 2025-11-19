@@ -194,6 +194,8 @@
 	};
 
 	const drop = (evt: Event) => {
+    if(!card.parentElement) return;
+
 		card.parentElement.classList.add('animateable');
 
 		card.parentElement.style.top = `${originalPosition.y}px`;

@@ -60,7 +60,7 @@
 					data-cy="sign-out"
 					class="sign-out">Sign out</Button
 				>
-				<Tooltip content="Accout Settings" placement="bottom-end">
+				<Tooltip content="Account Settings" placement="bottom-end">
 					<Link onclick={toggleSettings}>
 						<Icon name="settings" size="large" />
 					</Link>
