@@ -177,7 +177,6 @@
 		height: 100%;
 		display: flex;
 		align-items: strech;
-		max-width: 27.714rem;
 		flex-direction: column;
 		justify-content: center;
 		margin: 0 auto;

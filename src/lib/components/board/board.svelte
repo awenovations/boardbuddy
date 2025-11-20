@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Panel from '@awenovations/aura/panel.svelte';
 	import Button from '@awenovations/aura/button.svelte';
 	import Column from '$lib/components/column/column.svelte';
 	import type { Card } from '$lib/components/task-card/types';
@@ -117,47 +116,41 @@
 	/>
 </div>
 
-<Panel open={taskFormOpen} class="task-panel task-form-panel">
+<div class="task-panel" class:taskFormOpen>
 	<TaskForm task={openEditedTask} {handleClose} column={newTaskColumn} {handleSubmit} />
-</Panel>
+</div>
 
-<Panel open={taskDetailsOpen} class="task-panel task-details-panel">
-	{#if openTask}
-		<div class="task-details">
-			<h2>{openTask.title}</h2>
-			<div class="task-meta">
-				<div class="task-meta-type">
-					<span>Status</span>
-					<span>Assignee</span>
-					<span>Task type</span>
-				</div>
-
-				<div class="task-meta-value">
-					<span>{openTask.column}</span>
-					<span>{openTask.assignee}</span>
-					<span>{openTask.type}</span>
-				</div>
-			</div>
-			<h4>Description</h4>
-			<Container kind="filled" class="task-description">
-				{openTask.body}
-			</Container>
-
-			<div class="task-details-actions">
-				<Button
-					type="button"
-					kind="outlined"
-					size="small"
-					data-cy="cancel-button"
-					onclick={() => {
-						taskDetailsOpen = false;
-					}}>Close</Button
-				>
-				<Button type="submit" size="small" onclick={() => handleEditTask(openTask)}>Edit</Button>
-			</div>
+<div class="task-details" class:taskDetailsOpen>
+	<h3>{openTask.title}</h3>
+	<div class="task-meta">
+		<div class="task-meta-type">
+			<span>Status</span>
+			<span>Assignee</span>
+			<span>Task type</span>
+			<span>Details</span>
 		</div>
-	{/if}
-</Panel>
+
+		<div class="task-meta-value">
+			<span>{openTask.column}</span>
+			<span>{openTask.assignee}</span>
+			<span>{openTask.type}</span>
+			<span>{openTask.body}</span>
+		</div>
+	</div>
+
+	<div class="task-details-actions">
+		<Button
+			type="button"
+			kind="outlined"
+			size="small"
+			data-cy="cancel-button"
+			onclick={() => {
+				taskDetailsOpen = false;
+			}}>Close</Button
+		>
+		<Button type="submit" size="small" onclick={() => handleEditTask(openTask)}>Edit</Button>
+	</div>
+</div>
 
 <style lang="ts">
 	.column-wrapper {
@@ -180,11 +173,30 @@
 		height: auto;
 	}
 
+	.task-panel:not(.taskFormOpen),
+	.task-details:not(.taskDetailsOpen) {
+		display: none;
+	}
+
+	.task-details,
+	.task-panel {
+		position: absolute;
+		width: fit-content;
+		padding: 2rem;
+		background: white;
+		border-radius: var(--aura-container-border-radius);
+		border: 1px solid var(--aura-tertiary-10);
+		box-shadow: var(--aura-container-drop-shadow);
+		transform: translate(-50%, -50%);
+		top: 50%;
+		left: 50%;
+		min-width: 41vw;
+	}
+
 	.task-details {
 		white-space: wrap;
 		display: flex;
 		flex-direction: column;
-		width: 41vw;
 		max-height: 100%;
 		padding: 3.143rem;
 		box-sizing: border-box;
@@ -210,6 +222,10 @@
 		.task-meta {
 			display: flex;
 			gap: 1.786rem;
+
+			.task-meta-type {
+				min-width: 4.5rem;
+			}
 
 			.task-meta-value,
 			.task-meta-type {
