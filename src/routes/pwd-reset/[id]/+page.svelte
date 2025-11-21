@@ -21,7 +21,7 @@
 		};
 </script>
 
-<Container kind="filled" variant="elevated" clearPadding>
+<Container class="dialog" kind="filled" variant="elevated" clearPadding>
 	<div class="content-wrapper">
 		{#if data.authProvider === 'board-buddy'}
 			<h3>Reset Password</h3>
@@ -68,6 +68,10 @@
 </Container>
 
 <style lang="scss">
+	:global(.dialog) {
+		margin: 0 auto;
+	}
+
 	.content-wrapper {
 		box-sizing: border-box;
 		padding: 3rem 3.714rem 1.857rem;

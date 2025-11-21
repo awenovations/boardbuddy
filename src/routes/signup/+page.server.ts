@@ -41,7 +41,13 @@ export const actions: Actions = {
 		const tokenRequest = await getTokenWithClientCredentials();
 		const token = await tokenRequest.json();
 
-		await createUser(token.access_token, firstName, email, password);
+    const createUserResponse = await createUser(token.access_token, firstName, email, password);
+
+		if (!createUserResponse.ok) {
+			return fail(500, {
+				message: 'Something unexpected occurred, try again later.'
+			});
+		}
 
 		const user = await findUser(token.access_token, email);
 

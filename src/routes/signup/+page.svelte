@@ -11,8 +11,7 @@
 
 		return async ({ result }) => {
 			loading = false;
-
-			if (result.type === 'failure' && result.status === 400) {
+			if (result.type === 'failure') {
 				showToast({
 					severity: 'error',
 					message: result.data.message ?? 'Sorry, something went wrong, please try again!'
@@ -45,5 +44,6 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-start;
+		align-items: center;
 	}
 </style>

@@ -180,6 +180,7 @@
 
 	.task-details,
 	.task-panel {
+		z-index: 1001;
 		position: absolute;
 		width: fit-content;
 		padding: 2rem;

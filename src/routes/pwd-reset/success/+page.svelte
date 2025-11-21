@@ -11,7 +11,7 @@
 		};
 </script>
 
-<Container kind="filled" variant="elevated" clearPadding>
+<Container class="dialog" kind="filled" variant="elevated" clearPadding>
 	<div class="content-wrapper">
 		<Icon name="checkmark" size="large" />
 
@@ -24,6 +24,10 @@
 </Container>
 
 <style lang="scss">
+	:global(.dialog) {
+		margin: 0 auto;
+	}
+
 	.content-wrapper {
 		box-sizing: border-box;
 		padding: 2.5rem;
