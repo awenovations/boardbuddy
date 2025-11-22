@@ -190,9 +190,9 @@
 		position: absolute;
 		width: fit-content;
 		padding: 2rem;
-		background: white;
+		background: var(--aura-container-background);
 		border-radius: var(--aura-container-border-radius);
-		border: 1px solid var(--aura-tertiary-10);
+		border: 1px solid var(--aura-container-border-color);
 		box-shadow: var(--aura-container-drop-shadow);
 		transform: translate(-50%, -50%);
 		top: 50%;
