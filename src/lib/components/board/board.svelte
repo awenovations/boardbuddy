@@ -18,6 +18,8 @@
 	let taskFormOpen: boolean = $state(false);
 	let taskDetailsOpen: boolean = $state(false);
 
+	let showBackdrop = $derived(taskDetailsOpen || taskFormOpen);
+
 	let newTaskColumn = $state('');
 
 	const handleOpenTask = (_task) => {
@@ -152,6 +154,10 @@
 	</div>
 </div>
 
+{#if showBackdrop}
+	<div class="backdrop"></div>
+{/if}
+
 <style lang="ts">
 	.column-wrapper {
 		display: flex;
@@ -238,5 +244,16 @@
 				font: var(--aura-default-semibold);
 			}
 		}
+	}
+
+	.backdrop {
+		position: absolute;
+		top: 0;
+		left: 0;
+		background: rgba(0, 0, 0, 40%);
+		backdrop-filter: blur(0.2rem);
+		height: 100%;
+		width: 100%;
+		z-index: 1000;
 	}
 </style>
