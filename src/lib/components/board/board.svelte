@@ -119,6 +119,7 @@
 </div>
 
 <div class="task-panel" class:taskFormOpen>
+  <h4>New Task</h4>
 	<TaskForm task={openEditedTask} {handleClose} column={newTaskColumn} {handleSubmit} />
 </div>
 
@@ -168,7 +169,12 @@
 	}
 
 	:global(.task-panel) {
+    min-width: 47.643rem;
+    min-height: 29.857rem;
 		z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 1.063rem;
 	}
 
 	:global(.task-details .aura-container.task-description) {
@@ -189,7 +195,7 @@
 		z-index: 1001;
 		position: absolute;
 		width: fit-content;
-		padding: 2rem;
+		padding: 1.571rem;
 		background: var(--aura-container-background);
 		border-radius: var(--aura-container-border-radius);
 		border: 1px solid var(--aura-container-border-color);
@@ -197,7 +203,6 @@
 		transform: translate(-50%, -50%);
 		top: 50%;
 		left: 50%;
-		min-width: 41vw;
 	}
 
 	.task-details {

@@ -77,93 +77,103 @@
 	onsubmit={submitForm}
 	novalidate
 >
-	<TextField
-		required
-		showErrors={showErrors?.['task-name']}
-		name="task-name"
-		data-cy="task-name"
-		placeholder="Task name..."
-		value={task.title}
-	>
-		{#snippet label()}
-			<span>Task name</span>
-		{/snippet}
-		{#snippet errors()}
-			<span data-cy="task-name-errors">Task name is required</span>
-		{/snippet}
-	</TextField>
-
-	<TextField
-		height="10.786rem"
-		required
-		showErrors={showErrors?.['description']}
-		name="description"
-		data-cy="description"
-		type="multi"
-		placeholder="Description..."
-		value={task.body}
-	>
-		{#snippet label()}
-			<span>Description</span>
-		{/snippet}
-		{#snippet errors()}
-			<span data-cy="task-description-errors">Task description is required</span>
-		{/snippet}
-	</TextField>
-
-	<div class="bottom-row">
+	<div class="left-column">
 		<TextField
-			fullWidth
+			width="100%"
 			required
-			showErrors={showErrors?.['assignee']}
-			name="assignee"
-			data-cy="assignee"
-			type="text"
-			placeholder="Assignee..."
-			value={task.assignee}
+			showErrors={showErrors?.['task-name']}
+			name="task-name"
+			data-cy="task-name"
+			placeholder="Task name..."
+			value={task.title}
 		>
 			{#snippet label()}
-				<span>Assignee</span>
+				<span>Task name</span>
 			{/snippet}
 			{#snippet errors()}
-				<span data-cy="assignee-errors">Assignee is required</span>
+				<span data-cy="task-name-errors">Task name is required</span>
 			{/snippet}
 		</TextField>
 
-		<Dropdown
-			data-cy="task-type"
-			fullWidth
-			required
-			name="task-type"
-			showErrors={showErrors?.['task-type']}
-			on:change={(event) => {
-				task.type = event.detail.value;
-			}}
-			currentValue={task.type}
-		>
-			{#snippet placeholder()}
-				<span>Task type...</span>
-			{/snippet}
-			{#snippet errors()}
-				<span data-cy="task-type-errors">Task type is required</span>
-			{/snippet}
-			{#snippet label()}
-				<span>Task type</span>
-			{/snippet}
-			<aura-option value="user story">user story</aura-option>
-			<aura-option value="bug fix">bug fix</aura-option>
-			<aura-option value="plan">plan</aura-option>
-		</Dropdown>
+		<div class="description-field">
+			<TextField
+				height="100%"
+				width="100%"
+				required
+				showErrors={showErrors?.['description']}
+				name="description"
+				data-cy="description"
+				type="multi"
+				placeholder="Description..."
+				value={task.body}
+			>
+				{#snippet label()}
+					<span>Description</span>
+				{/snippet}
+				{#snippet errors()}
+					<span data-cy="task-description-errors">Task description is required</span>
+				{/snippet}
+			</TextField>
+		</div>
 	</div>
-	<div class="bottom-row">
-		<Button
-			type="button"
-			kind="outlined"
-			size="small"
-			data-cy="cancel-button"
-			on:click={handleClose}>Cancel</Button
-		>
-		<Button {loading} type="submit" size="small" data-cy="save-button">Save</Button>
+
+	<div class="right-column">
+		<div class="right-column-row">
+			<TextField
+				fullWidth
+				required
+				showErrors={showErrors?.['assignee']}
+				name="assignee"
+				data-cy="assignee"
+				type="text"
+				placeholder="Assignee..."
+				value={task.assignee}
+			>
+				{#snippet label()}
+					<span>Assignee</span>
+				{/snippet}
+				{#snippet errors()}
+					<span data-cy="assignee-errors">Assignee is required</span>
+				{/snippet}
+			</TextField>
+		</div>
+
+		<div class="right-column-row">
+			<Dropdown
+				data-cy="task-type"
+				fullWidth
+				required
+				name="task-type"
+				showErrors={showErrors?.['task-type']}
+				on:change={(event) => {
+					task.type = event.detail.value;
+				}}
+				currentValue={task.type}
+			>
+				{#snippet placeholder()}
+					<span>Task type...</span>
+				{/snippet}
+				{#snippet errors()}
+					<span data-cy="task-type-errors">Task type is required</span>
+				{/snippet}
+				{#snippet label()}
+					<span>Task type</span>
+				{/snippet}
+				<aura-option value="user story">user story</aura-option>
+				<aura-option value="bug fix">bug fix</aura-option>
+				<aura-option value="plan">plan</aura-option>
+			</Dropdown>
+		</div>
+		<div class="right-column-row bottom-row">
+			<Button
+				type="button"
+				kind="outlined"
+				size="small"
+				data-cy="cancel-button"
+				on:click={handleClose}>Cancel</Button
+			>
+			<Button {loading} type="submit" size="small" data-cy="save-button">Save</Button>
+		</div>
 	</div>
 	<input type="hidden" name="column" value={column} />
 	{#if task._id}
@@ -176,18 +186,40 @@
 		width: 100%;
 		height: 100%;
 		display: flex;
-		align-items: strech;
-		flex-direction: column;
-		justify-content: center;
-		margin: 0 auto;
+		flex-direction: row;
+		flex: 1;
+		gap: 1.571rem;
 
-		&,
-		& .bottom-row {
-			gap: 1rem;
+		.left-column {
+			width: 29.786rem;
+			display: flex;
+			flex-direction: column;
+			gap: 1.571rem;
+
+			.description-field {
+				flex: 1;
+				:global(.aura-text-field-wrapper) {
+					height: 100%;
+				}
+			}
 		}
 
-		.bottom-row {
+		.right-column {
 			display: flex;
+			flex-direction: column;
+			gap: 1.571rem;
+			flex: 1;
+
+			.right-column-row {
+				display: flex;
+			}
+
+			.bottom-row {
+				flex: 1;
+				align-items: flex-end;
+				justify-content: flex-end;
+				gap: 1.571rem;
+			}
 		}
 	}
 </style>
