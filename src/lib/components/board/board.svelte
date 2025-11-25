@@ -119,27 +119,33 @@
 </div>
 
 <div class="task-panel" class:taskFormOpen>
-  <h4>New Task</h4>
+	<h4>New Task</h4>
 	<TaskForm task={openEditedTask} {handleClose} column={newTaskColumn} {handleSubmit} />
 </div>
 
 <div class="task-details" class:taskDetailsOpen>
-	<h3>{openTask.title}</h3>
-	<div class="task-meta">
-		<div class="task-meta-type">
-			<span>Status</span>
-			<span>Assignee</span>
-			<span>Task type</span>
-			<span>Details</span>
-		</div>
-
-		<div class="task-meta-value">
-			<span>{openTask.column}</span>
-			<span>{openTask.assignee}</span>
-			<span>{openTask.type}</span>
-			<span>{openTask.body}</span>
-		</div>
+	<div class="task-details-header">
+		<h3>{openTask.title}</h3>
+		<Container clearPadding class="task-meta">
+			<div class="task-meta-type">
+				<div class="task-meta-item">
+					<span class="task-meta-header">Status</span>
+					<span class="task-meta-value">{openTask.column}</span>
+				</div>
+				<div class="task-meta-item">
+					<span class="task-meta-header">Task type</span>
+					<span class="task-meta-value">{openTask.type}</span>
+				</div>
+				<div class="task-meta-item">
+					<span class="task-meta-header">Assignee</span>
+					<span class="task-meta-value">{openTask.assignee}</span>
+				</div>
+			</div>
+		</Container>
 	</div>
+
+	<span class="description-header">Description</span>
+	<span>{openTask.body}</span>
 
 	<div class="task-details-actions">
 		<Button
@@ -169,12 +175,12 @@
 	}
 
 	:global(.task-panel) {
-    min-width: 47.643rem;
-    min-height: 29.857rem;
+		min-width: 47.643rem;
+		min-height: 29.857rem;
 		z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    gap: 1.063rem;
+		display: flex;
+		flex-direction: column;
+		gap: 1.063rem;
 	}
 
 	:global(.task-details .aura-container.task-description) {
@@ -183,6 +189,10 @@
 		flex: 1;
 		overflow-y: auto;
 		height: auto;
+	}
+
+	.description-header {
+		font: var(--aura-default-semibold);
 	}
 
 	.task-panel:not(.taskFormOpen),
@@ -209,12 +219,21 @@
 		white-space: wrap;
 		display: flex;
 		flex-direction: column;
+		width: 47.643rem;
 		max-height: 100%;
-		padding: 3.143rem;
 		box-sizing: border-box;
 
+		.task-details-header {
+			display: flex;
+			justify-content: space-between;
+
+			h3 {
+				width: 24.286rem;
+			}
+		}
+
 		h2,
-		.task-meta,
+		:gloabl(.task-meta),
 		h4,
 		.task-details-actions {
 			flex: 0 0 auto;
@@ -231,22 +250,30 @@
 			gap: 1.071rem;
 		}
 
-		.task-meta {
+		:global(.task-meta) {
 			display: flex;
 			gap: 1.786rem;
+			padding: 0.75rem;
 
 			.task-meta-type {
 				min-width: 4.5rem;
-			}
-
-			.task-meta-value,
-			.task-meta-type {
 				display: flex;
-				flex-direction: column;
-			}
+				gap: 2rem;
 
-			.task-meta-value {
-				font: var(--aura-default-semibold);
+				.task-meta-item,
+				.task-meta-value {
+					display: flex;
+					flex-direction: column;
+				}
+
+				.task-meta-item {
+					align-items: baseline;
+					gap: 0.5rem;
+				}
+
+				.task-meta-value {
+					font: var(--aura-default-semibold);
+				}
 			}
 		}
 	}
