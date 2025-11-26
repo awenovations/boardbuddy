@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { format, fromUnixTime } from 'date-fns';
 	import Button from '@awenovations/aura/button.svelte';
 	import Column from '$lib/components/column/column.svelte';
 	import type { Card } from '$lib/components/task-card/types';
@@ -147,17 +148,22 @@
 	<span class="description-header">Description</span>
 	<span>{openTask.body}</span>
 
-	<div class="task-details-actions">
-		<Button
-			type="button"
-			kind="outlined"
-			size="small"
-			data-cy="cancel-button"
-			onclick={() => {
-				taskDetailsOpen = false;
-			}}>Close</Button
-		>
-		<Button type="submit" size="small" onclick={() => handleEditTask(openTask)}>Edit</Button>
+	<div class="task-details-footer">
+		<span class="task-details-time">
+			Created {openTask.createDate && format(new Date(openTask.createDate), 'MMMM d, yyyy')}
+		</span>
+		<div class="task-details-actions">
+			<Button
+				type="button"
+				kind="outlined"
+				size="small"
+				data-cy="cancel-button"
+				onclick={() => {
+					taskDetailsOpen = false;
+				}}>Close</Button
+			>
+			<Button type="submit" size="small" onclick={() => handleEditTask(openTask)}>Edit</Button>
+		</div>
 	</div>
 </div>
 
@@ -229,6 +235,18 @@
 
 			h3 {
 				width: 24.286rem;
+			}
+		}
+
+		.task-details-footer {
+			display: flex;
+			align-items: self-end;
+			justify-content: space-between;
+			margin-top: 2rem;
+
+			.task-details-time {
+				color: var(--aura-light-tertiary-50);
+				font-size: 0.857rem;
 			}
 		}
 

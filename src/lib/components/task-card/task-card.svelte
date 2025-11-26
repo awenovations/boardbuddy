@@ -26,6 +26,7 @@
 		assignee: string;
 		column: string;
 		type?: string;
+		createDate?: number;
 		handleEditTask: (task: Card) => void;
 		handleOpenTask: (task: Card) => void;
 	}
@@ -36,6 +37,7 @@
 		body,
 		assignee,
 		column,
+		createDate,
 		type = 'user story',
 		handleEditTask,
 		handleOpenTask
@@ -194,7 +196,7 @@
 	};
 
 	const drop = (evt: Event) => {
-    if(!card.parentElement) return;
+		if (!card.parentElement) return;
 
 		card.parentElement.classList.add('animateable');
 
@@ -312,6 +314,7 @@
 					title,
 					body,
 					assignee,
+					createDate,
 					type,
 					column
 				})}
@@ -327,6 +330,7 @@
 					title,
 					body,
 					assignee,
+					createDate,
 					type
 				})}
 			data-cy="task-card-edit-button"

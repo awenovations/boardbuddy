@@ -293,6 +293,7 @@
 						title={card.taskName}
 						body={card.description}
 						type={card.taskType}
+						createDate={card.createDate}
 						assignee={card.assignee}
 						column={card.column}
 						{handleEditTask}
