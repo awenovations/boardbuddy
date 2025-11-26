@@ -107,6 +107,7 @@
 
 	:global(html, body) {
 		width: 100%;
+		overflow: clip;
 	}
 
 	:global(html, body),
@@ -149,7 +150,7 @@
 		box-sizing: border-box;
 		margin: 0 auto;
 		min-width: 71.429rem;
-    width: fit-content;
+		width: fit-content;
 		max-height: 100%;
 		gap: 3.813rem;
 		overflow: hidden;
@@ -175,16 +176,16 @@
 		margin-right: 0.071rem;
 	}
 
-	.logo {
+	:global(.logo) {
 		color: var(--aura-light-secondary-40);
 		display: flex;
 		flex-direction: column;
 
-		.name {
+		:global(.name) {
 			font: var(--aura-display2);
 		}
 
-		.center & {
+		:global(.center) & {
 			align-items: center;
 		}
 	}
