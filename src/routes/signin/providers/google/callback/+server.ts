@@ -63,7 +63,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 			email: claims.email,
 			name: claims.name,
 			authProvider: 'google',
-			createDate: now,
+			createdDate: now,
 			lastUpdateDate: now
 		});
 	}

@@ -104,7 +104,7 @@ export async function POST({ request, cookies }: RequestEvent) {
 			email,
 			name,
 			authProvider: 'apple',
-			createDate: now,
+			createdDate: now,
 			lastUpdateDate: now
 		});
 	}
