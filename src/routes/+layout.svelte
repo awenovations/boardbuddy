@@ -51,21 +51,23 @@
 		</div>
 
 		{#if data.session}
-			<div class="right-user-actions">
-				<Button
-					onclick={() => goto('/signout')}
-					kind="outlined"
-					variant="secondary"
-					size="small"
-					data-cy="sign-out"
-					class="sign-out">Sign out</Button
-				>
-				<Tooltip content="Account Settings" placement="bottom-end">
-					<Link onclick={toggleSettings}>
-						<Icon name="settings" size="large" />
-					</Link>
-				</Tooltip>
-			</div>
+			<form method="POST" action="/signout">
+				<div class="right-user-actions">
+					<Button
+						type="submit"
+						kind="outlined"
+						variant="secondary"
+						size="small"
+						data-cy="sign-out"
+						class="sign-out">Sign out</Button
+					>
+					<Tooltip content="Account Settings" placement="bottom-end">
+						<Link onclick={toggleSettings}>
+							<Icon name="settings" size="large" />
+						</Link>
+					</Tooltip>
+				</div>
+			</form>
 		{/if}
 	</header>
 
