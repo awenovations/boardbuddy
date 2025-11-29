@@ -18,6 +18,7 @@ interface UserDoc {
 	authProvider: string;
   createdDate: number;
   lastUpdateDate?: number;
+  role?: string;
 }
 
 interface SessionDoc {

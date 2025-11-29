@@ -33,7 +33,7 @@ export const load: LayoutServerLoad = async ({ cookies, url }) => {
 		throw redirect(302, '/');
 	}
 
-  if(session && url.pathname !== '/paywall' && session.user.createdDate < subDays(new Date(), 3).getTime()) {
+  if(session && url.pathname !== '/paywall' && session.user.createdDate < subDays(new Date(), 3).getTime() && session.user.role !== 'admin') {
     throw redirect(302, '/paywall');
   }
 
