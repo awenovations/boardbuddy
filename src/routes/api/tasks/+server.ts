@@ -3,7 +3,6 @@ import { lucia } from '$lib/server/auth';
 import mongoDbClient from '$lib/db/mongo';
 import type { RequestEvent } from './$types';
 import { fail, json } from '@sveltejs/kit';
-import { type Card } from '$lib/components/task-card/types';
 
 export async function POST({ cookies, request }: RequestEvent) {
 	const sessionId = cookies.get(lucia.sessionCookieName);
@@ -20,17 +19,12 @@ export async function POST({ cookies, request }: RequestEvent) {
 
 	const tasks = (await mongoDbClient).db().collection('tasks');
 
-	const { order: lastCardOrder } =
-		(await tasks.findOne<Card>({ column: body.column }, { sort: { order: -1 } })) ?? {};
-
-	const order = typeof lastCardOrder === 'undefined' ? 0 : lastCardOrder + 1;
-
 	const now = Date.now();
 
 	const task = await tasks.insertOne({
 		_id: uuidv4(),
 		...body,
-		order,
+		order: -1,
 		user_id: user?.id,
 		createDate: now,
 		lastUpdateDate: now
