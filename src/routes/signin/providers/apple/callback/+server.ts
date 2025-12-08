@@ -95,7 +95,9 @@ export async function POST({ request, cookies }: RequestEvent) {
 	} else if (!existingUser) {
 		const client = (await mongoDbClient).db();
 
-		const name = `${nameObject.firstName} ${nameObject.lastName}`;
+    console.log(`nameObject: ${nameObject}`);
+
+		const name = `${nameObject?.firstName} ${nameObject?.lastName}`;
 
 		const now = Date.now();
 

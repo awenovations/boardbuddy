@@ -44,7 +44,9 @@ export const createUser = (
 			email,
 			firstName,
 			enabled: true,
+			emailVerified: true,
 			username: email,
+			requiredActions: [],
 			credentials: [{ type: 'password', value: password, temporary: false }]
 		})
 	});
