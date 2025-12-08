@@ -195,14 +195,17 @@ export async function DELETE({ cookies, params }: RequestEvent) {
 				}
 			);
 		}
-	}
+  } else {
+		await lucia.invalidateSession(session.id);
+
+  }
 
 	try {
 		const db = (await mongoDbClient).db();
 
 		const users = db.collection('users');
 
-		await users.deleteOne({ user_id: user._id });
+		await users.deleteOne({ _id: id as any});
 	} catch (error) {
 		console.error('Error deleting by user id: ', error);
 		return new Response(

@@ -8,8 +8,6 @@
 	let loading = $state(false);
 
 	const deleteAccount = async () => {
-		console.log('This is a thing');
-
 		loading = true;
 
 		const response = await Promise.all([
