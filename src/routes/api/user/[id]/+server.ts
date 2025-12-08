@@ -144,55 +144,57 @@ export async function DELETE({ cookies, params }: RequestEvent) {
 		);
 	}
 
-	const adminTokenResponse = await getTokenWithClientCredentials();
+	if (user.authProvider === 'board-buddy') {
+		const adminTokenResponse = await getTokenWithClientCredentials();
 
-	if (!adminTokenResponse.ok) {
-		return new Response(
-			JSON.stringify({
-				message: 'Forbidden'
-			}),
-			{ status: 403 }
-		);
-	}
+		if (!adminTokenResponse.ok) {
+			return new Response(
+				JSON.stringify({
+					message: 'Forbidden'
+				}),
+				{ status: 403 }
+			);
+		}
 
-	const { access_token } = await adminTokenResponse.json();
+		const { access_token } = await adminTokenResponse.json();
 
-	await lucia.invalidateSession(session.id);
+		await lucia.invalidateSession(session.id);
 
-	const keycloakSignOutResult = await signOutUserFromKeycloak(`${user._id}`, access_token);
+		const keycloakSignOutResult = await signOutUserFromKeycloak(`${user._id}`, access_token);
 
-	if (!keycloakSignOutResult.ok) {
-		console.warn(
-			'An error occurred trying to sign a user out in keycloak: ',
-			keycloakSignOutResult
-		);
+		if (!keycloakSignOutResult.ok) {
+			console.warn(
+				'An error occurred trying to sign a user out in keycloak: ',
+				keycloakSignOutResult
+			);
 
-		return new Response(
-			JSON.stringify({
-				message: 'Unexpected error occured'
-			}),
-			{
-				status: keycloakSignOutResult.status
-			}
-		);
-	}
+			return new Response(
+				JSON.stringify({
+					message: 'Unexpected error occured'
+				}),
+				{
+					status: keycloakSignOutResult.status
+				}
+			);
+		}
 
-	const keycloakDeleteResult = await deleteUserInKeycloak(`${user._id}`, access_token);
+		const keycloakDeleteResult = await deleteUserInKeycloak(`${user._id}`, access_token);
 
-	if (!keycloakDeleteResult.ok) {
-		console.warn(
-			'An error occurred trying to change a users details in keycloak: ',
-			keycloakDeleteResult
-		);
+		if (!keycloakDeleteResult.ok) {
+			console.warn(
+				'An error occurred trying to change a users details in keycloak: ',
+				keycloakDeleteResult
+			);
 
-		return new Response(
-			JSON.stringify({
-				message: 'Unexpected error occured'
-			}),
-			{
-				status: keycloakDeleteResult.status
-			}
-		);
+			return new Response(
+				JSON.stringify({
+					message: 'Unexpected error occured'
+				}),
+				{
+					status: keycloakDeleteResult.status
+				}
+			);
+		}
 	}
 
 	try {
