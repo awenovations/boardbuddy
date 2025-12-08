@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { lucia } from '$lib/server/auth';
 import mongoDbClient from '$lib/db/mongo';
 import { env } from '$env/dynamic/private';
@@ -99,9 +100,7 @@ export async function POST({ request, cookies }: RequestEvent) {
 	} else if (!existingUser) {
 		const client = (await mongoDbClient).db();
 
-    console.log(`nameObject: ${nameObject}`);
-
-		const name = `${nameObject?.firstName} ${nameObject?.lastName}`;
+    const name = `appleUser-${uuidv4()}`;
 
 		const now = Date.now();
 
