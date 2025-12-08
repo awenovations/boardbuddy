@@ -79,8 +79,12 @@ export async function POST({ request, cookies }: RequestEvent) {
 		return new Response('Missing user ID in ID token', { status: 400 });
 	}
 
+  for (const [key, value] of formData.entries()) {
+    console.log(key, value);
+  }
+
 	const { name: nameObject, email } = formData.get('user')
-		? JSON.parse(formData.get('user').toString())
+		? JSON.parse(formData?.get('user').toString())
 		: { email: payload.email };
 
 	const existingUser = await (await mongoDbClient).db().collection('users').findOne({ email });
