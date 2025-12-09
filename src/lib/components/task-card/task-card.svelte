@@ -80,7 +80,7 @@
 
 		const cardTitle = card.querySelector('.card-title');
 
-		showTitleTooltip = cardTitle.scrollWidth > cardTitle.clientWidth;
+		showTitleTooltip = !dragging && cardTitle.scrollWidth > cardTitle.clientWidth;
 
 		const taskCardActions = document.querySelector(`.task-card-actions[data-id="${id}"]`);
 
@@ -126,7 +126,7 @@
 
 		cleanUpTooltip = autoUpdate(card.parentElement, taskCardTitleTooltip, setTitleTooltipPosition);
 
-		showActions = true;
+    showActions = !dragging;
 	};
 
 	const debounceRate = 300;
@@ -145,7 +145,7 @@
 			showTitleTooltip = false;
 			showActions = false;
 		} else {
-			showActions = true;
+			showActions = !dragging;
 		}
 		hideActionsTransition = false;
 	}, debounceRate);
