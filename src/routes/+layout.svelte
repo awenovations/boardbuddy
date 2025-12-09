@@ -111,7 +111,10 @@
 
 <div class="small-screen-message">
 	<Container class="message"
-		>🤔 Your screen is a bit small for this app<br /><br />This app requires a minimum width of 1000px. Responsiveness is still being developed.</Container
+            >🤔 
+            <br />
+            <br />
+            Your screen is a bit small for this app. This app requires a minimum width of 1000px. Responsiveness is still being developed.</Container
 	>
 	<div class="backdrop"></div>
 </div>
