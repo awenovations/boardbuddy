@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Icon from '@awenovations/aura/icon.svelte';
 	import Button from '@awenovations/aura/button.svelte';
+	import Tooltip from '@awenovations/aura/tooltip.svelte';
 	import DarkModeImage from '$lib/assets/dark-mode-board.png';
 	import LightModeImage from '$lib/assets/light-mode-board.png';
 	import Container from '@awenovations/aura/container.svelte';
@@ -48,7 +49,12 @@
 					Free updates keep you productive
 				</li>
 			</ul>
-			<Button fullWidth variant="tertiary">Continue</Button>
+			<Tooltip
+				placement="top"
+				content="We aren't accepting sign ups right now, check back later and keep an eye on your email"
+			>
+				<Button class="continue-button" fullWidth variant="tertiary">Continue</Button>
+			</Tooltip>
 		</div>
 	</Container>
 </div>
@@ -66,6 +72,11 @@
 		z-index: 30;
 	}
 
+	:global(button.aura-button.continue-button) {
+		cursor: no-drop;
+		min-width: 21.429rem;
+	}
+
 	.paywall-layout {
 		display: flex;
 		flex-direction: column;
@@ -75,25 +86,25 @@
 		z-index: 20;
 	}
 
-	.background-image {
-		.backdrop {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			z-index: 10;
-			backdrop-filter: blur(0.714rem);
+	.backdrop {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 10;
+		backdrop-filter: blur(0.714rem);
 
-			@media (prefers-color-scheme: light) {
-				background: rgba(230, 230, 230, 0.3);
-			}
-
-			@media (prefers-color-scheme: dark) {
-				background: rgba(0, 0, 0, 0.5);
-			}
+		@media (prefers-color-scheme: light) {
+			background: rgba(230, 230, 230, 0.3);
 		}
 
+		@media (prefers-color-scheme: dark) {
+			background: rgba(0, 0, 0, 0.5);
+		}
+	}
+
+	.background-image {
 		.light-mode-image,
 		.dark-mode-image {
 			position: absolute;

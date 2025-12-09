@@ -4,10 +4,12 @@
 	import { goto } from '$app/navigation';
 	import Link from '@awenovations/aura/link.svelte';
 	import Icon from '@awenovations/aura/icon.svelte';
+	import Alert from '@awenovations/aura/alert.svelte';
 	import Panel from '@awenovations/aura/panel.svelte';
 	import Toast from '@awenovations/aura/toast.svelte';
 	import Dialog from '@awenovations/aura/dialog.svelte';
 	import Button from '@awenovations/aura/button.svelte';
+	import Container from '@awenovations/aura/container.svelte';
 	import '@awenovations/aura/dist/tokens/_variables.css';
 	import { dialogStore } from '$lib/stores/dialog.store';
 	import Tooltip from '@awenovations/aura/tooltip.svelte';
@@ -51,6 +53,8 @@
 		</div>
 
 		{#if data.session}
+			<Alert>Alpha version - features may be unstable. Thanks for trying!</Alert>
+
 			<form method="POST" action="/signout">
 				<div class="right-user-actions">
 					<Button
@@ -98,6 +102,19 @@
 		</div>
 	</Panel>
 {/if}
+
+<footer>
+	&copy; {new Date().getFullYear()} Benjamin Knox | Feedback:&nbsp;<Link
+		href="mailto:ben@knoxes.email">ben@knoxes.email</Link
+	>&nbsp;| My Website:&nbsp;<Link target="blank" href="https://knox.pro">knox.pro</Link>
+</footer>
+
+<div class="small-screen-message">
+	<Container class="message"
+		>🤔 Your screen is a bit small for this app<br /><br />This app requires a minimum width of 1000px. Responsiveness is still being developed.</Container
+	>
+	<div class="backdrop"></div>
+</div>
 
 <style lang="scss">
 	@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
@@ -148,7 +165,7 @@
 	.wrapper {
 		display: flex;
 		flex-direction: column;
-		padding: 1.875rem 0;
+		padding: 1.875rem 0 4.018rem;
 		box-sizing: border-box;
 		margin: 0 auto;
 		min-width: 71.429rem;
@@ -209,5 +226,47 @@
 		height: 100%;
 		width: 100%;
 		z-index: 1000;
+	}
+
+	footer {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		background: var(--aura-background);
+		height: 2.143rem;
+		z-index: 1000;
+		font-size: 8pt;
+		border-top: 1px solid var(--aura-container-border-color);
+		box-sizing: border-box;
+
+		& :global(a.aura-link:active) {
+			font-size: 8pt;
+		}
+	}
+
+	.small-screen-message {
+		:global(.message) {
+			position: absolute;
+			z-index: 1001;
+			max-width: 25.429rem;
+			margin: auto;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			line-height: 1.5em;
+		}
+
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		@media (min-width: 71.429rem) {
+			display: none;
+		}
 	}
 </style>

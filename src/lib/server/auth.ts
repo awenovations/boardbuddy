@@ -116,8 +116,6 @@ export const signOut = async (sessionId: string) => {
 
 		const adminTokenResponse = await getTokenWithClientCredentials();
 
-    console.log(adminTokenResponse);
-
 		if (!adminTokenResponse.ok) {
 			throw new Error('Cannot generate admin token');
 		}
