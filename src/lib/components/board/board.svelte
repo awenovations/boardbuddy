@@ -119,10 +119,12 @@
 	/>
 </div>
 
-<div class="task-panel" class:taskFormOpen>
+{#if taskFormOpen}
+<div class="task-panel">
 	<h4>New Task</h4>
 	<TaskForm task={openEditedTask} {handleClose} column={newTaskColumn} {handleSubmit} />
 </div>
+{/if}
 
 <div class="task-details" class:taskDetailsOpen>
 	<div class="task-details-header">
@@ -201,7 +203,6 @@
 		font: var(--aura-default-semibold);
 	}
 
-	.task-panel:not(.taskFormOpen),
 	.task-details:not(.taskDetailsOpen) {
 		display: none;
 	}

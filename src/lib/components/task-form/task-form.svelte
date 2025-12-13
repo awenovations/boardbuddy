@@ -85,6 +85,7 @@
 			name="task-name"
 			data-cy="task-name"
 			placeholder="Task name..."
+			autofocus
 			value={task.title}
 		>
 			{#snippet label()}
