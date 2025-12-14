@@ -126,7 +126,7 @@
 
 		cleanUpTooltip = autoUpdate(card.parentElement, taskCardTitleTooltip, setTitleTooltipPosition);
 
-    showActions = !dragging;
+		showActions = !dragging;
 	};
 
 	const debounceRate = 300;
@@ -451,6 +451,7 @@
 			-webkit-line-clamp: 3;
 			-webkit-box-orient: vertical;
 			overflow: hidden;
+			white-space: pre-wrap;
 		}
 
 		.card-type {
