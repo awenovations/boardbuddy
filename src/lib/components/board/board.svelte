@@ -120,10 +120,10 @@
 </div>
 
 {#if taskFormOpen}
-<div class="task-panel">
-	<h4>New Task</h4>
-	<TaskForm task={openEditedTask} {handleClose} column={newTaskColumn} {handleSubmit} />
-</div>
+	<div class="task-panel">
+		<h4>New Task</h4>
+		<TaskForm task={openEditedTask} {handleClose} column={newTaskColumn} {handleSubmit} />
+	</div>
 {/if}
 
 <div class="task-details" class:taskDetailsOpen>
@@ -148,7 +148,7 @@
 	</div>
 
 	<span class="description-header">Description</span>
-	<span>{openTask.body}</span>
+	<span class="description">{openTask.body}</span>
 
 	<div class="task-details-footer">
 		<span class="task-details-time">
@@ -201,6 +201,11 @@
 
 	.description-header {
 		font: var(--aura-default-semibold);
+	}
+
+	.description {
+		white-space: pre-wrap;
+		line-height: 1.5em;
 	}
 
 	.task-details:not(.taskDetailsOpen) {
