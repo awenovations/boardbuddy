@@ -411,6 +411,10 @@
 		display: block;
 	}
 
+  :global(body:not(.dragging) .card:hover) {
+    cursor: grab;
+  }
+
 	.card {
 		height: 12.714rem;
 		width: 13.929rem;
@@ -427,14 +431,6 @@
 
 		* {
 			pointer-events: none;
-		}
-
-		&.dragging {
-			cursor: grabbing !important;
-		}
-
-		&:hover {
-			cursor: grab;
 		}
 
 		.card-type-text,
