@@ -140,7 +140,7 @@
 			0,
 			Math.min(rect1.bottom, rect2.bottom) - Math.max(rect1.top, rect2.top)
 		);
-		const overlapArea = xOverlap * yOverlap;
+		const overlapArea = xOverlap * (yOverlap * yOverlap / 100);;
 
 		return overlapArea;
 	};
