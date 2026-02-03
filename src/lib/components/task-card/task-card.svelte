@@ -265,7 +265,7 @@
 <Container class="task-card" data-cy="task-card" clearPadding variant="elevated" data-id={id}>
 	<div bind:this={card} role="button" tabindex="0" class="card" class:dragging>
 		<h4 class="card-title" data-cy="task-card-title">{title}</h4>
-		<span class="card-body" data-cy="task-card-body">{body}</span>
+		<span class="card-body" data-cy="task-card-body">{@html body}</span>
 		<span class="card-assignee" data-cy="task-card-assignee">Assigned to <i>{assignee}</i></span>
 		<span class="card-type" data-cy="task-card-type"
 			><span class="card-type-text">{type}</span>

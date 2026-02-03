@@ -6,6 +6,7 @@ on:
 
 jobs:
   cypress-run:
+    if: ${{ false }} # disabling because cypress tests aren't being maintained anymore
     runs-on: ubuntu-latest
 
     steps:

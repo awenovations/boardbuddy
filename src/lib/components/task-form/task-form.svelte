@@ -3,6 +3,7 @@
 	import type { Card } from '$lib/components/task-card/types';
 	import Dropdown from '@awenovations/aura/dropdown.svelte';
 	import TextField from '@awenovations/aura/text-field.svelte';
+	import TextEditor from '$lib/components/text-editor/text-editor.svelte';
 
 	interface Props {
 		column?: string;
@@ -96,26 +97,15 @@
 			{/snippet}
 		</TextField>
 
-		<div class="description-field">
-			<TextField
-				height="100%"
-				width="100%"
-				required
-				showErrors={showErrors?.['description']}
-				name="description"
-				data-cy="description"
-				type="multi"
-				placeholder="Description..."
-				value={task.body}
-			>
-				{#snippet label()}
-					<span>Description</span>
-				{/snippet}
-				{#snippet errors()}
-					<span data-cy="task-description-errors">Task description is required</span>
-				{/snippet}
-			</TextField>
-		</div>
+		<TextEditor content={task.body} name="description" showErrors={showErrors?.['description']}>
+			{#snippet label()}
+				<span>Description</span>
+			{/snippet}
+
+			{#snippet errors()}
+				<span data-cy="task-description-errors">Task description is required</span>
+			{/snippet}
+		</TextEditor>
 	</div>
 
 	<div class="right-column">

@@ -148,7 +148,7 @@
 	</div>
 
 	<span class="description-header">Description</span>
-	<span class="description">{openTask.body}</span>
+	<span class="description">{@html openTask.body}</span>
 
 	<div class="task-details-footer">
 		<span class="task-details-time">
