@@ -164,7 +164,7 @@
 		min-width: 71.429rem;
 		width: fit-content;
 		max-height: 100%;
-		gap: 3.813rem;
+		gap: 1rem;
 		overflow: hidden;
 
 		&.center {

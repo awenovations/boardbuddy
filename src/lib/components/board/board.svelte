@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { format, fromUnixTime } from 'date-fns';
 	import Button from '@awenovations/aura/button.svelte';
+	import TextField from '@awenovations/aura/text-field.svelte';
 	import Column from '$lib/components/column/column.svelte';
 	import type { Card } from '$lib/components/task-card/types';
 	import Container from '@awenovations/aura/container.svelte';
@@ -22,6 +23,7 @@
 	let showBackdrop = $derived(taskDetailsOpen || taskFormOpen);
 
 	let newTaskColumn = $state('');
+	let filterText = $state('');
 
 	const handleOpenTask = (_task) => {
 		if (taskFormOpen) {
@@ -63,19 +65,23 @@
 		newTaskColumn = '';
 	};
 
-	const tasksByColumns = cards.reduce(
-		(accumulator: Record<string, Array<Card>>, currentValue: Card) => {
-			const columnName = currentValue.column;
-			const tasks = accumulator?.[columnName]
-				? [...accumulator[columnName], currentValue]
-				: [currentValue];
-
-			return {
-				...accumulator,
-				[columnName]: [...tasks]
-			};
-		},
-		{}
+	let tasksByColumns = $derived(
+		cards
+			.filter((card) => {
+				if (!filterText) return true;
+				const query = filterText.toLowerCase();
+				return (
+					card.taskName?.toLowerCase().includes(query) ||
+					card.description?.toLowerCase().includes(query) ||
+					card.assignee?.toLowerCase().includes(query) ||
+					card.taskType?.toLowerCase().includes(query)
+				);
+			})
+			.reduce((acc: Record<string, Array<Card>>, card: Card) => {
+				const col = card.column;
+				acc[col] = acc[col] ? [...acc[col], card] : [card];
+				return acc;
+			}, {})
 	);
 
 	const handleEscapeKeydown = (event) => {
@@ -87,6 +93,15 @@
 </script>
 
 <svelte:window onkeydown={handleEscapeKeydown} />
+
+<div class="filter-wrapper">
+	<TextField
+    class="card-filter"
+		type="search"
+		placeholder="Filter cards"
+		bind:value={filterText}
+	/>
+</div>
 
 <div class="column-wrapper">
 	<Column
@@ -174,12 +189,23 @@
 {/if}
 
 <style lang="ts">
+	.filter-wrapper {
+		:global(.card-filter) {
+			width: 20rem;
+		}
+
+
+		display: flex;
+		justify-content: flex-end;
+		margin-bottom: 1rem;
+	}
+
 	.column-wrapper {
 		display: flex;
 		flex-direction: row;
-		gap: 2.5rem;
 		overflow: hidden;
 		height: 100%;
+    justify-content: space-between;
 	}
 
 	:global(.task-panel) {

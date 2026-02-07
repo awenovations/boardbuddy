@@ -8,8 +8,6 @@
 
 	import Board from '$lib/components/board/board.svelte';
 
-	let cards = $derived($page.data.cards);
-
 	let {
 		handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
 			const formData = [...new FormData(event.currentTarget).entries()].reduce(
@@ -76,9 +74,7 @@
 
 <svelte:document onmousedown={mousedown} onmouseup={mouseup} />
 
-{#key cards}
-	<Board {handleSubmit} cards={$page.data.cards} />
-{/key}
+<Board {handleSubmit} cards={$page.data.cards} />
 
 <style lang="scss">
 	:global(body.dragging) {
