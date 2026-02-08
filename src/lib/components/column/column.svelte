@@ -321,7 +321,12 @@
 			gap: 0.875rem;
 			overflow-x: hidden;
 			overflow-y: auto;
+			scrollbar-width: none;
 			padding-bottom: 14.286rem;
+
+			&::-webkit-scrollbar {
+				display: none;
+			}
 		}
 
 		:global(.dropzone.show) {
