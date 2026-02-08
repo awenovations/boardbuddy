@@ -319,7 +319,8 @@
 			display: flex;
 			flex-direction: column;
 			gap: 0.875rem;
-			overflow-y: scroll;
+			overflow-x: hidden;
+			overflow-y: auto;
 			padding-bottom: 14.286rem;
 		}
 
@@ -334,7 +335,6 @@
 			border-radius: 0.714rem;
 			border: 0.143rem dashed var(--aura-container-border-color);
 			min-height: 12.714rem;
-			width: 13.929rem;
 			flex-direction: column;
 			justify-content: center;
 			font: var(--aura-h4);

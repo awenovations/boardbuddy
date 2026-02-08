@@ -239,6 +239,8 @@
 
 	onMount(() => {
 		if (browser) {
+			card.parentElement.style.setProperty('width', `${card.parentElement.offsetWidth}px`, 'important');
+
 			card.parentElement.addEventListener('mousedown', dragStart);
 			card.parentElement.addEventListener('mouseover', hover);
 			card.parentElement.addEventListener('mouseleave', hoverOut);
@@ -345,6 +347,10 @@
 </Portal>
 
 <style lang="scss">
+	:global(.aura-container.task-card) {
+		width: auto !important;
+	}
+
 	:global(.task-card.animateable) {
 		transition: all 200ms ease-out;
 	}
@@ -417,7 +423,6 @@
 
 	.card {
 		height: 12.714rem;
-		width: 13.929rem;
 		padding: 0.857rem;
 		box-sizing: border-box;
 		text-align: left;
