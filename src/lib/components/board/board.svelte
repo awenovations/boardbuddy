@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { format, fromUnixTime } from 'date-fns';
+	import '$lib/styles/quill-content.css';
 	import Button from '@awenovations/aura/button.svelte';
 	import TextField from '@awenovations/aura/text-field.svelte';
 	import Column from '$lib/components/column/column.svelte';
@@ -163,7 +164,7 @@
 	</div>
 
 	<span class="description-header">Description</span>
-	<span class="description">{@html openTask.body}</span>
+	<span class="description ql-content">{@html openTask.body}</span>
 
 	<div class="task-details-footer">
 		<span class="task-details-time">

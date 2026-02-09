@@ -1,0 +1,135 @@
+/*
+ * Restores browser defaults that reset-css strips,
+ * scoped to containers displaying Quill-generated HTML.
+ *
+ * Usage: add class="ql-content" to any wrapper rendering {@html} from Quill.
+ */
+
+/* Inline formatting */
+.ql-content strong,
+.ql-content b {
+	font-weight: bold;
+}
+
+.ql-content em,
+.ql-content i {
+	font-style: italic;
+}
+
+.ql-content sub {
+	vertical-align: sub;
+	font-size: smaller;
+}
+
+.ql-content sup {
+	vertical-align: super;
+	font-size: smaller;
+}
+
+/* Headings */
+.ql-content h1 {
+	font-size: 2em;
+	font-weight: bold;
+}
+
+.ql-content h2 {
+	font-size: 1.5em;
+	font-weight: bold;
+}
+
+.ql-content h3 {
+	font-size: 1.17em;
+	font-weight: bold;
+}
+
+.ql-content h4 {
+	font-weight: bold;
+}
+
+.ql-content h5 {
+	font-size: 0.83em;
+	font-weight: bold;
+}
+
+.ql-content h6 {
+	font-size: 0.67em;
+	font-weight: bold;
+}
+
+/* Links */
+.ql-content a {
+	color: #06c;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+/* Blockquotes */
+.ql-content blockquote {
+	border-left: 4px solid #ccc;
+	padding-left: 16px;
+	margin: 5px 0;
+}
+
+/* Code */
+.ql-content code {
+	background-color: #f0f0f0;
+	border-radius: 3px;
+	font-size: 85%;
+	padding: 2px 4px;
+}
+
+.ql-content .ql-code-block-container {
+	background-color: #23241f;
+	color: #f8f8f2;
+	margin: 5px 0;
+	padding: 5px 10px;
+	font-family: monospace;
+}
+
+/* Lists — Quill uses data-list attributes, mirror snow theme */
+.ql-content ol {
+	padding-left: 1.5em;
+}
+
+.ql-content li {
+	list-style-type: none;
+	padding-left: 1.5em;
+	position: relative;
+}
+
+.ql-content li[data-list='bullet']::before {
+	content: '\2022';
+	display: inline-block;
+	margin-left: -1.5em;
+	margin-right: 0.3em;
+	text-align: right;
+	white-space: nowrap;
+	width: 1.2em;
+}
+
+.ql-content li[data-list='ordered'] {
+	counter-increment: list-0;
+}
+
+.ql-content li[data-list='ordered']::before {
+	content: counter(list-0, decimal) '. ';
+	display: inline-block;
+	margin-left: -1.5em;
+	margin-right: 0.3em;
+	text-align: right;
+	white-space: nowrap;
+	width: 1.2em;
+}
+
+/* Alignment — Quill class-based */
+.ql-content .ql-align-center {
+	text-align: center;
+}
+
+.ql-content .ql-align-right {
+	text-align: right;
+}
+
+.ql-content .ql-align-justify {
+	text-align: justify;
+}

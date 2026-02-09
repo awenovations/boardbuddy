@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type Quill from 'quill';
 	import 'quill/dist/quill.snow.css';
+	import '$lib/styles/quill-content.css';
 	import type { Snippet } from 'svelte';
 
 	interface Props {
@@ -46,7 +47,7 @@
 	});
 </script>
 
-<div class="editor-container" class:error={showErrors}>
+<div class="editor-container ql-content" class:error={showErrors}>
 	{#if label}
 		{@render label()}
 	{/if}
@@ -75,7 +76,7 @@
 		height: 100%;
 		display: flex;
 		flex-direction: column;
-		overflow: scroll;
+		overflow: visible;
 
 		:global(.ql-toolbar),
 		:global(.ql-container) {
