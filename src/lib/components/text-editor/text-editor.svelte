@@ -71,7 +71,6 @@
 		display: none;
 	}
 	.editor-container {
-		background: white;
 		border-radius: 0.313rem;
 		height: 100%;
 		display: flex;
@@ -89,6 +88,25 @@
 
 		:global(.ql-toolbar) {
 			border-radius: 0.313rem 0.313rem 0 0;
+			background: white;
+		}
+
+		:global(.ql-toolbar .ql-stroke) {
+			stroke: var(--aura-light-font-color);
+		}
+
+		:global(.ql-toolbar .ql-fill) {
+			fill: var(--aura-light-font-color);
+		}
+
+		:global(.ql-toolbar .ql-picker-label) {
+			color: var(--aura-light-font-color);
+		}
+
+		:global(.ql-container) {
+			background: white;
+			color: var(--aura-light-font-color);
+			font-family: Roboto, sans-serif;
 		}
 
 		#editor {

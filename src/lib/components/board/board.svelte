@@ -56,10 +56,14 @@
 		}
 	};
 
+	let hasAutoOpened = false;
+	let hasAutoEdited = false;
+
 	$effect(() => {
-		if (openTaskId && cards.length) {
+		if (openTaskId && cards.length && !hasAutoOpened) {
 			const card = cards.find((c) => c._id === openTaskId);
 			if (card) {
+				hasAutoOpened = true;
 				const task = {
 					_id: card._id,
 					title: card.taskName,
@@ -75,9 +79,10 @@
 	});
 
 	$effect(() => {
-		if (editTaskId && cards.length) {
+		if (editTaskId && cards.length && !hasAutoEdited) {
 			const card = cards.find((c) => c._id === editTaskId);
 			if (card) {
+				hasAutoEdited = true;
 				const task = {
 					_id: card._id,
 					title: card.taskName,
