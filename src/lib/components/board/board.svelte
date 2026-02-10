@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
+	import { browser } from '$app/environment';
 	import { format, fromUnixTime } from 'date-fns';
 	import '$lib/styles/quill-content.css';
 	import Button from '@awenovations/aura/button.svelte';
@@ -11,9 +13,11 @@
 	interface Props {
 		handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
 		cards?: Array<Card>;
+		openTaskId?: string;
+		editTaskId?: string;
 	}
 
-	let { handleSubmit, cards = [] }: Props = $props();
+	let { handleSubmit, cards = [], openTaskId, editTaskId }: Props = $props();
 
 	let openTask: Partial<Card> = $state({});
 	let openEditedTask: Partial<Card> = $state({});
@@ -26,6 +30,12 @@
 	let newTaskColumn = $state('');
 	let filterText = $state('');
 
+	const clearTaskRoute = () => {
+		if (browser) {
+			history.replaceState({}, '', '/');
+		}
+	};
+
 	const handleOpenTask = (_task) => {
 		if (taskFormOpen) {
 			taskFormOpen = false;
@@ -33,12 +43,54 @@
 			setTimeout(() => {
 				taskDetailsOpen = true;
 				openTask = _task;
+				if (browser && _task._id) {
+					history.pushState({}, '', '/task/' + _task._id);
+				}
 			}, 500);
 		} else {
 			taskDetailsOpen = true;
 			openTask = _task;
+			if (browser && _task._id) {
+				history.pushState({}, '', '/task/' + _task._id);
+			}
 		}
 	};
+
+	$effect(() => {
+		if (openTaskId && cards.length) {
+			const card = cards.find((c) => c._id === openTaskId);
+			if (card) {
+				const task = {
+					_id: card._id,
+					title: card.taskName,
+					body: card.description,
+					assignee: card.assignee,
+					createDate: card.createDate,
+					type: card.taskType,
+					column: card.column
+				};
+				untrack(() => handleOpenTask(task));
+			}
+		}
+	});
+
+	$effect(() => {
+		if (editTaskId && cards.length) {
+			const card = cards.find((c) => c._id === editTaskId);
+			if (card) {
+				const task = {
+					_id: card._id,
+					title: card.taskName,
+					body: card.description,
+					assignee: card.assignee,
+					createDate: card.createDate,
+					type: card.taskType,
+					column: card.column
+				};
+				untrack(() => handleEditTask(task));
+			}
+		}
+	});
 
 	const handleEditTask = (_task) => {
 		if (taskDetailsOpen) {
@@ -47,14 +99,21 @@
 			setTimeout(() => {
 				taskFormOpen = true;
 				openEditedTask = _task;
+				if (browser && _task._id) {
+					history.pushState({}, '', '/task/' + _task._id + '/edit');
+				}
 			}, 500);
 		} else {
 			taskFormOpen = true;
 			openEditedTask = _task;
+			if (browser && _task._id) {
+				history.pushState({}, '', '/task/' + _task._id + '/edit');
+			}
 		}
 	};
 
 	const handleCreateTask = (taskColumn: string) => {
+		clearTaskRoute();
 		taskFormOpen = true;
 		newTaskColumn = taskColumn;
 		taskDetailsOpen = false;
@@ -64,6 +123,7 @@
 	const handleClose = () => {
 		taskFormOpen = false;
 		newTaskColumn = '';
+		clearTaskRoute();
 	};
 
 	let tasksByColumns = $derived(
@@ -89,6 +149,7 @@
 		if (event.key === 'Escape') {
 			taskFormOpen = false;
 			taskDetailsOpen = false;
+			clearTaskRoute();
 		}
 	};
 </script>
@@ -178,6 +239,7 @@
 				data-cy="cancel-button"
 				onclick={() => {
 					taskDetailsOpen = false;
+					clearTaskRoute();
 				}}>Close</Button
 			>
 			<Button type="submit" size="small" onclick={() => handleEditTask(openTask)}>Edit</Button>
