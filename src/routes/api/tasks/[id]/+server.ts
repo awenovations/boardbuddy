@@ -40,10 +40,30 @@ export async function PATCH({ cookies, request, params }: RequestEvent) {
 
   clearEmptyStringProperties(body);
 
+	if (body.order !== undefined) {
+		body.order = Number(body.order);
+	}
+
+	const updatedTask = { ...task, ...body, lastUpdateDate: Date.now() };
+
 	await tasks.updateOne(
 		{ _id: id as any },
-		{ $set: { ...task, ...body, lastUpdateDate: Date.now() } }
+		{ $set: updatedTask }
 	);
+
+	if (body.order === -1) {
+		const columnTasks = await tasks
+			.find({ user_id: user?.id, column: updatedTask.column })
+			.sort({ order: 1 })
+			.toArray();
+
+		for (let i = 0; i < columnTasks.length; i++) {
+			await tasks.updateOne(
+				{ _id: columnTasks[i]._id },
+				{ $set: { order: i } }
+			);
+		}
+	}
 
 	return new Response(null, { status: 204 });
 }

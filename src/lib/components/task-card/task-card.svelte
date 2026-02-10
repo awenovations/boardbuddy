@@ -334,7 +334,8 @@
 					body,
 					assignee,
 					createDate,
-					type
+					type,
+					column
 				})}
 			data-cy="task-card-edit-button"
 		>

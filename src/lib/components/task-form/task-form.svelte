@@ -14,6 +14,10 @@
 
 	let { column = '', handleClose: _handleClose, task = {}, handleSubmit }: Props = $props();
 
+	const originalColumn = column || task.column || '';
+	let selectedColumn = $state(originalColumn);
+	let orderValue = $state('');
+
 	const handleClose = () => {
 		_handleClose();
 		task = {};
@@ -36,7 +40,7 @@
 					accumulator[name] = !element.checkValidity();
 				}
 
-				if (name === 'task-type') {
+				if (name === 'task-type' || name === 'column') {
 					const value = element.getAttribute('value');
 
 					accumulator[name] = !value;
@@ -110,6 +114,35 @@
 
 	<div class="right-column">
 		<div class="right-column-row">
+			<Dropdown
+				data-cy="status"
+				fullWidth
+				required
+				name="column"
+				showErrors={showErrors?.['column']}
+				on:change={(event) => {
+					selectedColumn = event.detail.value;
+					orderValue = selectedColumn !== originalColumn ? '-1' : '';
+				}}
+				currentValue={selectedColumn}
+			>
+				{#snippet placeholder()}
+					<span>select...</span>
+				{/snippet}
+				{#snippet errors()}
+					<span data-cy="status-errors">Status is required</span>
+				{/snippet}
+				{#snippet label()}
+					<span>Status</span>
+				{/snippet}
+				<aura-option value="Backlog">Backlog</aura-option>
+				<aura-option value="To Do">To Do</aura-option>
+				<aura-option value="In Progress">In Progress</aura-option>
+				<aura-option value="Done">Done</aura-option>
+			</Dropdown>
+		</div>
+
+		<div class="right-column-row">
 			<TextField
 				fullWidth
 				required
@@ -166,7 +199,7 @@
 			<Button {loading} type="submit" size="small" data-cy="save-button">Save</Button>
 		</div>
 	</div>
-	<input type="hidden" name="column" value={column} />
+	<input type="hidden" name="order" value={orderValue} />
 	{#if task._id}
 		<input type="hidden" name="id" value={task._id} />
 	{/if}
