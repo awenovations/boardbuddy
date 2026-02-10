@@ -1,3 +1,4 @@
+import { redirect } from '@sveltejs/kit';
 import mongoDbClient from '$lib/db/mongo';
 
 import type { PageServerLoad } from './$types';
@@ -8,6 +9,12 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 	const client = (await mongoDbClient).db();
 
 	const collection = client.collection('tasks');
+
+	const task = await collection.findOne({ _id: params.id as any });
+
+	if (!task || task.user_id !== user?.id) {
+		redirect(302, '/');
+	}
 
   const cards = await collection.find({ user_id: user?.id }).sort({ order: 1}).toArray();
 
