@@ -16,7 +16,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		redirect(302, '/app');
 	}
 
-  const cards = await collection.find({ user_id: user?.id }).sort({ order: 1}).toArray();
+  const cards = await collection.find({ user_id: user?.id }).sort({ order: 1, createDate: -1 }).toArray();
 
 	return {
 		cards,

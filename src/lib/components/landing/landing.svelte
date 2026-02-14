@@ -1,6 +1,22 @@
 <script lang="ts">
 	import Link from '@awenovations/aura/link.svelte';
+	import Icon from '@awenovations/aura/icon.svelte';
+	import Button from '@awenovations/aura/button.svelte';
+	import Panel from '@awenovations/aura/panel.svelte';
+	import Tooltip from '@awenovations/aura/tooltip.svelte';
 	import screenshot from '$lib/assets/screenshot.svg';
+
+	import PersonalInfo from '$lib/components/settings/personal-info/personal-info.svelte';
+	import DeleteAccount from '$lib/components/settings/delete-account/delete-account.svelte';
+	import AccountManagement from '$lib/components/settings/account-management/account-management.svelte';
+
+	let { session = null }: { session?: any } = $props();
+
+	let settingsOpen = $state(false);
+
+	const toggleSettings = () => {
+		settingsOpen = !settingsOpen;
+	};
 </script>
 
 <!-- Nav Bar -->
@@ -8,9 +24,28 @@
 	<div class="nav-content">
 		<span class="nav-logo">BB</span>
 		<div class="nav-links">
-			<!--<a href="#pricing" class="nav-link">Pricing</a>-->
-			<a href="/signin" class="nav-link">Login</a>
-			<a href="/signup" class="nav-signup">Sign Up</a>
+			{#if session?.user}
+				<a href="/app" class="nav-link">Go to Board</a>
+				<form method="POST" action="/signout" class="nav-signout-form">
+					<Button
+						type="submit"
+						kind="outlined"
+						variant="secondary"
+						size="small"
+						data-cy="sign-out"
+						class="sign-out">Sign out</Button
+					>
+				</form>
+				<Tooltip content="Account Settings" placement="bottom-end">
+					<Link onclick={toggleSettings}>
+						<Icon name="settings" size="large" />
+					</Link>
+				</Tooltip>
+			{:else}
+				<!--<a href="#pricing" class="nav-link">Pricing</a>-->
+				<a href="/signin" class="nav-link">Login</a>
+				<a href="/signup" class="nav-signup">Sign Up</a>
+			{/if}
 		</div>
 	</div>
 </nav>
@@ -323,6 +358,20 @@
 	</div>
 </footer>
 
+{#if session?.user}
+	<Panel width="19vw" open={settingsOpen} class="settings-panel">
+		<div class="settings-wrapper">
+			<h2>
+				Settings
+				<Button size="small" onclick={toggleSettings}>Close</Button>
+			</h2>
+			<PersonalInfo user={session.user} />
+			<AccountManagement user={session.user} />
+			<DeleteAccount user={session.user} />
+		</div>
+	</Panel>
+{/if}
+
 <style lang="scss">
 	/* ========== Nav Bar ========== */
 	.navbar {
@@ -354,6 +403,38 @@
 		display: flex;
 		align-items: center;
 		gap: 0.75rem;
+	}
+
+	.nav-signout-form {
+		display: inline;
+	}
+
+	:global(.settings-panel) {
+		z-index: 1000;
+		max-width: 25.714rem;
+	}
+
+	.settings-wrapper {
+		padding: 1.5rem;
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		width: var(--width);
+		white-space: normal;
+
+		:global(.aura-button .content) {
+			justify-content: center;
+		}
+
+		h2 {
+			display: flex;
+			justify-content: space-between;
+		}
+	}
+
+	:global(.sign-out) {
+		margin-right: 0.071rem;
 	}
 
 	.nav-link {

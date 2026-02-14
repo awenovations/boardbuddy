@@ -34,4 +34,14 @@
 		color: var(--aura-font-color);
 		height: 100%;
 	}
+
+	:global(.logo) {
+		color: var(--aura-light-secondary-40);
+		display: flex;
+		flex-direction: column;
+
+		:global(.name) {
+			font: var(--aura-display2);
+		}
+	}
 </style>

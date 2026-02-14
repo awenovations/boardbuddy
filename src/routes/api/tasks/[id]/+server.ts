@@ -54,7 +54,7 @@ export async function PATCH({ cookies, request, params }: RequestEvent) {
 	if (body.order === -1) {
 		const columnTasks = await tasks
 			.find({ user_id: user?.id, column: updatedTask.column })
-			.sort({ order: 1 })
+			.sort({ order: 1, createDate: -1 })
 			.toArray();
 
 		for (let i = 0; i < columnTasks.length; i++) {

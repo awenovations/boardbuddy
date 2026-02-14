@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 	const collection = client.collection('tasks');
 
-  const cards = await collection.find({ user_id: user?.id }).sort({ order: 1}).toArray();
+  const cards = await collection.find({ user_id: user?.id }).sort({ order: 1, createDate: -1 }).toArray();
 
 	return {
 		cards

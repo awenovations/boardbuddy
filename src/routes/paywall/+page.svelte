@@ -8,66 +8,68 @@
 </script>
 
 <div class="wrapper">
-<div class="background-image">
-	<div class="backdrop"></div>
-	<image class="dark-mode-image" src={DarkModeImage} />
-	<image class="light-mode-image" src={LightModeImage} />
-</div>
-
-<div class="paywall-layout">
-	<div class="center paywall-logo">
-		<div class="logo">
-			<span class="name">Board Buddy</span>
-			Simplify Your Workflow
-		</div>
+	<div class="background-image">
+		<div class="backdrop"></div>
+		<image class="dark-mode-image" src={DarkModeImage} />
+		<image class="light-mode-image" src={LightModeImage} />
 	</div>
 
-	<Container variant="elevated" class="paywall-container" clearPadding>
-		<div class="paywall-wrapper">
-			<h1 class="paywall-header">
-				Your trial is up! Unlock <br /> lifetime access for $30!
-			</h1>
-
-			<ul class="value-proposition">
-				<li>
-					<Icon name="checkmark" size="large" />
-					Simplify your workflow in minutes
-				</li>
-				<li>
-					<Icon name="checkmark" size="large" />
-					Manage tasks easily, no complexity
-				</li>
-				<li>
-					<Icon name="checkmark" size="large" />
-					Streamline sprints, ditch Jira chaos
-				</li>
-				<li>
-					<Icon name="checkmark" size="large" />
-					One-time payment, forever access
-				</li>
-				<li>
-					<Icon name="checkmark" size="large" />
-					Free updates keep you productive
-				</li>
-			</ul>
-			<Tooltip
-				placement="top"
-				content="We aren't accepting sign ups right now, check back later and keep an eye on your email"
-			>
-				<Button class="continue-button" fullWidth variant="tertiary">Continue</Button>
-			</Tooltip>
+	<div class="paywall-layout">
+		<div class="paywall-logo">
+			<div class="logo">
+				<span class="name">Board Buddy</span>
+				Simplify Your Workflow
+			</div>
 		</div>
-	</Container>
-</div>
+
+		<Container variant="elevated" class="paywall-container" clearPadding>
+			<div class="paywall-wrapper">
+				<h1 class="paywall-header">
+					Your trial is up! Unlock <br /> lifetime access for $30!
+				</h1>
+
+				<ul class="value-proposition">
+					<li>
+						<Icon name="checkmark" size="large" />
+						Simplify your workflow in minutes
+					</li>
+					<li>
+						<Icon name="checkmark" size="large" />
+						Manage tasks easily, no complexity
+					</li>
+					<li>
+						<Icon name="checkmark" size="large" />
+						Streamline sprints, ditch Jira chaos
+					</li>
+					<li>
+						<Icon name="checkmark" size="large" />
+						One-time payment, forever access
+					</li>
+					<li>
+						<Icon name="checkmark" size="large" />
+						Free updates keep you productive
+					</li>
+				</ul>
+				<Tooltip
+					placement="top"
+					content="We aren't accepting sign ups right now, check back later and keep an eye on your email"
+				>
+					<Button class="continue-button" fullWidth variant="tertiary">Continue</Button>
+				</Tooltip>
+				<a href="/" class="back-link">&larr; Back to website</a>
+			</div>
+		</Container>
+	</div>
 </div>
 
 <style lang="ts">
-  .wrapper {
+	.wrapper {
 		display: flex;
-    justify-content: center;
-    flex-direction: column;
+		justify-content: center;
+		flex-direction: column;
 		height: 100%;
-  }
+		align-items: center;
+	}
 
 	:global(.paywall-container) {
 		margin: 0 auto -2rem;
@@ -84,6 +86,28 @@
 	:global(button.aura-button.continue-button) {
 		cursor: no-drop;
 		min-width: 21.429rem;
+	}
+
+	.paywall-logo {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1rem;
+
+		:global(.logo) {
+			align-items: center;
+		}
+	}
+
+	.back-link {
+		flex: 1;
+		color: var(--aura-link-color);
+		text-decoration: none;
+		font: var(--aura-default-regular);
+
+		&:hover {
+			text-decoration: underline;
+		}
 	}
 
 	.paywall-layout {
