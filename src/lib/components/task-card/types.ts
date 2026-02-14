@@ -7,5 +7,7 @@ export interface Card {
   user_id: string;
   order: number;
   column: string;
+  cardType?: 'task' | 'project';
+  project_id?: string | null;
 }
 

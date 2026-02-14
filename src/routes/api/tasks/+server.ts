@@ -21,14 +21,25 @@ export async function POST({ cookies, request }: RequestEvent) {
 
 	const now = Date.now();
 
-	const task = await tasks.insertOne({
+	const doc: Record<string, any> = {
 		_id: uuidv4(),
 		...body,
 		order: -1,
 		user_id: user?.id,
 		createDate: now,
 		lastUpdateDate: now
-	});
+	};
+
+	if (body.cardType) {
+		doc.cardType = body.cardType;
+	}
+	if (body.projectId) {
+		doc.project_id = body.projectId;
+	}
+	// Remove camelCase projectId from doc since we store as project_id
+	delete doc.projectId;
+
+	const task = await tasks.insertOne(doc);
 
 	return json(await tasks.findOne({ _id: task.insertedId }));
 }

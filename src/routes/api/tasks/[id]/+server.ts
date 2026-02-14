@@ -1,4 +1,4 @@
-import { fail } from '@sveltejs/kit';
+import { fail, json } from '@sveltejs/kit';
 import { lucia } from '$lib/server/auth';
 import mongoDbClient from '$lib/db/mongo';
 import type { RequestEvent } from './$types';
@@ -42,6 +42,12 @@ export async function PATCH({ cookies, request, params }: RequestEvent) {
 
 	if (body.order !== undefined) {
 		body.order = Number(body.order);
+	}
+
+	// Map camelCase projectId to project_id
+	if (body.projectId !== undefined) {
+		body.project_id = body.projectId;
+		delete body.projectId;
 	}
 
 	const updatedTask = { ...task, ...body, lastUpdateDate: Date.now() };
@@ -97,6 +103,17 @@ export async function DELETE({ cookies, params }: RequestEvent) {
 		return fail(403, {
 			message: 'Forbidden'
 		});
+	}
+
+	// Block deletion of projects that contain children
+	if (task.cardType === 'project') {
+		const childCount = await tasks.countDocuments({ project_id: id, user_id: user?.id });
+		if (childCount > 0) {
+			return json(
+				{ message: 'Cannot delete project that contains items. Remove all items first.' },
+				{ status: 409 }
+			);
+		}
 	}
 
 	await tasks.deleteOne({ _id: id as any });

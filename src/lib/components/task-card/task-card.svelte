@@ -28,8 +28,10 @@
 		column: string;
 		type?: string;
 		createDate?: number;
+		cardType?: 'task' | 'project';
 		handleEditTask: (task: Card) => void;
 		handleOpenTask: (task: Card) => void;
+		handleOpenProject: (card: Card) => void;
 	}
 
 	let {
@@ -40,9 +42,13 @@
 		column,
 		createDate,
 		type = 'user story',
+		cardType = 'task',
 		handleEditTask,
-		handleOpenTask
+		handleOpenTask,
+		handleOpenProject
 	}: Props = $props();
+
+	const isProject = $derived(cardType === 'project');
 
 	let hideActionsTransition = $state(false);
 
@@ -271,8 +277,10 @@
 		<span class="card-body ql-content" data-cy="task-card-body">{@html body}</span>
 		<span class="card-assignee" data-cy="task-card-assignee">Assigned to <i>{assignee}</i></span>
 		<span class="card-type" data-cy="task-card-type"
-			><span class="card-type-text">{type}</span>
-			{#if type === 'user story'}
+			><span class="card-type-text">{isProject ? 'project' : type}</span>
+			{#if isProject}
+				<Icon name="plan" />
+			{:else if type === 'user story'}
 				<Icon name="user-story" />
 			{:else if type === 'bug fix'}
 				<Icon name="bug" />
@@ -311,18 +319,23 @@
 		<div
 			class="action-button"
 			data-cy="task-open-details-button"
-			onclick={() =>
-				handleOpenTask({
-					_id: id,
-					title,
-					body,
-					assignee,
-					createDate,
-					type,
-					column
-				})}
+			onclick={() => {
+				if (isProject) {
+					handleOpenProject({ _id: id, title, body, assignee, type, column, user_id: '', order: 0, cardType });
+				} else {
+					handleOpenTask({
+						_id: id,
+						title,
+						body,
+						assignee,
+						createDate,
+						type,
+						column
+					});
+				}
+			}}
 		>
-			<Icon class="action-button-icon" name="eye-open" />
+			<Icon class="action-button-icon" name={isProject ? 'eye-open' : 'eye-open'} />
 		</div>
 		<Divider class="actions-divider" />
 		<div
@@ -335,7 +348,8 @@
 					assignee,
 					createDate,
 					type,
-					column
+					column,
+					cardType
 				})}
 			data-cy="task-card-edit-button"
 		>

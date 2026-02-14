@@ -19,9 +19,10 @@
 		handleCreateTask: (type: string) => void;
 		handleEditTask: (task: Card) => void;
 		handleOpenTask: (task: Card) => void;
+		handleOpenProject: (card: Card) => void;
 	}
 
-	let { name, cards = [], handleCreateTask, handleEditTask, handleOpenTask }: Props = $props();
+	let { name, cards = [], handleCreateTask, handleEditTask, handleOpenTask, handleOpenProject }: Props = $props();
 
 	let columnWrapper: HTMLDivElement = $state();
 	let droppable = $state(false);
@@ -296,8 +297,10 @@
 						createDate={card.createDate}
 						assignee={card.assignee}
 						column={card.column}
+						cardType={card.cardType}
 						{handleEditTask}
 						{handleOpenTask}
+						{handleOpenProject}
 					/>
 				{/if}
 			{/key}

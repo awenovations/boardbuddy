@@ -10,9 +10,12 @@
 		handleClose: () => void;
 		task?: Partial<Card>;
 		handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
+		projectId?: string;
 	}
 
-	let { column = '', handleClose: _handleClose, task = {}, handleSubmit }: Props = $props();
+	let { column = '', handleClose: _handleClose, task = {}, handleSubmit, projectId }: Props = $props();
+
+	let cardTypeValue = $state(task.cardType || 'task');
 
 	const originalColumn = column || task.column || '';
 	let selectedColumn = $state(originalColumn);
@@ -113,6 +116,25 @@
 	</div>
 
 	<div class="right-column">
+		{#if !task._id}
+			<div class="right-column-row">
+				<Dropdown
+					data-cy="card-type"
+					fullWidth
+					name="card-type-select"
+					on:change={(event) => {
+						cardTypeValue = event.detail.value;
+					}}
+					currentValue={cardTypeValue}
+				>
+					{#snippet label()}
+						<span>Card type</span>
+					{/snippet}
+					<aura-option value="task">Task</aura-option>
+					<aura-option value="project">Project</aura-option>
+				</Dropdown>
+			</div>
+		{/if}
 		<div class="right-column-row">
 			<Dropdown
 				data-cy="status"
@@ -200,6 +222,10 @@
 		</div>
 	</div>
 	<input type="hidden" name="order" value={orderValue} />
+	<input type="hidden" name="card-type" value={cardTypeValue} />
+	{#if projectId}
+		<input type="hidden" name="project-id" value={projectId} />
+	{/if}
 	{#if task._id}
 		<input type="hidden" name="id" value={task._id} />
 	{/if}

@@ -9,15 +9,25 @@
 	import type { Card } from '$lib/components/task-card/types';
 	import Container from '@awenovations/aura/container.svelte';
 	import TaskForm from '$lib/components/task-form/task-form.svelte';
+	import Breadcrumb from '$lib/components/breadcrumb/breadcrumb.svelte';
+
+	interface BreadcrumbItem {
+		_id: string;
+		title: string;
+	}
 
 	interface Props {
 		handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
 		cards?: Array<Card>;
 		openTaskId?: string;
 		editTaskId?: string;
+		projectId?: string;
+		breadcrumb?: Array<BreadcrumbItem>;
 	}
 
-	let { handleSubmit, cards = [], openTaskId, editTaskId }: Props = $props();
+	let { handleSubmit, cards = [], openTaskId, editTaskId, projectId, breadcrumb }: Props = $props();
+
+	const basePath = $derived(projectId ? `/app/project/${projectId}` : '/app');
 
 	let openTask: Partial<Card> = $state({});
 	let openEditedTask: Partial<Card> = $state({});
@@ -32,7 +42,7 @@
 
 	const clearTaskRoute = () => {
 		if (browser) {
-			history.replaceState({}, '', '/app');
+			history.replaceState({}, '', basePath);
 		}
 	};
 
@@ -44,15 +54,21 @@
 				taskDetailsOpen = true;
 				openTask = _task;
 				if (browser && _task._id) {
-					history.pushState({}, '', '/app/task/' + _task._id);
+					history.pushState({}, '', basePath + '/task/' + _task._id);
 				}
 			}, 500);
 		} else {
 			taskDetailsOpen = true;
 			openTask = _task;
 			if (browser && _task._id) {
-				history.pushState({}, '', '/app/task/' + _task._id);
+				history.pushState({}, '', basePath + '/task/' + _task._id);
 			}
+		}
+	};
+
+	const handleOpenProject = (_card) => {
+		if (browser) {
+			window.location.href = '/app/project/' + _card._id;
 		}
 	};
 
@@ -71,7 +87,8 @@
 					assignee: card.assignee,
 					createDate: card.createDate,
 					type: card.taskType,
-					column: card.column
+					column: card.column,
+					cardType: card.cardType
 				};
 				untrack(() => handleOpenTask(task));
 			}
@@ -90,7 +107,8 @@
 					assignee: card.assignee,
 					createDate: card.createDate,
 					type: card.taskType,
-					column: card.column
+					column: card.column,
+					cardType: card.cardType
 				};
 				untrack(() => handleEditTask(task));
 			}
@@ -105,14 +123,14 @@
 				taskFormOpen = true;
 				openEditedTask = _task;
 				if (browser && _task._id) {
-					history.pushState({}, '', '/app/task/' + _task._id + '/edit');
+					history.pushState({}, '', basePath + '/task/' + _task._id + '/edit');
 				}
 			}, 500);
 		} else {
 			taskFormOpen = true;
 			openEditedTask = _task;
 			if (browser && _task._id) {
-				history.pushState({}, '', '/app/task/' + _task._id + '/edit');
+				history.pushState({}, '', basePath + '/task/' + _task._id + '/edit');
 			}
 		}
 	};
@@ -162,6 +180,7 @@
 <svelte:window onkeydown={handleEscapeKeydown} />
 
 <div class="filter-wrapper">
+  <Breadcrumb {breadcrumb} />
 	<TextField
     class="card-filter"
 		type="search"
@@ -174,6 +193,7 @@
 	<Column
 		{handleOpenTask}
 		{handleEditTask}
+		{handleOpenProject}
 		cards={tasksByColumns['Backlog']}
 		name="Backlog"
 		{handleCreateTask}
@@ -181,6 +201,7 @@
 	<Column
 		{handleOpenTask}
 		{handleEditTask}
+		{handleOpenProject}
 		cards={tasksByColumns['To Do']}
 		name="To Do"
 		{handleCreateTask}
@@ -188,6 +209,7 @@
 	<Column
 		{handleOpenTask}
 		{handleEditTask}
+		{handleOpenProject}
 		cards={tasksByColumns['In Progress']}
 		name="In Progress"
 		{handleCreateTask}
@@ -195,6 +217,7 @@
 	<Column
 		{handleOpenTask}
 		{handleEditTask}
+		{handleOpenProject}
 		cards={tasksByColumns['Done']}
 		name="Done"
 		{handleCreateTask}
@@ -204,7 +227,7 @@
 {#if taskFormOpen}
 	<div class="task-panel">
 		<h4>New Task</h4>
-		<TaskForm task={openEditedTask} {handleClose} column={newTaskColumn} {handleSubmit} />
+		<TaskForm task={openEditedTask} {handleClose} column={newTaskColumn} {handleSubmit} {projectId} />
 	</div>
 {/if}
 
@@ -262,9 +285,9 @@
 			width: 20rem;
 		}
 
-
 		display: flex;
-		justify-content: flex-end;
+		justify-content: space-between;
+		align-items: flex-end;
 		margin-bottom: 1rem;
 	}
 
