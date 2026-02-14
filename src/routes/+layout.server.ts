@@ -20,20 +20,17 @@ export const load: LayoutServerLoad = async ({ cookies, url }) => {
 
 	if (
 		!session?.user &&
-		url.pathname !== '/signin' &&
-		!url.pathname.startsWith('/icons') &&
-		!url.pathname.startsWith('/signup') &&
-		!url.pathname.startsWith('/pwd-reset')
+		url.pathname.startsWith('/app')
 	) {
 		throw redirect(302, '/signin');
 	} else if (
 		session?.user &&
 		(url.pathname.startsWith('/signin') || url.pathname.startsWith('/signup'))
 	) {
-		throw redirect(302, '/');
+		throw redirect(302, '/app');
 	}
 
-  if(session && url.pathname !== '/paywall' && session.user.createdDate < subDays(new Date(), 3).getTime() && session.user.role !== 'admin') {
+  if(session && url.pathname.startsWith('/app') && session.user.createdDate < subDays(new Date(), 3).getTime() && session.user.role !== 'admin') {
     throw redirect(302, '/paywall');
   }
 

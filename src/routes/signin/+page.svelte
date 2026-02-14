@@ -4,6 +4,7 @@
 	import { goto } from '$app/navigation';
 	import { invalidateAll } from '$app/navigation';
 	import SignIn from '$lib/components/signin/signin.svelte';
+	import AuthWrapper from '$lib/components/auth-wrapper/auth-wrapper.svelte';
 	import { showToast } from '@awenovations/aura/toast.store';
 
 	$effect(() => {
@@ -52,9 +53,11 @@
 	};
 </script>
 
-<form method="post" use:enhance={onSubmit} id="signin-form">
-	<SignIn {loading} {signInWithGoogleHandler} {signInWithAppleHandler} />
-</form>
+<AuthWrapper>
+	<form method="post" use:enhance={onSubmit} id="signin-form">
+		<SignIn {loading} {signInWithGoogleHandler} {signInWithAppleHandler} />
+	</form>
+</AuthWrapper>
 
 <style lang="scss">
 	form {

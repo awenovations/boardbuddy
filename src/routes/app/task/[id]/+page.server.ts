@@ -13,13 +13,13 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 	const task = await collection.findOne({ _id: params.id as any });
 
 	if (!task || task.user_id !== user?.id) {
-		redirect(302, '/');
+		redirect(302, '/app');
 	}
 
   const cards = await collection.find({ user_id: user?.id }).sort({ order: 1}).toArray();
 
 	return {
 		cards,
-		editTaskId: params.id
+		openTaskId: params.id
 	};
 };

@@ -2,6 +2,7 @@
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import SignUp from '$lib/components/signup/signup.svelte';
+	import AuthWrapper from '$lib/components/auth-wrapper/auth-wrapper.svelte';
 	import { showToast } from '@awenovations/aura/toast.store';
 
 	let loading = $state(false);
@@ -35,9 +36,11 @@
 	};
 </script>
 
-<form method="post" use:enhance={onSubmit} id="signup-form">
-	<SignUp {loading} {signUpWithGoogleHandler} {signUpWithAppleHandler} />
-</form>
+<AuthWrapper>
+	<form method="post" use:enhance={onSubmit} id="signup-form">
+		<SignUp {loading} {signUpWithGoogleHandler} {signUpWithAppleHandler} />
+	</form>
+</AuthWrapper>
 
 <style lang="scss">
 	form {

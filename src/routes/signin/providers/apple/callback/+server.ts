@@ -125,7 +125,7 @@ export async function POST({ request, cookies }: RequestEvent) {
 	return new Response(null, {
 		status: 302,
 		headers: {
-			Location: '/'
+			Location: '/app'
 		}
 	});
 }

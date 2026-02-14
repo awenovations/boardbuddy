@@ -7,6 +7,7 @@
 	import Container from '@awenovations/aura/container.svelte';
 </script>
 
+<div class="wrapper">
 <div class="background-image">
 	<div class="backdrop"></div>
 	<image class="dark-mode-image" src={DarkModeImage} />
@@ -58,8 +59,16 @@
 		</div>
 	</Container>
 </div>
+</div>
 
 <style lang="ts">
+  .wrapper {
+		display: flex;
+    justify-content: center;
+    flex-direction: column;
+		height: 100%;
+  }
+
 	:global(.paywall-container) {
 		margin: 0 auto -2rem;
 		box-sizing: border-box;

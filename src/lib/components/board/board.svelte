@@ -32,7 +32,7 @@
 
 	const clearTaskRoute = () => {
 		if (browser) {
-			history.replaceState({}, '', '/');
+			history.replaceState({}, '', '/app');
 		}
 	};
 
@@ -44,14 +44,14 @@
 				taskDetailsOpen = true;
 				openTask = _task;
 				if (browser && _task._id) {
-					history.pushState({}, '', '/task/' + _task._id);
+					history.pushState({}, '', '/app/task/' + _task._id);
 				}
 			}, 500);
 		} else {
 			taskDetailsOpen = true;
 			openTask = _task;
 			if (browser && _task._id) {
-				history.pushState({}, '', '/task/' + _task._id);
+				history.pushState({}, '', '/app/task/' + _task._id);
 			}
 		}
 	};
@@ -105,14 +105,14 @@
 				taskFormOpen = true;
 				openEditedTask = _task;
 				if (browser && _task._id) {
-					history.pushState({}, '', '/task/' + _task._id + '/edit');
+					history.pushState({}, '', '/app/task/' + _task._id + '/edit');
 				}
 			}, 500);
 		} else {
 			taskFormOpen = true;
 			openEditedTask = _task;
 			if (browser && _task._id) {
-				history.pushState({}, '', '/task/' + _task._id + '/edit');
+				history.pushState({}, '', '/app/task/' + _task._id + '/edit');
 			}
 		}
 	};
