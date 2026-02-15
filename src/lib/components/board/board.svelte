@@ -39,6 +39,7 @@
 	let showBackdrop = $derived(taskDetailsOpen || taskFormOpen);
 
 	let newTaskColumn = $state('');
+	let newCardType = $state('task');
 	let filterText = $state('');
 
 	const clearTaskRoute = () => {
@@ -140,6 +141,16 @@
 		clearTaskRoute();
 		taskFormOpen = true;
 		newTaskColumn = taskColumn;
+		newCardType = 'task';
+		taskDetailsOpen = false;
+		openEditedTask = {};
+	};
+
+	const handleCreateProject = () => {
+		clearTaskRoute();
+		taskFormOpen = true;
+		newTaskColumn = 'In Progress';
+		newCardType = 'project';
 		taskDetailsOpen = false;
 		openEditedTask = {};
 	};
@@ -147,6 +158,7 @@
 	const handleClose = () => {
 		taskFormOpen = false;
 		newTaskColumn = '';
+		newCardType = 'task';
 		clearTaskRoute();
 	};
 
@@ -181,7 +193,7 @@
 <svelte:window onkeydown={handleEscapeKeydown} />
 
 <div class="filter-wrapper">
-  <Breadcrumb {breadcrumb} {allProjects} />
+  <Breadcrumb {breadcrumb} {allProjects} onAddProject={handleCreateProject} />
 	<TextField
     class="card-filter"
 		type="search"
@@ -228,7 +240,7 @@
 {#if taskFormOpen}
 	<div class="task-panel">
 		<h4>New Task</h4>
-		<TaskForm task={openEditedTask} {handleClose} column={newTaskColumn} {handleSubmit} {projectId} />
+		<TaskForm task={openEditedTask} {handleClose} column={newTaskColumn} cardType={newCardType} {handleSubmit} {projectId} />
 	</div>
 {/if}
 
@@ -242,7 +254,7 @@
 					<span class="task-meta-value">{openTask.column}</span>
 				</div>
 				<div class="task-meta-item">
-					<span class="task-meta-header">Task type</span>
+					<span class="task-meta-header">Work type</span>
 					<span class="task-meta-value">{openTask.type}</span>
 				</div>
 				<div class="task-meta-item">

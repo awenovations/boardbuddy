@@ -11,6 +11,10 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { invalidateAll } from '$app/navigation';
 	import Icon from '@awenovations/aura/icon.svelte';
+	import { registerIcons } from '@awenovations/aura/icon-registry';
+	import { Folder, FolderOpen } from 'lucide-svelte';
+
+	registerIcons({ 'folder': Folder, 'folder-open': FolderOpen });
 	import Dialog from '@awenovations/aura/dialog.svelte';
 	import Button from '@awenovations/aura/button.svelte';
 	import { openDialog } from '$lib/stores/dialog.store';
@@ -279,7 +283,7 @@
 		<span class="card-type" data-cy="task-card-type"
 			><span class="card-type-text">{isProject ? 'project' : type}</span>
 			{#if isProject}
-				<Icon name="plan" />
+				<Icon name="folder" />
 			{:else if type === 'user story'}
 				<Icon name="user-story" />
 			{:else if type === 'bug fix'}
@@ -335,7 +339,7 @@
 				}
 			}}
 		>
-			<Icon class="action-button-icon" name={isProject ? 'eye-open' : 'eye-open'} />
+			<Icon class="action-button-icon" name={isProject ? 'folder-open' : 'eye-open'} />
 		</div>
 		<Divider class="actions-divider" />
 		<div
@@ -419,6 +423,10 @@
 		background: var(--aura-tertiary-50) !important;
 	}
 
+	:global(.action-button-icon.isRegistered) {
+		color: var(--aura-tertiary-50) !important;
+	}
+
 	:global(.task-card-title-tooltip) {
 		position: absolute;
 		display: none;
@@ -484,6 +492,10 @@
 
 			& :global(.aura-icon .icon) {
 				background: var(--aura-tertiary-50);
+			}
+
+			& :global(.aura-icon.isRegistered) {
+				color: var(--aura-tertiary-50);
 			}
 		}
 

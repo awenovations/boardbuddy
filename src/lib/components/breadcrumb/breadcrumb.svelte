@@ -23,9 +23,10 @@
 	interface Props {
 		breadcrumb?: Array<BreadcrumbItem>;
 		allProjects?: Array<ProjectDoc>;
+		onAddProject?: () => void;
 	}
 
-	let { breadcrumb = [], allProjects = [] }: Props = $props();
+	let { breadcrumb = [], allProjects = [], onAddProject }: Props = $props();
 
 	const maxVisible = 4;
 	const shouldCollapse = $derived(breadcrumb.length > maxVisible);
@@ -198,6 +199,15 @@
 			{#each projectTree as node}
 				{@render treeNode(node, 0)}
 			{/each}
+			{#if onAddProject}
+				<div class="tree-dropdown-divider"></div>
+				<button
+					class="tree-item-row tree-add-project"
+					onclick={() => { treeOpen = false; onAddProject(); }}
+				>
+					+ New Project
+				</button>
+			{/if}
 		</div>
 	{/if}
 </nav>
@@ -405,6 +415,22 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
+	}
+
+	.tree-dropdown-divider {
+		height: 1px;
+		background: var(--aura-tertiary-20);
+		margin: 0.35rem 0.5rem;
+	}
+
+	.tree-add-project {
+		width: 100%;
+		background: none;
+		border: none;
+		font: var(--aura-default-regular);
+		color: var(--aura-highlight);
+		cursor: pointer;
+		text-align: left;
 	}
 
 	.crumb-title-tooltip {

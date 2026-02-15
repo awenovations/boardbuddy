@@ -11,11 +11,12 @@
 		task?: Partial<Card>;
 		handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
 		projectId?: string;
+		cardType?: string;
 	}
 
-	let { column = '', handleClose: _handleClose, task = {}, handleSubmit, projectId }: Props = $props();
+	let { column = '', handleClose: _handleClose, task = {}, handleSubmit, projectId, cardType = 'task' }: Props = $props();
 
-	let cardTypeValue = $state(task.cardType || 'task');
+	let cardTypeValue = $state(task.cardType || cardType);
 
 	const originalColumn = column || task.column || '';
 	let selectedColumn = $state(originalColumn);
@@ -197,13 +198,13 @@
 				currentValue={task.type}
 			>
 				{#snippet placeholder()}
-					<span>Task type...</span>
+					<span>Work type...</span>
 				{/snippet}
 				{#snippet errors()}
-					<span data-cy="task-type-errors">Task type is required</span>
+					<span data-cy="task-type-errors">Work type is required</span>
 				{/snippet}
 				{#snippet label()}
-					<span>Task type</span>
+					<span>Work type</span>
 				{/snippet}
 				<aura-option value="user story">user story</aura-option>
 				<aura-option value="bug fix">bug fix</aura-option>
