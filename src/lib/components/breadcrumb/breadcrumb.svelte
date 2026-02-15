@@ -341,7 +341,7 @@
 		background: var(--aura-tertiary-10);
 		border: 1px solid var(--aura-container-border-color);
 		border-radius: var(--aura-menu-border-radius);
-		box-shadow: 0 1px 0 0 var(--aura-light-tertiary-70);
+		box-shadow: var(--aura-container-drop-shadow);
 		z-index: 100;
 		padding: 0.35rem 0;
 	}
@@ -424,7 +424,7 @@
 	.crumb-pill,
 	.crumb-title-tooltip {
 		@media (prefers-color-scheme: light) {
-			box-shadow: 0 1px 0 0 var(--aura-light-tertiary-40);
+			box-shadow: 0 1px 0 0 var(--aura-light-tertiary-20);
 		}
 		@media (prefers-color-scheme: dark) {
 			box-shadow: 0 1px 0 0 black;
