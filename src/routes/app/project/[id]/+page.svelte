@@ -79,6 +79,7 @@
 	cards={$page.data.cards}
 	projectId={$page.data.projectId}
 	breadcrumb={$page.data.breadcrumb}
+	allProjects={$page.data.allProjects}
 />
 
 <style lang="scss">

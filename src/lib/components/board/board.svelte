@@ -23,9 +23,10 @@
 		editTaskId?: string;
 		projectId?: string;
 		breadcrumb?: Array<BreadcrumbItem>;
+		allProjects?: Array<any>;
 	}
 
-	let { handleSubmit, cards = [], openTaskId, editTaskId, projectId, breadcrumb }: Props = $props();
+	let { handleSubmit, cards = [], openTaskId, editTaskId, projectId, breadcrumb, allProjects }: Props = $props();
 
 	const basePath = $derived(projectId ? `/app/project/${projectId}` : '/app');
 
@@ -180,7 +181,7 @@
 <svelte:window onkeydown={handleEscapeKeydown} />
 
 <div class="filter-wrapper">
-  <Breadcrumb {breadcrumb} />
+  <Breadcrumb {breadcrumb} {allProjects} />
 	<TextField
     class="card-filter"
 		type="search"

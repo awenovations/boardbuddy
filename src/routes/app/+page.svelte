@@ -74,7 +74,7 @@
 
 <svelte:document onmousedown={mousedown} onmouseup={mouseup} />
 
-<Board {handleSubmit} cards={$page.data.cards} />
+<Board {handleSubmit} cards={$page.data.cards} allProjects={$page.data.allProjects} />
 
 <style lang="scss">
 	:global(body.dragging) {

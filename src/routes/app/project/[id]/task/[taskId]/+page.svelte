@@ -80,6 +80,7 @@
 	projectId={$page.data.projectId}
 	breadcrumb={$page.data.breadcrumb}
 	openTaskId={$page.data.openTaskId}
+	allProjects={$page.data.allProjects}
 />
 
 <style lang="scss">
