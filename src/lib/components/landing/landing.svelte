@@ -19,318 +19,51 @@
 	};
 </script>
 
-<!-- Nav Bar -->
-<nav class="navbar">
-	<div class="nav-content">
-		<span class="nav-logo">BB</span>
-		<div class="nav-links">
-			{#if session?.user}
-				<a href="/app" class="nav-link">Go to Board</a>
-				<form method="POST" action="/signout" class="nav-signout-form">
-					<Button
-						type="submit"
-						kind="outlined"
-						variant="secondary"
-						size="small"
-						data-cy="sign-out"
-						class="sign-out">Sign out</Button
-					>
-				</form>
-				<Tooltip content="Account Settings" placement="bottom-end">
-					<Link onclick={toggleSettings}>
-						<Icon name="settings" size="large" />
-					</Link>
-				</Tooltip>
-			{:else}
-				<!--<a href="#pricing" class="nav-link">Pricing</a>-->
-				<a href="/signin" class="nav-link">Login</a>
-				<a href="/signup" class="nav-signup">Sign Up</a>
-			{/if}
+<div class="wrapper" data-theme="light">
+	<!-- Nav Bar -->
+	<nav class="navbar">
+		<div class="nav-content">
+			<span class="nav-logo">BB</span>
+			<div class="nav-links">
+				{#if session?.user}
+					<a href="/app" class="nav-link">Go to Board</a>
+					<form method="POST" action="/signout" class="nav-signout-form">
+						<Button
+							type="submit"
+							kind="outlined"
+							variant="secondary"
+							size="small"
+							data-cy="sign-out"
+							class="sign-out">Sign out</Button
+						>
+					</form>
+					<Tooltip content="Account Settings" placement="bottom-end">
+						<Link onclick={toggleSettings}>
+							<Icon name="settings" size="large" />
+						</Link>
+					</Tooltip>
+				{:else}
+					<!--<a href="#pricing" class="nav-link">Pricing</a>-->
+					<a href="/signin" class="nav-link">Login</a>
+					<a href="/signup" class="nav-signup">Sign Up</a>
+				{/if}
+			</div>
 		</div>
-	</div>
-</nav>
+	</nav>
 
-<!-- Hero Section -->
-<section class="hero">
-	<div class="hero-bg-decoration"></div>
-	<div class="hero-content">
-		<h1 class="hero-title">Board Buddy</h1>
-		<p class="hero-tagline">Simplify Your Workflow</p>
-		<p class="hero-description">
-			The modern task management tool that helps teams stay organized and productive. Manage
-			projects with ease using our intuitive kanban board interface.
-		</p>
-		<div class="hero-buttons">
-			<a href="/signup" class="cta-primary">
-				Get Started
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="20"
-					height="20"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg
-				>
-			</a>
-			<!-- <a href="#demo" class="cta-outlined">Watch Demo</a> -->
-		</div>
-	</div>
-</section>
-
-<!-- Features Section -->
-<section class="features">
-	<div class="features-inner">
-		<div class="section-header">
-			<h2 class="section-title">Everything you need to succeed</h2>
-			<p class="section-subtitle">
-				Powerful features designed to help your team work smarter, not harder
+	<!-- Hero Section -->
+	<section class="hero">
+		<div class="hero-bg-decoration"></div>
+		<div class="hero-content">
+			<h1 class="hero-title">Board Buddy</h1>
+			<p class="hero-tagline">Simplify Your Workflow</p>
+			<p class="hero-description">
+				The modern task management tool that helps teams stay organized and productive. Manage
+				projects with ease using our intuitive kanban board interface.
 			</p>
-		</div>
-
-		<div class="features-grid">
-			<div class="feature-card">
-				<div class="feature-icon">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" /></svg
-					>
-				</div>
-				<h3 class="feature-title">Simplify your workflow in minutes</h3>
-				<p class="feature-description">
-					Get started quickly with an intuitive interface that requires no training. Create boards,
-					add tasks, and start collaborating instantly.
-				</p>
-			</div>
-
-			<div class="feature-card">
-				<div class="feature-icon">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><path d="m9 11 3 3L22 4" /></svg
-					>
-				</div>
-				<h3 class="feature-title">Manage tasks easily, no complexity</h3>
-				<p class="feature-description">
-					Drag and drop tasks between columns, assign team members, and track progress with our
-					streamlined kanban board.
-				</p>
-			</div>
-
-			<div class="feature-card">
-				<div class="feature-icon">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						><rect width="18" height="18" x="3" y="4" rx="2" ry="2" /><line
-							x1="16"
-							x2="16"
-							y1="2"
-							y2="6"
-						/><line x1="8" x2="8" y1="2" y2="6" /><line x1="3" x2="21" y1="10" y2="10" /></svg
-					>
-				</div>
-				<h3 class="feature-title">Streamline sprints, ditch Jira chaos</h3>
-				<p class="feature-description">
-					Built for agile teams who need powerful features without overwhelming complexity. Perfect
-					for modern development workflows.
-				</p>
-			</div>
-
-			<div class="feature-card">
-				<div class="feature-icon">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle
-							cx="9"
-							cy="7"
-							r="4"
-						/><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg
-					>
-				</div>
-				<h3 class="feature-title">Seamless team collaboration</h3>
-				<p class="feature-description">
-					Work together in real-time with your team. Assign tasks, add comments, and keep everyone
-					on the same page.
-				</p>
-			</div>
-
-			<div class="feature-card">
-				<div class="feature-icon">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						><line x1="12" x2="12" y1="20" y2="10" /><line x1="18" x2="18" y1="20" y2="4" /><line
-							x1="6"
-							x2="6"
-							y1="20"
-							y2="16"
-						/></svg
-					>
-				</div>
-				<h3 class="feature-title">Track progress with insights</h3>
-				<p class="feature-description">
-					Monitor your team's productivity with built-in analytics and reporting. See what's working
-					and what needs attention.
-				</p>
-			</div>
-
-			<div class="feature-card">
-				<div class="feature-icon">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /><path
-							d="M7 11V7a5 5 0 0 1 10 0v4"
-						/></svg
-					>
-				</div>
-				<h3 class="feature-title">Secure and reliable</h3>
-				<p class="feature-description">
-					Your data is protected with enterprise-grade security. Work with confidence knowing your
-					information is safe and accessible.
-				</p>
-			</div>
-		</div>
-	</div>
-</section>
-
-<!-- Product Preview Section -->
-<section class="preview">
-	<div class="preview-inner">
-		<div class="section-header">
-			<h2 class="section-title">See Board Buddy in action</h2>
-			<p class="section-subtitle">Organize your work with our intuitive kanban board interface</p>
-		</div>
-
-		<div class="browser-mockup">
-			<div class="browser-chrome">
-				<div class="browser-dots">
-					<span class="dot dot-red"></span>
-					<span class="dot dot-yellow"></span>
-					<span class="dot dot-green"></span>
-				</div>
-				<div class="browser-url">boardbuddy.cloud/app</div>
-			</div>
-
-			<div class="browser-content">
-				<img src={screenshot} />
-			</div>
-		</div>
-
-		<div class="preview-blur-left"></div>
-		<div class="preview-blur-right"></div>
-	</div>
-</section>
-
-<!-- CTA Section -->
-<section class="cta-section">
-	<div class="cta-banner">
-		<div class="cta-bg-pattern">
-			<div class="cta-bg-circle cta-bg-circle-top"></div>
-			<div class="cta-bg-circle cta-bg-circle-bottom"></div>
-		</div>
-		<div class="cta-content">
-			<h2 class="cta-title">Ready to simplify your workflow?</h2>
-			<p class="cta-subtitle">
-				Stop wrestling with overcomplicated tools and start managing tasks the simple way
-			</p>
-			<div class="cta-benefits">
-				<div class="benefit">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="20"
-						height="20"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="#28c840"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><path d="m9 11 3 3L22 4" /></svg
-					>
-					<span>No credit card required</span>
-				</div>
-				<div class="benefit">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="20"
-						height="20"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="#28c840"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><path d="m9 11 3 3L22 4" /></svg
-					>
-					<span>Setup in minutes</span>
-				</div>
-				<div class="benefit">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="20"
-						height="20"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="#28c840"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><path d="m9 11 3 3L22 4" /></svg
-					>
-					<span>Cancel anytime</span>
-				</div>
-			</div>
-			<div class="cta-buttons">
-				<a href="/signup" class="cta-btn-white">
-					Start Free Trial
+			<div class="hero-buttons">
+				<a href="/signup" class="cta-primary">
+					Get Started
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="20"
@@ -343,20 +76,289 @@
 						stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg
 					>
 				</a>
-				<!-- <a href="#pricing" class="cta-btn-outline">View Pricing</a> -->
+				<!-- <a href="#demo" class="cta-outlined">Watch Demo</a> -->
 			</div>
 		</div>
-	</div>
-</section>
+	</section>
 
-<!-- Footer -->
-<footer class="landing-footer">
-	<div class="footer-inner">
-		&copy; {new Date().getFullYear()} Benjamin Knox | Feedback:&nbsp;<Link
-			href="mailto:ben@knoxes.email">ben@knoxes.email</Link
-		>&nbsp;| My Website:&nbsp;<Link target="blank" href="https://knox.pro">knox.pro</Link>
-	</div>
-</footer>
+	<!-- Features Section -->
+	<section class="features">
+		<div class="features-inner">
+			<div class="section-header">
+				<h2 class="section-title">Everything you need to succeed</h2>
+				<p class="section-subtitle">
+					Powerful features designed to help your team work smarter, not harder
+				</p>
+			</div>
+
+			<div class="features-grid">
+				<div class="feature-card">
+					<div class="feature-icon">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="24"
+							height="24"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" /></svg
+						>
+					</div>
+					<h3 class="feature-title">Simplify your workflow in minutes</h3>
+					<p class="feature-description">
+						Get started quickly with an intuitive interface that requires no training. Create
+						boards, add tasks, and start collaborating instantly.
+					</p>
+				</div>
+
+				<div class="feature-card">
+					<div class="feature-icon">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="24"
+							height="24"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><path d="m9 11 3 3L22 4" /></svg
+						>
+					</div>
+					<h3 class="feature-title">Manage tasks easily, no complexity</h3>
+					<p class="feature-description">
+						Drag and drop tasks between columns, assign team members, and track progress with our
+						streamlined kanban board.
+					</p>
+				</div>
+
+				<div class="feature-card">
+					<div class="feature-icon">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="24"
+							height="24"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							><rect width="18" height="18" x="3" y="4" rx="2" ry="2" /><line
+								x1="16"
+								x2="16"
+								y1="2"
+								y2="6"
+							/><line x1="8" x2="8" y1="2" y2="6" /><line x1="3" x2="21" y1="10" y2="10" /></svg
+						>
+					</div>
+					<h3 class="feature-title">Streamline sprints, ditch Jira chaos</h3>
+					<p class="feature-description">
+						Built for agile teams who need powerful features without overwhelming complexity.
+						Perfect for modern development workflows.
+					</p>
+				</div>
+
+				<div class="feature-card">
+					<div class="feature-icon">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="24"
+							height="24"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle
+								cx="9"
+								cy="7"
+								r="4"
+							/><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg
+						>
+					</div>
+					<h3 class="feature-title">Seamless team collaboration</h3>
+					<p class="feature-description">
+						Work together in real-time with your team. Assign tasks, add comments, and keep everyone
+						on the same page.
+					</p>
+				</div>
+
+				<div class="feature-card">
+					<div class="feature-icon">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="24"
+							height="24"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							><line x1="12" x2="12" y1="20" y2="10" /><line x1="18" x2="18" y1="20" y2="4" /><line
+								x1="6"
+								x2="6"
+								y1="20"
+								y2="16"
+							/></svg
+						>
+					</div>
+					<h3 class="feature-title">Track progress with insights</h3>
+					<p class="feature-description">
+						Monitor your team's productivity with built-in analytics and reporting. See what's
+						working and what needs attention.
+					</p>
+				</div>
+
+				<div class="feature-card">
+					<div class="feature-icon">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="24"
+							height="24"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /><path
+								d="M7 11V7a5 5 0 0 1 10 0v4"
+							/></svg
+						>
+					</div>
+					<h3 class="feature-title">Secure and reliable</h3>
+					<p class="feature-description">
+						Your data is protected with enterprise-grade security. Work with confidence knowing your
+						information is safe and accessible.
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Product Preview Section -->
+	<section class="preview">
+		<div class="preview-inner">
+			<div class="section-header">
+				<h2 class="section-title">See Board Buddy in action</h2>
+				<p class="section-subtitle">Organize your work with our intuitive kanban board interface</p>
+			</div>
+
+			<div class="browser-mockup">
+				<div class="browser-chrome">
+					<div class="browser-dots">
+						<span class="dot dot-red"></span>
+						<span class="dot dot-yellow"></span>
+						<span class="dot dot-green"></span>
+					</div>
+					<div class="browser-url">boardbuddy.cloud/app</div>
+				</div>
+
+				<div class="browser-content">
+					<img src={screenshot} />
+				</div>
+			</div>
+
+			<div class="preview-blur-left"></div>
+			<div class="preview-blur-right"></div>
+		</div>
+	</section>
+
+	<!-- CTA Section -->
+	<section class="cta-section">
+		<div class="cta-banner">
+			<div class="cta-bg-pattern">
+				<div class="cta-bg-circle cta-bg-circle-top"></div>
+				<div class="cta-bg-circle cta-bg-circle-bottom"></div>
+			</div>
+			<div class="cta-content">
+				<h2 class="cta-title">Ready to simplify your workflow?</h2>
+				<p class="cta-subtitle">
+					Stop wrestling with overcomplicated tools and start managing tasks the simple way
+				</p>
+				<div class="cta-benefits">
+					<div class="benefit">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="20"
+							height="20"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="#28c840"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><path d="m9 11 3 3L22 4" /></svg
+						>
+						<span>No credit card required</span>
+					</div>
+					<div class="benefit">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="20"
+							height="20"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="#28c840"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><path d="m9 11 3 3L22 4" /></svg
+						>
+						<span>Setup in minutes</span>
+					</div>
+					<div class="benefit">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="20"
+							height="20"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="#28c840"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><path d="m9 11 3 3L22 4" /></svg
+						>
+						<span>Cancel anytime</span>
+					</div>
+				</div>
+				<div class="cta-buttons">
+					<a href="/signup" class="cta-btn-white">
+						Start Free Trial
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="20"
+							height="20"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg
+						>
+					</a>
+					<!-- <a href="#pricing" class="cta-btn-outline">View Pricing</a> -->
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Footer -->
+	<footer class="landing-footer">
+		<div class="footer-inner">
+			&copy; {new Date().getFullYear()} Benjamin Knox | Feedback:&nbsp;<Link
+				href="mailto:ben@knoxes.email">ben@knoxes.email</Link
+			>&nbsp;| My Website:&nbsp;<Link target="blank" href="https://knox.pro">knox.pro</Link>
+		</div>
+	</footer>
+</div>
 
 {#if session?.user}
 	<Panel width="19vw" open={settingsOpen} class="settings-panel">
@@ -373,6 +375,9 @@
 {/if}
 
 <style lang="scss">
+  .wrapper {
+    background: var(--aura-light-background);
+  }
 	/* ========== Nav Bar ========== */
 	.navbar {
 		position: fixed;
