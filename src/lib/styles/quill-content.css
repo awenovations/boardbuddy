@@ -133,3 +133,14 @@
 .ql-content .ql-align-justify {
 	text-align: justify;
 }
+
+/* Diagram images */
+.ql-content img[data-drawio] {
+	max-width: 100%;
+	height: auto;
+	display: block;
+	margin: 8px 0;
+	border: 1px solid var(--aura-container-border-color, #ddd);
+	border-radius: 4px;
+	background: white;
+}
