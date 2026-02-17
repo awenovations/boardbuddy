@@ -1,10 +1,9 @@
 <script lang="ts">
 	import type Quill from 'quill';
+	import type { Component } from 'svelte';
 	import 'quill/dist/quill.snow.css';
 	import '$lib/styles/quill-content.css';
 	import type { Snippet } from 'svelte';
-	import DiagramEditor from '$lib/components/diagram-editor/diagram-editor.svelte';
-	import { svgToDataUri, encodeXml, decodeXml } from '$lib/components/diagram-editor/drawio-utils';
 
 	interface Props {
 		content?: string;
@@ -21,16 +20,22 @@
 	let diagramEditorOpen = $state(false);
 	let editingDiagramXml: string | null = $state(null);
 	let editingDiagramImg: HTMLImageElement | null = $state(null);
+	let DiagramEditor: Component<any> | null = $state(null);
 
-	function openDiagramEditor(xml: string | null = null, img: HTMLImageElement | null = null) {
+	async function openDiagramEditor(xml: string | null = null, img: HTMLImageElement | null = null) {
+		if (!DiagramEditor) {
+			const mod = await import('$lib/components/diagram-editor/diagram-editor.svelte');
+			DiagramEditor = mod.default;
+		}
 		editingDiagramXml = xml;
 		editingDiagramImg = img;
 		diagramEditorOpen = true;
 	}
 
-	function handleDiagramSave(svg: string, xml: string) {
+	async function handleDiagramSave(svg: string, xml: string) {
 		if (!quillInstance) return;
 
+		const { svgToDataUri, encodeXml } = await import('$lib/components/diagram-editor/drawio-utils');
 		const dataUri = svgToDataUri(svg);
 		const encodedXml = encodeXml(xml);
 
@@ -132,9 +137,10 @@
 			quill.root.innerHTML = content;
 
 			// Double-click handler for editing existing diagrams
-			quill.root.addEventListener('dblclick', (e: MouseEvent) => {
+			quill.root.addEventListener('dblclick', async (e: MouseEvent) => {
 				const target = e.target as HTMLElement;
 				if (target.tagName === 'IMG' && target.hasAttribute('data-drawio')) {
+					const { decodeXml } = await import('$lib/components/diagram-editor/drawio-utils');
 					const encoded = target.getAttribute('data-drawio')!;
 					const xml = decodeXml(encoded);
 					openDiagramEditor(xml, target as HTMLImageElement);
@@ -169,7 +175,7 @@
 	{/if}
 </div>
 
-{#if diagramEditorOpen}
+{#if diagramEditorOpen && DiagramEditor}
 	<DiagramEditor
 		initialXml={editingDiagramXml}
 		onSave={handleDiagramSave}

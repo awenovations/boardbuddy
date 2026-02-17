@@ -239,7 +239,7 @@
 
 {#if taskFormOpen}
 	<div class="task-panel">
-		<h4>New Task</h4>
+		<h4>{openEditedTask._id ? 'Edit Task' : 'New Task'}</h4>
 		<TaskForm task={openEditedTask} {handleClose} column={newTaskColumn} cardType={newCardType} {handleSubmit} {projectId} />
 	</div>
 {/if}

@@ -477,6 +477,19 @@
 			-webkit-box-orient: vertical;
 			overflow: hidden;
 			white-space: pre-wrap;
+
+			:global(*) {
+				font-size: inherit !important;
+				font-weight: inherit !important;
+				font-style: inherit !important;
+				margin: 0 !important;
+				padding: 0 !important;
+				line-height: inherit !important;
+			}
+
+			:global(img) {
+				display: none !important;
+			}
 		}
 
 		.card-type {
