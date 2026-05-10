@@ -26,6 +26,7 @@
 			<span class="nav-logo">BB</span>
 			<div class="nav-links">
 				{#if session?.user}
+					<a href="/docs" class="nav-link">Docs</a>
 					<a href="/app" class="nav-link">Go to Board</a>
 					<form method="POST" action="/signout" class="nav-signout-form">
 						<Button
@@ -43,7 +44,8 @@
 						</Link>
 					</Tooltip>
 				{:else}
-					<!--<a href="#pricing" class="nav-link">Pricing</a>-->
+					<a href="/pricing" class="nav-link">Pricing</a>
+					<a href="/docs" class="nav-link">Docs</a>
 					<a href="/signin" class="nav-link">Login</a>
 					<a href="/signup" class="nav-signup">Sign Up</a>
 				{/if}
@@ -174,17 +176,22 @@
 							stroke-width="2"
 							stroke-linecap="round"
 							stroke-linejoin="round"
-							><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle
-								cx="9"
-								cy="7"
-								r="4"
-							/><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg
+							><rect width="18" height="10" x="3" y="11" rx="2" /><circle
+								cx="12"
+								cy="5"
+								r="2"
+							/><path d="M12 7v4" /><line x1="8" x2="8" y1="16" y2="16" /><line
+								x1="16"
+								x2="16"
+								y1="16"
+								y2="16"
+							/></svg
 						>
 					</div>
-					<h3 class="feature-title">Seamless team collaboration</h3>
+					<h3 class="feature-title">AI-powered task management</h3>
 					<p class="feature-description">
-						Work together in real-time with your team. Assign tasks, add comments, and keep everyone
-						on the same page.
+						Connect your AI assistant directly to your board via the built-in MCP server. Create,
+						move, and manage tasks through natural conversation — no clicking required.
 					</p>
 				</div>
 
@@ -344,7 +351,7 @@
 							stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg
 						>
 					</a>
-					<!-- <a href="#pricing" class="cta-btn-outline">View Pricing</a> -->
+					<a href="/pricing" class="cta-btn-outline">View Pricing</a>
 				</div>
 			</div>
 		</div>

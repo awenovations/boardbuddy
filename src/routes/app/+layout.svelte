@@ -41,6 +41,7 @@
 
 		<form method="POST" action="/signout">
 			<div class="right-user-actions">
+				<Link href="/docs">Docs</Link>
 				<Button
 					type="submit"
 					kind="outlined"
@@ -143,6 +144,7 @@
 	}
 
 	.right-user-actions {
+    --aura-link-color: var(--aura-secondary-40);
 		display: flex;
 		gap: 1.406rem;
 		align-items: center;

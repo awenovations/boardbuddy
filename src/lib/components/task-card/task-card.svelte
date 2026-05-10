@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import 'animate.css';
 	import '$lib/styles/quill-content.css';
 
@@ -8,7 +6,6 @@
 	import classNames from 'classnames';
 	import debounce from 'lodash.debounce';
 	import { browser } from '$app/environment';
-	import { onMount, onDestroy } from 'svelte';
 	import { invalidateAll } from '$app/navigation';
 	import Icon from '@awenovations/aura/icon.svelte';
 	import { registerIcons } from '@awenovations/aura/icon-registry';
@@ -60,9 +57,9 @@
 
 	let cardHovered = $state(false);
 
-	let dragging;
+	let dragging = $state(false);
 
-	run(() => {
+	$effect(() => {
 		dragging = $draggingStore.dragging;
 	});
 
@@ -248,30 +245,33 @@
 		document.addEventListener('mousemove', drag);
 	};
 
-	onMount(() => {
-		if (browser) {
-			card.parentElement.style.setProperty('width', `${card.parentElement.offsetWidth}px`, 'important');
+	$effect(() => {
+		if (!browser || !card?.parentElement) return;
 
-			card.parentElement.addEventListener('mousedown', dragStart);
-			card.parentElement.addEventListener('mouseover', hover);
-			card.parentElement.addEventListener('mouseleave', hoverOut);
+		const parent = card.parentElement;
 
-			const taskCardActions = document.querySelector(`.task-card-actions[data-id="${id}"]`);
-			taskCardActions.addEventListener('mouseover', actionsHover);
-			taskCardActions.addEventListener('mouseleave', hoverOut);
-		}
-	});
+		parent.style.setProperty('width', `${parent.offsetWidth}px`, 'important');
+		parent.addEventListener('mousedown', dragStart);
+		parent.addEventListener('mouseover', hover);
+		parent.addEventListener('mouseleave', hoverOut);
 
-	onDestroy(() => {
-		if (browser) {
-			card.parentElement.removeEventListener('mousedown', dragStart);
-			card.parentElement.removeEventListener('mouseover', hover);
-			card.parentElement.removeEventListener('mouseleave', hoverOut);
+		const taskCardActions = document.querySelector(`.task-card-actions[data-id="${id}"]`);
+		taskCardActions?.addEventListener('mouseover', actionsHover);
+		taskCardActions?.addEventListener('mouseleave', hoverOut);
 
-			const taskCardActions = document.querySelector(`.task-card-actions[data-id="${id}"]`);
+		return () => {
+			cleanUp?.();
+			cleanUpTooltip?.();
+			hoverOut.cancel();
+			hideActions.cancel();
+			document.removeEventListener('mouseup', drop);
+			document.removeEventListener('mousemove', drag);
+			parent.removeEventListener('mousedown', dragStart);
+			parent.removeEventListener('mouseover', hover);
+			parent.removeEventListener('mouseleave', hoverOut);
 			taskCardActions?.removeEventListener('mouseover', actionsHover);
 			taskCardActions?.removeEventListener('mouseleave', hoverOut);
-		}
+		};
 	});
 </script>
 

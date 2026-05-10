@@ -1,12 +1,14 @@
-import { redirect } from '@sveltejs/kit';
+import { redirect, error } from '@sveltejs/kit';
 import mongoDbClient from '$lib/db/mongo';
 
 import type { PageServerLoad } from './$types';
 
 async function buildBreadcrumb(collection, projectId, userId) {
 	const crumbs = [];
+	const visited = new Set<string>();
 	let currentId = projectId;
-	while (currentId) {
+	while (currentId && !visited.has(currentId)) {
+		visited.add(currentId);
 		const project = await collection.findOne({ _id: currentId, user_id: userId });
 		if (!project) break;
 		crumbs.unshift({ _id: project._id, title: project.taskName });
@@ -16,25 +18,27 @@ async function buildBreadcrumb(collection, projectId, userId) {
 }
 
 export const load: PageServerLoad = async ({ locals, params }) => {
-	const { user } = locals;
+	try {
+		const { user } = locals;
 
-	const client = (await mongoDbClient).db();
+		const client = (await mongoDbClient).db();
+		const collection = client.collection('tasks');
 
-	const collection = client.collection('tasks');
+		const project = await collection.findOne({ _id: params.id as any, user_id: user?.id });
 
-	const project = await collection.findOne({ _id: params.id as any, user_id: user?.id });
+		if (!project || project.cardType !== 'project') {
+			redirect(302, '/app');
+		}
 
-	if (!project || project.cardType !== 'project') {
-		redirect(302, '/app');
+		const [cards, breadcrumb] = await Promise.all([
+			collection.find({ user_id: user?.id, project_id: params.id }).sort({ order: 1, createDate: -1 }).toArray(),
+			buildBreadcrumb(collection, params.id, user?.id)
+		]);
+
+		return { cards, breadcrumb, projectId: params.id };
+	} catch (err) {
+		if ((err as any)?.status) throw err;
+		console.error('Project load error:', err);
+		throw error(500, 'Failed to load project');
 	}
-
-	const cards = await collection.find({ user_id: user?.id, project_id: params.id }).sort({ order: 1, createDate: -1 }).toArray();
-
-	const breadcrumb = await buildBreadcrumb(collection, params.id, user?.id);
-
-	return {
-		cards,
-		breadcrumb,
-		projectId: params.id
-	};
 };
