@@ -11,7 +11,10 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 
 	try {
 		const allProjects = await collection
-			.find({ user_id: user?.id, cardType: 'project' })
+			.find(
+				{ user_id: user?.id, cardType: 'project' },
+				{ projection: { _id: 1, taskName: 1, project_id: 1, order: 1 } }
+			)
 			.sort({ order: 1 })
 			.toArray();
 		return { allProjects };

@@ -1,10 +1,9 @@
 import { subDays } from 'date-fns';
 import { redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
-import { lucia, validateUserAndGetDetails } from "$lib/server/auth";
 
-export const load: LayoutServerLoad = async ({ cookies, url }) => {
-  const sessionId = cookies.get(lucia.sessionCookieName);
+export const load: LayoutServerLoad = async ({ locals, url }) => {
+	const { user } = locals;
 
 	const { searchParams } = url;
 
@@ -12,30 +11,37 @@ export const load: LayoutServerLoad = async ({ cookies, url }) => {
 
 	if (searchParams.get('error') === 'OAuthAccountNotLinked') {
 		errorMessage = 'This account already exists in our system';
-  } else if(searchParams.get('error') === 'CredentialsSignin' && searchParams.get('code') === 'credentials') {
+	} else if (searchParams.get('error') === 'CredentialsSignin' && searchParams.get('code') === 'credentials') {
 		errorMessage = 'Username or password is incorrect';
-  }
+	}
 
-  const session = sessionId ? await validateUserAndGetDetails(sessionId) : null;
-
-	if (
-		!session?.user &&
-		url.pathname.startsWith('/app')
-	) {
+	if (!user && url.pathname.startsWith('/app')) {
 		throw redirect(302, '/signin');
-	} else if (
-		session?.user &&
-		(url.pathname.startsWith('/signin') || url.pathname.startsWith('/signup'))
-	) {
+	} else if (user && (url.pathname.startsWith('/signin') || url.pathname.startsWith('/signup'))) {
 		throw redirect(302, '/app');
 	}
 
-  if(session && url.pathname.startsWith('/app') && session.user.createdDate < subDays(new Date(), 3).getTime() && ['admin', 'lifetime'].includes(session.user.role ?? "trial") === false) {
-    throw redirect(302, '/paywall');
-  }
+	if (
+		user &&
+		url.pathname.startsWith('/app') &&
+		user.createdDate < subDays(new Date(), 3).getTime() &&
+		!['admin', 'lifetime'].includes(user.role ?? 'trial')
+	) {
+		throw redirect(302, '/paywall');
+	}
 
 	return {
-		session,
-		errorMessage,
+		user: user
+			? {
+					_id: user.id,
+					id: user.id,
+					email: user.email,
+					name: user.name,
+					role: user.role,
+					createdDate: user.createdDate,
+					authProvider: user.authProvider
+				}
+			: null,
+		errorMessage
 	};
 };

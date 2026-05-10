@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import Container from '@awenovations/aura/container.svelte';
 
-	const session = $derived($page.data.session);
+	const user = $derived($page.data.user);
 
 	// prettier-ignore
 	const claudeCodeSnippet =
@@ -50,7 +50,7 @@
 		<div class="nav-content">
 			<a href="/" class="nav-logo">BB</a>
 			<div class="nav-links">
-				{#if session?.user}
+				{#if user}
 					<a href="/app" class="nav-link">Go to Board</a>
 					<form method="POST" action="/signout" class="nav-signout-form">
 						<button type="submit" class="nav-link">Sign out</button>

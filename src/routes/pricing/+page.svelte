@@ -5,11 +5,11 @@
 	import Button from '@awenovations/aura/button.svelte';
 	import Icon from '@awenovations/aura/icon.svelte';
 
-	const session = $derived($page.data.session);
-	const ctaHref = $derived(session?.user ? '/paywall/pay' : '/signup');
-	const ctaLabel = $derived(session?.user ? 'Get Lifetime Access' : 'Start Free Trial');
+	const user = $derived($page.data.user);
+	const ctaHref = $derived(user ? '/paywall/pay' : '/signup');
+	const ctaLabel = $derived(user ? 'Get Lifetime Access' : 'Start Free Trial');
 	const trialNote = $derived(
-		session?.user
+		user
 			? 'One-time payment · No subscription'
 			: '3-day free trial · No credit card required'
 	);
@@ -29,7 +29,7 @@
 		<div class="nav-content">
 			<a href="/" class="nav-logo">BB</a>
 			<div class="nav-links">
-				{#if session?.user}
+				{#if user}
 					<a href="/app" class="nav-link">Go to Board</a>
 					<form method="POST" action="/signout" class="nav-signout-form">
 						<button type="submit" class="nav-link">Sign out</button>

@@ -62,7 +62,7 @@
 	{@render children?.()}
 </div>
 
-{#if data?.session?.user}
+{#if data?.user}
 	{#if $dialogStore.open}
 		<Dialog
 			class="floating-dialog"
@@ -80,10 +80,10 @@
 				Settings
 				<Button size="small" onclick={toggleSettings}>Close</Button>
 			</h2>
-			<PersonalInfo user={data?.session?.user} />
-			<AccountManagement user={data?.session?.user} />
-			<ApiKeys user={data?.session?.user} />
-			<DeleteAccount user={data?.session?.user} />
+			<PersonalInfo user={data.user} />
+			<AccountManagement user={data.user} />
+			<ApiKeys user={data.user} />
+			<DeleteAccount user={data.user} />
 		</div>
 	</Panel>
 {/if}

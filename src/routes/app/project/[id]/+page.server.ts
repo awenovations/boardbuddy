@@ -31,7 +31,27 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		}
 
 		const [cards, breadcrumb] = await Promise.all([
-			collection.find({ user_id: user?.id, project_id: params.id }).sort({ order: 1, createDate: -1 }).toArray(),
+			collection
+				.find(
+					{ user_id: user?.id, project_id: params.id },
+					{
+						projection: {
+							_id: 1,
+							taskName: 1,
+							description: 1,
+							assignee: 1,
+							taskType: 1,
+							column: 1,
+							order: 1,
+							cardType: 1,
+							project_id: 1,
+							createDate: 1,
+							lastUpdateDate: 1
+						}
+					}
+				)
+				.sort({ order: 1, createDate: -1 })
+				.toArray(),
 			buildBreadcrumb(collection, params.id, user?.id)
 		]);
 

@@ -3,4 +3,4 @@
 	import Landing from '$lib/components/landing/landing.svelte';
 </script>
 
-<Landing session={$page.data.session} />
+<Landing user={$page.data.user} />

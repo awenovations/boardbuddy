@@ -10,7 +10,7 @@
 	import DeleteAccount from '$lib/components/settings/delete-account/delete-account.svelte';
 	import AccountManagement from '$lib/components/settings/account-management/account-management.svelte';
 
-	let { session = null }: { session?: any } = $props();
+	let { user = null }: { user?: any } = $props();
 
 	let settingsOpen = $state(false);
 
@@ -25,7 +25,7 @@
 		<div class="nav-content">
 			<span class="nav-logo">BB</span>
 			<div class="nav-links">
-				{#if session?.user}
+				{#if user}
 					<a href="/docs" class="nav-link">Docs</a>
 					<a href="/app" class="nav-link">Go to Board</a>
 					<form method="POST" action="/signout" class="nav-signout-form">
@@ -367,16 +367,16 @@
 	</footer>
 </div>
 
-{#if session?.user}
+{#if user}
 	<Panel width="19vw" open={settingsOpen} class="settings-panel">
 		<div class="settings-wrapper">
 			<h2>
 				Settings
 				<Button size="small" onclick={toggleSettings}>Close</Button>
 			</h2>
-			<PersonalInfo user={session.user} />
-			<AccountManagement user={session.user} />
-			<DeleteAccount user={session.user} />
+			<PersonalInfo {user} />
+			<AccountManagement {user} />
+			<DeleteAccount {user} />
 		</div>
 	</Panel>
 {/if}
