@@ -11,6 +11,7 @@
 	import PersonalInfo from '$lib/components/settings/personal-info/personal-info.svelte';
 	import DeleteAccount from '$lib/components/settings/delete-account/delete-account.svelte';
 	import AccountManagement from '$lib/components/settings/account-management/account-management.svelte';
+	import ApiKeys from '$lib/components/settings/api-keys/api-keys.svelte';
 
 	let { data, children } = $props();
 
@@ -80,6 +81,7 @@
 			</h2>
 			<PersonalInfo user={data?.session?.user} />
 			<AccountManagement user={data?.session?.user} />
+			<ApiKeys user={data?.session?.user} />
 			<DeleteAccount user={data?.session?.user} />
 		</div>
 	</Panel>

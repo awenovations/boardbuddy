@@ -1,6 +1,5 @@
 import { handler } from './build/handler.js';
 import winston from 'winston';
-
 import express from 'express';
 
 const logger = winston.createLogger({
