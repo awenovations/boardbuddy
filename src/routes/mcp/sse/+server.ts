@@ -29,9 +29,15 @@ export const GET: RequestHandler = async ({ request }) => {
 	const encoder = new TextEncoder();
 	const client = await mongoDbClient;
 
+	let heartbeat: ReturnType<typeof setInterval>;
+
 	const stream = new ReadableStream({
 		async start(controller) {
 			const enqueue = (text: string) => controller.enqueue(encoder.encode(text));
+
+			heartbeat = setInterval(() => {
+				try { enqueue(': heartbeat\n\n'); } catch { clearInterval(heartbeat); }
+			}, 30_000);
 
 			const transport: McpTransport = {
 				onmessage: undefined,
@@ -47,8 +53,9 @@ export const GET: RequestHandler = async ({ request }) => {
 				},
 
 				async close() {
+					clearInterval(heartbeat);
 					mcpSessions.delete(sessionId);
-					controller.close();
+					try { controller.close(); } catch { /* already cancelled */ }
 				}
 			} as McpTransport & { start: () => Promise<void>; onclose?: () => void; onerror?: (e: Error) => void };
 
@@ -59,6 +66,7 @@ export const GET: RequestHandler = async ({ request }) => {
 		},
 
 		cancel() {
+			clearInterval(heartbeat);
 			mcpSessions.delete(sessionId);
 		}
 	});

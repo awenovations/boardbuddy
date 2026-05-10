@@ -9,12 +9,14 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 
 	const collection = client.collection('tasks');
 
-	const allProjects = await collection
-		.find({ user_id: user?.id, cardType: 'project' })
-		.sort({ order: 1 })
-		.toArray();
-
-	return {
-		allProjects
-	};
+	try {
+		const allProjects = await collection
+			.find({ user_id: user?.id, cardType: 'project' })
+			.sort({ order: 1 })
+			.toArray();
+		return { allProjects };
+	} catch (err) {
+		console.error('[app layout] Failed to load projects:', err);
+		return { allProjects: [] };
+	}
 };

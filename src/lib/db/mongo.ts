@@ -1,8 +1,12 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient, type MongoClientOptions } from 'mongodb';
 import { building, dev } from '$app/environment';
 import { env } from "$env/dynamic/private";
 
-const options = {};
+const options: MongoClientOptions = {
+  serverSelectionTimeoutMS: 5000,
+  connectTimeoutMS: 5000,
+  socketTimeoutMS: 10000,
+};
 
 let client : MongoClient;
 let clientPromise: Promise<MongoClient>;
