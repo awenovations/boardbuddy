@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Link from '@awenovations/aura/link.svelte';
 	import Icon from '@awenovations/aura/icon.svelte';
-	import Alert from '@awenovations/aura/alert.svelte';
 	import Panel from '@awenovations/aura/panel.svelte';
 	import Dialog from '@awenovations/aura/dialog.svelte';
 	import Button from '@awenovations/aura/button.svelte';
@@ -36,8 +35,6 @@
 			<span class="name">Board Buddy</span>
 			Simplify Your Workflow
 		</div>
-
-		<Alert>Alpha version - features may be unstable. Thanks for trying!</Alert>
 
 		<form method="POST" action="/signout">
 			<div class="right-user-actions">
