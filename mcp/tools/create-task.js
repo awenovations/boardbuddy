@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 import { COLUMNS } from './list-columns.js';
 
-/** @param {string} userId @param {import('mongodb').MongoClient} mongoClient @param {Record<string,any>} args */
-export async function createTask(userId, mongoClient, args) {
+/** @param {string} userId @param {import('mongodb').MongoClient} mongoClient @param {Record<string,any>} args @param {() => void} [notify] */
+export async function createTask(userId, mongoClient, args, notify = () => {}) {
 	const tasks = mongoClient.db().collection('tasks');
 	const now = Date.now();
 
@@ -26,6 +26,8 @@ export async function createTask(userId, mongoClient, args) {
 	if (args.project_id) doc.project_id = args.project_id;
 
 	await tasks.insertOne(doc);
+	notify();
+
 	const inserted = await tasks.findOne({ _id: doc._id });
 
 	return { content: [{ type: 'text', text: JSON.stringify(inserted, null, 2) }] };

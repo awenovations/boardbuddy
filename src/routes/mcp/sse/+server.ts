@@ -1,6 +1,7 @@
 import type { RequestHandler } from './$types';
 import mongoDbClient from '$lib/db/mongo';
 import { mcpSessions, type McpTransport } from '$lib/mcp-sessions.js';
+import { notifyTasksChanged } from '$lib/server/task-events';
 import { createMcpServer } from '../../../../mcp/index.js';
 
 export const GET: RequestHandler = async ({ request }) => {
@@ -59,7 +60,9 @@ export const GET: RequestHandler = async ({ request }) => {
 				}
 			} as McpTransport & { start: () => Promise<void>; onclose?: () => void; onerror?: (e: Error) => void };
 
-			const server = createMcpServer(keyDoc.user_id, client);
+			const server = createMcpServer(keyDoc.user_id, client, () =>
+				notifyTasksChanged(keyDoc.user_id)
+			);
 			await server.connect(transport as any);
 
 			mcpSessions.set(sessionId, transport);

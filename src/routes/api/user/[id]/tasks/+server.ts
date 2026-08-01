@@ -1,6 +1,7 @@
 import mongoDbClient from '$lib/db/mongo';
 import type { RequestEvent } from './$types';
 import { findUserSession, findUserCollectionBySession } from '$lib/helpers/api';
+import { notifyTasksChanged } from '$lib/server/task-events';
 
 export async function DELETE({ cookies, params }: RequestEvent) {
 	const session = await findUserSession(cookies);
@@ -33,6 +34,8 @@ export async function DELETE({ cookies, params }: RequestEvent) {
 		const tasks = db.collection('tasks');
 
 		await tasks.deleteMany({ user_id: user._id });
+
+		notifyTasksChanged(session.userId);
 	} catch (error) {
 		console.error('Error deleting tasks by user id: ', error);
 		return new Response(

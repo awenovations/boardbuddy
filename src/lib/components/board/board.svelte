@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
 	import { browser } from '$app/environment';
+	import { invalidateAll } from '$app/navigation';
 	import { format, fromUnixTime } from 'date-fns';
+	import debounce from 'lodash.debounce';
 	import '$lib/styles/quill-content.css';
 	import Button from '@awenovations/aura/button.svelte';
 	import TextField from '@awenovations/aura/text-field.svelte';
@@ -10,6 +12,7 @@
 	import Container from '@awenovations/aura/container.svelte';
 	import TaskForm from '$lib/components/task-form/task-form.svelte';
 	import Breadcrumb from '$lib/components/breadcrumb/breadcrumb.svelte';
+	import { draggingStore } from '$lib/stores/dragging.store';
 
 	interface BreadcrumbItem {
 		_id: string;
@@ -41,6 +44,41 @@
 	let newTaskColumn = $state('');
 	let newCardType = $state('task');
 	let filterText = $state('');
+
+	// Live board updates. The server pushes a bare "tasks.changed" signal on any
+	// write — from the REST API or the MCP tools — and we refetch. Plain `let`,
+	// not $state: the flush effect below should react to dragging, not to this.
+	let pendingRefresh = false;
+
+	const refresh = debounce(() => {
+		// A refresh mid-drag would recreate every TaskCard (column.svelte wraps
+		// them in {#key card}) and destroy the drag listeners on the card under
+		// the cursor. Defer instead of dropping the update.
+		if ($draggingStore.dragging) {
+			pendingRefresh = true;
+			return;
+		}
+
+		invalidateAll();
+	}, 300);
+
+	$effect(() => {
+		const stream = new EventSource('/api/tasks/stream');
+
+		stream.onmessage = refresh;
+
+		return () => {
+			stream.close();
+			refresh.cancel();
+		};
+	});
+
+	$effect(() => {
+		if (!$draggingStore.dragging && pendingRefresh) {
+			pendingRefresh = false;
+			invalidateAll();
+		}
+	});
 
 	const clearTaskRoute = () => {
 		if (browser) {

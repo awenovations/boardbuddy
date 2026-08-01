@@ -1,7 +1,7 @@
 import { COLUMNS } from './list-columns.js';
 
-/** @param {string} userId @param {import('mongodb').MongoClient} mongoClient @param {Record<string,any>} args */
-export async function updateTask(userId, mongoClient, args) {
+/** @param {string} userId @param {import('mongodb').MongoClient} mongoClient @param {Record<string,any>} args @param {() => void} [notify] */
+export async function updateTask(userId, mongoClient, args, notify = () => {}) {
 	const tasks = mongoClient.db().collection('tasks');
 
 	const task = await tasks.findOne({ _id: args.id, user_id: userId });
@@ -38,6 +38,9 @@ export async function updateTask(userId, mongoClient, args) {
 			await tasks.updateOne({ _id: columnTasks[i]._id }, { $set: { order: i } });
 		}
 	}
+
+	// One notification for the update plus any renumbering it triggered.
+	notify();
 
 	return { content: [{ type: 'text', text: 'Task updated successfully' }] };
 }

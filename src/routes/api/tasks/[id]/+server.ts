@@ -4,6 +4,7 @@ import mongoDbClient from '$lib/db/mongo';
 import type { RequestEvent } from './$types';
 import { type Card } from '$lib/components/task-card/types';
 import { clearEmptyStringProperties } from '$lib/helpers/api';
+import { notifyTasksChanged } from '$lib/server/task-events';
 
 export async function PATCH({ cookies, request, params }: RequestEvent) {
 	const sessionId = cookies.get(lucia.sessionCookieName);
@@ -71,6 +72,9 @@ export async function PATCH({ cookies, request, params }: RequestEvent) {
 		}
 	}
 
+	// One notification for the update plus any renumbering it triggered.
+	notifyTasksChanged(user?.id);
+
 	return new Response(null, { status: 204 });
 }
 
@@ -117,6 +121,8 @@ export async function DELETE({ cookies, params }: RequestEvent) {
 	}
 
 	await tasks.deleteOne({ _id: id as any });
+
+	notifyTasksChanged(user?.id);
 
 	return new Response(null, { status: 204 });
 }

@@ -1,7 +1,7 @@
 import { COLUMNS } from './list-columns.js';
 
-/** @param {string} userId @param {import('mongodb').MongoClient} mongoClient @param {Record<string,any>} args */
-export async function moveTasks(userId, mongoClient, args) {
+/** @param {string} userId @param {import('mongodb').MongoClient} mongoClient @param {Record<string,any>} args @param {() => void} [notify] */
+export async function moveTasks(userId, mongoClient, args, notify = () => {}) {
 	const tasks = mongoClient.db().collection('tasks');
 
 	for (const move of args.tasks) {
@@ -10,6 +10,9 @@ export async function moveTasks(userId, mongoClient, args) {
 			{ $set: { column: move.column, order: move.order } }
 		);
 	}
+
+	// One notification for the whole batch, not one per moved card.
+	notify();
 
 	return { content: [{ type: 'text', text: `Moved ${args.tasks.length} task(s) successfully` }] };
 }

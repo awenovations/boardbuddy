@@ -1,5 +1,5 @@
-/** @param {string} userId @param {import('mongodb').MongoClient} mongoClient @param {Record<string,any>} args */
-export async function deleteTask(userId, mongoClient, args) {
+/** @param {string} userId @param {import('mongodb').MongoClient} mongoClient @param {Record<string,any>} args @param {() => void} [notify] */
+export async function deleteTask(userId, mongoClient, args, notify = () => {}) {
 	const tasks = mongoClient.db().collection('tasks');
 
 	const task = await tasks.findOne({ _id: args.id, user_id: userId });
@@ -15,6 +15,7 @@ export async function deleteTask(userId, mongoClient, args) {
 	}
 
 	await tasks.deleteOne({ _id: args.id });
+	notify();
 
 	return { content: [{ type: 'text', text: 'Task deleted successfully' }] };
 }

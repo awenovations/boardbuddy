@@ -27,8 +27,11 @@ const TOOL_DEFINITIONS = [
 /**
  * @param {string} userId
  * @param {import('mongodb').MongoClient} mongoClient
+ * @param {() => void} [notify] Called after any write, so connected browsers can
+ *   refresh. Injected rather than imported so this directory stays free of
+ *   SvelteKit `$lib` aliases (it lives outside `src/`).
  */
-export function createMcpServer(userId, mongoClient) {
+export function createMcpServer(userId, mongoClient, notify = () => {}) {
 	const server = new Server(
 		{ name: 'boardbuddy', version: '1.0.0' },
 		{ capabilities: { tools: {} } }
@@ -46,13 +49,13 @@ export function createMcpServer(userId, mongoClient) {
 				case 'list_tasks':
 					return await listTasks(userId, mongoClient, args);
 				case 'create_task':
-					return await createTask(userId, mongoClient, args);
+					return await createTask(userId, mongoClient, args, notify);
 				case 'update_task':
-					return await updateTask(userId, mongoClient, args);
+					return await updateTask(userId, mongoClient, args, notify);
 				case 'delete_task':
-					return await deleteTask(userId, mongoClient, args);
+					return await deleteTask(userId, mongoClient, args, notify);
 				case 'move_tasks':
-					return await moveTasks(userId, mongoClient, args);
+					return await moveTasks(userId, mongoClient, args, notify);
 				case 'get_project':
 					return await getProject(userId, mongoClient, args);
 				case 'get_user_profile':

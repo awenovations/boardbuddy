@@ -3,6 +3,7 @@ import { lucia } from '$lib/server/auth';
 import mongoDbClient from '$lib/db/mongo';
 import type { RequestEvent } from './$types';
 import { fail, json } from '@sveltejs/kit';
+import { notifyTasksChanged } from '$lib/server/task-events';
 
 export async function POST({ cookies, request }: RequestEvent) {
 	const sessionId = cookies.get(lucia.sessionCookieName);
@@ -41,6 +42,8 @@ export async function POST({ cookies, request }: RequestEvent) {
 
 	const task = await tasks.insertOne(doc);
 
+	notifyTasksChanged(user?.id);
+
 	return json(await tasks.findOne({ _id: task.insertedId }));
 }
 
@@ -52,6 +55,9 @@ export async function PATCH({ cookies, request }: RequestEvent) {
 			message: 'Forbidden'
 		});
 	}
+
+	// Needed only to key the change notification below.
+	const { user } = await lucia.validateSession(sessionId);
 
 	const body = await request.json();
 
@@ -70,6 +76,9 @@ export async function PATCH({ cookies, request }: RequestEvent) {
 			}
 		);
 	}
+
+	// One notification per reorder, not per card.
+	notifyTasksChanged(user?.id);
 
 	return new Response(null, { status: 204 });
 }
