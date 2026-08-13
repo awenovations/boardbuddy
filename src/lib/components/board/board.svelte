@@ -45,15 +45,9 @@
 	let newCardType = $state('task');
 	let filterText = $state('');
 
-	// Live board updates. The server pushes a bare "tasks.changed" signal on any
-	// write — from the REST API or the MCP tools — and we refetch. Plain `let`,
-	// not $state: the flush effect below should react to dragging, not to this.
 	let pendingRefresh = false;
 
 	const refresh = debounce(() => {
-		// A refresh mid-drag would recreate every TaskCard (column.svelte wraps
-		// them in {#key card}) and destroy the drag listeners on the card under
-		// the cursor. Defer instead of dropping the update.
 		if ($draggingStore.dragging) {
 			pendingRefresh = true;
 			return;
@@ -359,14 +353,6 @@
 		gap: 1.063rem;
 	}
 
-	:global(.task-details .aura-container.task-description) {
-		white-space: pre-wrap;
-		text-align: left !important;
-		flex: 1;
-		overflow-y: auto;
-		height: auto;
-	}
-
 	.description-header {
 		font: var(--aura-default-semibold);
 	}
@@ -374,6 +360,9 @@
 	.description {
 		white-space: pre-wrap;
 		line-height: 1.5em;
+		flex: 1;
+		min-height: 0;
+		overflow-y: auto;
 	}
 
 	.task-details:not(.taskDetailsOpen) {
@@ -383,7 +372,7 @@
 	.task-details,
 	.task-panel {
 		z-index: 1001;
-		position: absolute;
+		position: fixed;
 		width: fit-content;
 		padding: 1.571rem;
 		background: var(--aura-container-background);
@@ -400,7 +389,8 @@
 		display: flex;
 		flex-direction: column;
 		width: 47.643rem;
-		max-height: 100%;
+		max-height: 90dvh;
+		overflow: hidden;
 		box-sizing: border-box;
 
 		.task-details-header {
@@ -424,10 +414,9 @@
 			}
 		}
 
-		h2,
-		:gloabl(.task-meta),
-		h4,
-		.task-details-actions {
+		.task-details-header,
+		.description-header,
+		.task-details-footer {
 			flex: 0 0 auto;
 		}
 
@@ -471,7 +460,7 @@
 	}
 
 	.backdrop {
-		position: absolute;
+		position: fixed;
 		top: 0;
 		left: 0;
 		background: rgba(0, 0, 0, 40%);
