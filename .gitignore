@@ -21,5 +21,10 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
 *.p8
-.claude
 .mcp.json
+
+# Claude
+.claude
+CLAUDE.local.md
+GLOSSARY.md
+docs/adr/

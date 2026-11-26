@@ -24,7 +24,7 @@
 	];
 </script>
 
-<div class="wrapper" data-theme="light">
+<div class="wrapper">
 	<nav class="navbar">
 		<div class="nav-content">
 			<a href="/" class="nav-logo">BB</a>
@@ -96,7 +96,7 @@
 		min-height: 100vh;
 		display: flex;
 		flex-direction: column;
-		background: var(--aura-light-background);
+		background: var(--aura-background);
 	}
 
 	/* ========== Navbar ========== */
@@ -106,7 +106,7 @@
 		left: 0;
 		right: 0;
 		z-index: 50;
-		background: rgba(255, 255, 255, 0.95);
+		background: color-mix(in srgb, var(--aura-background) 95%, transparent);
 		backdrop-filter: blur(8px);
 		border-bottom: 1px solid var(--aura-container-border-color);
 	}
@@ -169,6 +169,7 @@
 
 		&:hover {
 			background: var(--aura-tertiary-60);
+			color: var(--aura-background);
 		}
 	}
 
@@ -240,7 +241,7 @@
 
 	.plan-name {
 		font: var(--aura-h3);
-		color: black;
+		color: var(--aura-font-color);
 	}
 
 	.plan-price {
@@ -250,7 +251,7 @@
 
 		.price-amount {
 			font: var(--aura-display1);
-			color: black;
+			color: var(--aura-font-color);
 		}
 
 		.price-label {

@@ -5,6 +5,7 @@
 	import Panel from '@awenovations/aura/panel.svelte';
 	import Tooltip from '@awenovations/aura/tooltip.svelte';
 	import screenshot from '$lib/assets/screenshot.svg';
+	import screenshotDark from '$lib/assets/screenshot-dark.svg';
 
 	import PersonalInfo from '$lib/components/settings/personal-info/personal-info.svelte';
 	import DeleteAccount from '$lib/components/settings/delete-account/delete-account.svelte';
@@ -19,7 +20,7 @@
 	};
 </script>
 
-<div class="wrapper" data-theme="light">
+<div class="wrapper">
 	<!-- Nav Bar -->
 	<nav class="navbar">
 		<div class="nav-content">
@@ -268,7 +269,8 @@
 				</div>
 
 				<div class="browser-content">
-					<img src={screenshot} />
+					<img class="hero-light" src={screenshot} alt="Board Buddy kanban board" />
+					<img class="hero-dark" src={screenshotDark} alt="Board Buddy kanban board" />
 				</div>
 			</div>
 
@@ -383,7 +385,7 @@
 
 <style lang="scss">
   .wrapper {
-    background: var(--aura-light-background);
+    background: var(--aura-background);
   }
 	/* ========== Nav Bar ========== */
 	.navbar {
@@ -392,7 +394,7 @@
 		left: 0;
 		right: 0;
 		z-index: 50;
-		background: rgba(255, 255, 255, 0.95);
+		background: color-mix(in srgb, var(--aura-background) 95%, transparent);
 		backdrop-filter: blur(8px);
 		border-bottom: 1px solid var(--aura-container-border-color);
 	}
@@ -473,6 +475,7 @@
 
 		&:hover {
 			background: var(--aura-tertiary-60);
+			color: var(--aura-background);
 		}
 	}
 
@@ -538,7 +541,7 @@
 		align-items: center;
 		gap: 0.75rem;
 		background: var(--aura-tertiary-60);
-		color: white;
+		color: var(--aura-background);
 		padding: 1rem 2rem;
 		border-radius: 0.5rem;
 		font: var(--aura-default-semibold);
@@ -549,6 +552,7 @@
 
 		&:hover {
 			background: var(--aura-secondary-40);
+			color: white;
 			transform: scale(1.05);
 		}
 
@@ -575,7 +579,7 @@
 
 		&:hover {
 			background: var(--aura-tertiary-60);
-			color: white;
+			color: var(--aura-background);
 		}
 	}
 
@@ -680,7 +684,7 @@
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
-		background: #e6e6e6;
+		background: var(--aura-tertiary-10);
 		padding: 0.75rem 1rem;
 		border-bottom: 1px solid var(--aura-container-border-color);
 	}
@@ -721,6 +725,19 @@
 		background: var(--aura-background);
 		img {
 			width: 100%;
+		}
+
+		.hero-dark {
+			display: none;
+		}
+
+		@media (prefers-color-scheme: dark) {
+			.hero-light {
+				display: none;
+			}
+			.hero-dark {
+				display: inline;
+			}
 		}
 	}
 
@@ -881,7 +898,7 @@
 	.cta-banner {
 		max-width: 56rem;
 		margin: 0 auto;
-		background: linear-gradient(135deg, var(--aura-secondary-40), var(--aura-tertiary-60));
+		background: linear-gradient(135deg, var(--aura-secondary-40), var(--aura-light-tertiary-60));
 		border-radius: 1rem;
 		padding: 3rem;
 		overflow: hidden;
@@ -1003,7 +1020,7 @@
 
 	/* ========== Footer ========== */
 	.landing-footer {
-		background: var(--aura-tertiary-60);
+		background: var(--aura-light-tertiary-60);
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
