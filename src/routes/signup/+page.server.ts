@@ -10,6 +10,9 @@ import {
 	validateAndReturnUser
 } from '$lib/server/keycloak';
 import { lucia, validEmail, validPassword } from '$lib/server/auth';
+import { verifyTurnstile } from '$lib/server/turnstile';
+import { deleteAccount } from '$lib/server/accounts';
+import { sendVerification } from '$lib/emails/verify';
 
 export const actions: Actions = {
 	default: async (event) => {
@@ -36,18 +39,29 @@ export const actions: Actions = {
 			});
 		}
 
+		if (!(await verifyTurnstile(formData.get('cf-turnstile-response')))) {
+			return fail(400, {
+				message: 'We could not verify you are human, please try again.'
+			});
+		}
+
 		const existingUser = await (await mongoDbClient).db().collection('users').findOne({ email });
 
 		if (existingUser) {
-			return fail(400, {
-				message: 'User already exists.'
-			});
+			if (existingUser.emailVerified !== false) {
+				return fail(400, {
+					message: 'User already exists.'
+				});
+			}
+
+			// Nobody ever confirmed this address, so whoever controls it now may claim it.
+			await deleteAccount(`${existingUser._id}`, existingUser.authProvider);
 		}
 
 		const tokenRequest = await getTokenWithClientCredentials();
 		const token = await tokenRequest.json();
 
-    const createUserResponse = await createUser(token.access_token, firstName, email, password);
+    const createUserResponse = await createUser(token.access_token, firstName, email, password, false);
 
 		if (!createUserResponse.ok) {
 			return fail(500, {
@@ -64,9 +78,12 @@ export const actions: Actions = {
 			email,
 			name: firstName,
 			authProvider: 'board-buddy',
+			emailVerified: false,
 			createdDate: Date.now(),
 			lastUpdateDate: Date.now()
 		});
+
+		await sendVerification({ _id: userObject.id, email, name: firstName }, event.url.origin);
 
 		const authResponse = await authenticateWithKeycloak(email, password);
 
@@ -97,6 +114,6 @@ export const actions: Actions = {
 			...sessionCookie.attributes
 		});
 
-		redirect(302, '/app');
+		redirect(302, '/verify-email');
 	}
 };

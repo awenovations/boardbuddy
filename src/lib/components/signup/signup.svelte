@@ -5,6 +5,7 @@
 	import Divider from '@awenovations/aura/divider.svelte';
 	import Container from '@awenovations/aura/container.svelte';
 	import TextField from '@awenovations/aura/text-field.svelte';
+	import { env } from '$env/dynamic/public';
 
 	interface Props {
 		loading?: boolean;
@@ -17,6 +18,44 @@
 		signUpWithGoogleHandler = () => {},
 		signUpWithAppleHandler = () => {}
 	}: Props = $props();
+
+	const TURNSTILE_SCRIPT = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+
+	let turnstileEl: HTMLDivElement;
+
+	// Rendered explicitly so the widget also appears after client-side navigation.
+	$effect(() => {
+		const w = window as any;
+		let widgetId: string | undefined;
+		let cancelled = false;
+
+		const render = () => {
+			if (cancelled || !turnstileEl) return;
+			widgetId = w.turnstile.render(turnstileEl, {
+				sitekey: env.PUBLIC_TURNSTILE_SITE_KEY,
+				theme: 'auto'
+			});
+		};
+
+		if (w.turnstile) {
+			render();
+		} else {
+			let script = document.querySelector<HTMLScriptElement>('script[data-turnstile]');
+			if (!script) {
+				script = document.createElement('script');
+				script.src = TURNSTILE_SCRIPT;
+				script.async = true;
+				script.dataset.turnstile = '';
+				document.head.appendChild(script);
+			}
+			script.addEventListener('load', render, { once: true });
+		}
+
+		return () => {
+			cancelled = true;
+			if (widgetId !== undefined) w.turnstile?.remove(widgetId);
+		};
+	});
 </script>
 
 <Container kind="filled" variant="elevated" clearPadding>
@@ -83,6 +122,7 @@
 					{/snippet}
 				</TextField>
 			</div>
+			<div class="turnstile" bind:this={turnstileEl} data-cy="turnstile"></div>
 			<Button type="submit" {loading} fullWidth variant="tertiary" data-cy="sign-up">Sign up</Button
 			>
 		</div>
@@ -119,7 +159,11 @@
 		box-sizing: border-box;
 		padding: 3rem 3.714rem 1.857rem;
 		width: 25.643rem;
-		height: 39.571rem;
+		min-height: 39.571rem;
+	}
+
+	.turnstile {
+		min-height: 65px;
 	}
 
 	.sign-in {

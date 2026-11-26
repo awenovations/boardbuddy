@@ -1,7 +1,9 @@
 import { sequence } from '@sveltejs/kit/hooks';
 import { lucia } from '$lib/server/auth';
-import type { Handle } from '@sveltejs/kit';
+import { json, redirect, type Handle, type ServerInit } from '@sveltejs/kit';
+import { building } from '$app/environment';
 import { csrf } from './hooks/csrf';
+import { startUnverifiedAccountCleanup } from '$lib/server/cleanup-unverified';
 
 const allowedPaths: string[] = [];
 const allowedOrigins: string[] = [
@@ -48,6 +50,34 @@ const setupPosthog: Handle = async ({ event, resolve }) => {
 	return response;
 };
 
+export const init: ServerInit = () => {
+	if (!building && process.env.NODE_ENV === 'production') {
+		startUnverifiedAccountCleanup();
+	}
+};
+
+const unverifiedBlockedPaths = ['/app', '/paywall', '/api', '/mcp'];
+
+// Unverified Accounts can't use the App until they confirm their email.
+const requireVerifiedEmail: Handle = async ({ event, resolve }) => {
+	const { user } = event.locals;
+	const { pathname } = event.url;
+
+	const blocked = unverifiedBlockedPaths.some(
+		(path) => pathname === path || pathname.startsWith(`${path}/`)
+	);
+
+	if (user && !user.emailVerified && blocked) {
+		if (pathname.startsWith('/api') || pathname.startsWith('/mcp')) {
+			return json({ message: 'Please confirm your email address first.' }, { status: 403 });
+		}
+
+		redirect(302, '/verify-email');
+	}
+
+	return resolve(event);
+};
+
 export const handle: Handle = sequence(
 	csrf(allowedPaths, allowedOrigins),
 	setupPosthog,
@@ -82,5 +112,6 @@ export const handle: Handle = sequence(
 		event.locals.session = session;
 
 		return resolve(event);
-	}
+	},
+	requireVerifiedEmail
 );

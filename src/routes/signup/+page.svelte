@@ -13,6 +13,8 @@
 		return async ({ result }) => {
 			loading = false;
 			if (result.type === 'failure') {
+				// A Turnstile token can only be used once.
+				(window as any).turnstile?.reset();
 				showToast({
 					severity: 'error',
 					message: result.data.message ?? 'Sorry, something went wrong, please try again!'
@@ -21,7 +23,7 @@
 				goto(result.location);
 				showToast({
 					severity: 'success',
-					message: 'Thanks for making an account!'
+					message: 'Thanks for signing up! Check your email to confirm your account.'
 				});
 			}
 		};

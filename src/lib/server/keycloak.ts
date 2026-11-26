@@ -32,7 +32,8 @@ export const createUser = (
 	accessToken: string,
 	firstName: string,
 	email: string,
-	password: string
+	password: string,
+	emailVerified = true
 ) =>
 	fetch(`${KEYCLOAK_ADMIN_API}/users`, {
 		method: 'POST',
@@ -44,7 +45,7 @@ export const createUser = (
 			email,
 			firstName,
 			enabled: true,
-			emailVerified: true,
+			emailVerified,
 			username: email,
 			requiredActions: [],
 			credentials: [{ type: 'password', value: password, temporary: false }]

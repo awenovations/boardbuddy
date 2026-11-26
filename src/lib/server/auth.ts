@@ -19,6 +19,7 @@ interface UserDoc {
   createdDate: number;
   lastUpdateDate?: number;
   role?: string;
+  emailVerified?: boolean;
 }
 
 interface SessionDoc {
@@ -88,7 +89,9 @@ export const lucia = new Lucia(adapter, {
 		name: attributes.name,
 		role: attributes.role,
 		createdDate: attributes.createdDate,
-		authProvider: attributes.authProvider
+		authProvider: attributes.authProvider,
+		// Accounts created before email verification existed have no flag: treat them as verified.
+		emailVerified: attributes.emailVerified !== false
 	})
 });
 
@@ -145,6 +148,7 @@ interface DatabaseUserAttributes {
 	role?: string;
 	createdDate: number;
 	authProvider: string;
+	emailVerified?: boolean;
 }
 
 interface DatabaseSessionAttributes {
