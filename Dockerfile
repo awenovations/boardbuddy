@@ -1,12 +1,14 @@
-FROM node:22-alpine AS builder
+FROM --platform=$BUILDPLATFORM node:22.23.5-alpine AS builder
 WORKDIR /app
+
+ENV CYPRESS_INSTALL_BINARY=0
 COPY package*.json ./
 RUN npm ci
 COPY . .
 RUN npm run build
-RUN npm prune --production
+RUN npm prune --omit=dev
 
-FROM node:22-alpine
+FROM node:22.23.5-alpine
 WORKDIR /app
 COPY --from=builder /app/build build/
 COPY --from=builder /app/node_modules node_modules/
